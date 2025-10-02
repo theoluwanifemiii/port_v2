@@ -16,19 +16,21 @@ const navigationItems = [
 export const Home = (): JSX.Element => {
   return (
     <div className="bg-white w-full min-h-screen flex flex-col px-6 sm:px-12 lg:px-16">
-      <header className="w-full mt-12 sm:mt-16 lg:mt-20">
-<NavigationMenuList className="flex flex-col sm:flex-row items-start sm:items-center justify-evenly w-full gap-6 sm:gap-4">
-  {navigationItems.map((item, index) => (
-    <NavigationMenuItem key={index}>
-      <NavigationMenuLink className="[font-family:'Sometype_Mono',Helvetica] font-normal text-gray-500 text-sm sm:text-base lg:text-lg tracking-tight leading-relaxed cursor-pointer hover:text-gray-900 transition-colors">
-        {item.text}
-      </NavigationMenuLink>
-    </NavigationMenuItem>
-  ))}
-</NavigationMenuList>
-
-      </header>
-
+ <header className="w-full mt-12 sm:mt-16 lg:mt-20">
+  <NavigationMenu className="w-full">
+    <NavigationMenuList className="flex justify-between w-full max-w-6xl mx-auto">
+      {navigationItems.map((item, index) => (
+        <NavigationMenuItem key={index}>
+          <NavigationMenuLink
+            className="[font-family:'Sometype_Mono',Helvetica] font-normal text-gray-500 text-sm sm:text-base lg:text-lg tracking-tight leading-relaxed cursor-pointer hover:text-gray-900 transition-colors"
+          >
+            {item.text}
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+      ))}
+    </NavigationMenuList>
+  </NavigationMenu>
+</header>
       <main className="flex flex-col w-full mt-auto pb-12 sm:pb-16 lg:pb-20">
         <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-8 lg:gap-16">
           <h1 className="[font-family:'Linked',Helvetica] font-black text-black text-[80px] sm:text-[120px] lg:text-[180px] xl:text-[220px] tracking-tighter leading-[0.85] whitespace-nowrap flex-shrink-0">
