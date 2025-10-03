@@ -5,20 +5,29 @@ interface NavigationItem {
   text: string;
   href?: string;
   onClick?: () => void;
+  isNative?: boolean;
 }
 
 interface NavigationProps {
   items: NavigationItem[];
+  showBrand?: boolean;
 }
 
-export const Navigation: React.FC<NavigationProps> = ({ items }) => {
+export const Navigation: React.FC<NavigationProps> = ({ items, showBrand = true }) => {
   const location = useLocation();
 
   return (
     <nav className="w-full">
+      {showBrand && (
+        <Link to="/" className="inline-block mb-6">
+          <h1 className="[font-family:'Linked',Helvetica] font-black text-black text-3xl sm:text-4xl lg:text-5xl tracking-tighter leading-none hover:opacity-80 transition-opacity">
+            Just Olu
+          </h1>
+        </Link>
+      )}
       <ul className="flex flex-col sm:flex-row w-full gap-0 sm:justify-between">
         {items.map((item, index) => {
-          const isActive = location.pathname === item.href;
+          const isActive = item.isNative !== false && location.pathname === item.href;
 
           return (
             <li
