@@ -5,8 +5,8 @@ import { Navigation } from "../../components/Navigation";
 const navigationItems = [
   { text: "What have i done", href: "/work", isNative: true },
   { text: "Who am i ?", href: "/", isNative: true },
-  { text: "My explorations", href: "/", isNative: false },
-  { text: "Work with me", href: "/", isNative: false },
+  { text: "My explorations", href: "#", isNative: false },
+  { text: "Work with me", href: "/work-with-me", isNative: true },
 ];
 
 interface ProjectProps {
