@@ -2,10 +2,10 @@ import React from "react";
 import { Navigation } from "../../components/Navigation";
 
 const navigationItems = [
-  { text: "Who am i ?", href: "/", isNative: true },
   { text: "What have i done", href: "/work", isNative: true },
-  { text: "My explorations", href: "/", isNative: false },
-  { text: "Work with me", href: "/", isNative: false },
+  { text: "Who am i ?", href: "/", isNative: true },
+  { text: "My explorations", href: "#", isNative: false },
+  { text: "Work with me", href: "#", isNative: false },
 ];
 
 export const Home = (): JSX.Element => {
