@@ -18,9 +18,9 @@ export const Navigation: React.FC<NavigationProps> = ({ items, showBrand = true 
 
   return (
     <nav className="w-full">
-      <ul className="flex flex-col sm:flex-row w-full gap-0 sm:justify-between">
+      <ul className="flex flex-col sm:flex-row w-full gap-0 sm:justify-start sm:space-x-8 lg:space-x-12">
         {showBrand && (
-          <li className="flex-1 transition-all ease-in-out duration-300">
+          <li className="transition-all ease-in-out duration-300">
             <Link
               to="/"
               className="[font-family:'Linked',Helvetica] font-black text-black text-sm sm:text-base lg:text-lg tracking-tight leading-relaxed cursor-pointer block w-full py-3 sm:py-2 transition-all ease-in-out duration-300 hover:text-gray-900"
@@ -35,7 +35,7 @@ export const Navigation: React.FC<NavigationProps> = ({ items, showBrand = true 
           return (
             <li
               key={index}
-              className="flex-1 transition-all ease-in-out duration-300"
+              className="transition-all ease-in-out duration-300"
             >
               <Link
                 to={item.href || "#"}
