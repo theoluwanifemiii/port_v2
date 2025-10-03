@@ -13,7 +13,6 @@ interface ProjectProps {
   year: string;
   description: string[];
   image: string;
-  bgColor: string;
 }
 
 const Project: React.FC<ProjectProps> = ({
@@ -21,17 +20,14 @@ const Project: React.FC<ProjectProps> = ({
   year,
   description,
   image,
-  bgColor,
 }) => {
   return (
     <div className="w-full max-w-4xl mx-auto mb-16 sm:mb-20 lg:mb-24 transition-all ease-in-out duration-300">
-      <div
-        className={`w-full aspect-[4/3] sm:aspect-video ${bgColor} rounded-lg mb-6 overflow-hidden flex items-center justify-center transition-transform ease-in-out duration-300 hover:scale-[1.02]`}
-      >
+      <div className="w-full aspect-[4/3] sm:aspect-video rounded-lg mb-6 overflow-hidden transition-transform ease-in-out duration-300 hover:scale-[1.02]">
         <img
           src={image}
           alt={title}
-          className="w-full h-full object-contain p-8 sm:p-12"
+          className="w-full h-full object-cover"
         />
       </div>
 
@@ -67,7 +63,6 @@ export const Work = (): JSX.Element => {
         "I designed the Vital Swap back office to support three different user types, ensuring smooth operations and efficient workflows. The focus was on clarity, usability, and enabling the team to run processes seamlessly.",
       ],
       image: "/Project 1.png",
-      bgColor: "bg-amber-50",
     },
     {
       title: "DIGITVANT PAY MOBILE & INTERNET REDESIGN",
@@ -77,7 +72,6 @@ export const Work = (): JSX.Element => {
         "I led the redesign of both the mobile and internet banking platforms, simplifying financial management and creating a cleaner, more intuitive experience for individuals and businesses.",
       ],
       image: "/Project 2.png",
-      bgColor: "bg-slate-100",
     },
     {
       title: "MOTOBILLS ADMIN BILLS INVENTORY",
@@ -87,7 +81,6 @@ export const Work = (): JSX.Element => {
         "I designed the admin dashboard that empowers operations managers to restock bills faster, set selling prices and cashback percentages, and monitor balances in real time",
       ],
       image: "/Project 3.png",
-      bgColor: "bg-blue-50",
     },
     {
       title: "ONE DRUG STORE CHECK OUT REDESIGN",
@@ -96,7 +89,6 @@ export const Work = (): JSX.Element => {
         "One Drug Store brings pharmacy services online — from prescriptions to everyday wellness essentials. I redesigned the checkout experience, reducing friction so users can place and receive orders seamlessly, ensuring trust and reliability throughout the flow.",
       ],
       image: "/Project 4.png",
-      bgColor: "bg-pink-50",
     },
   ];
 
