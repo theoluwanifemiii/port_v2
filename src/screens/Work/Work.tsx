@@ -66,7 +66,7 @@ export const Work = (): JSX.Element => {
       description: [
         "I designed the Vital Swap back office to support three different user types, ensuring smooth operations and efficient workflows. The focus was on clarity, usability, and enabling the team to run processes seamlessly.",
       ],
-      image: "https://images.pexels.com/photos/7688336/pexels-photo-7688336.jpeg",
+      image: "/Project 1.png",
       bgColor: "bg-amber-50",
     },
     {
@@ -76,7 +76,7 @@ export const Work = (): JSX.Element => {
         "Digitvant Pay is a microfinance digital banking platform offering transfers, bill payments, and savings options.",
         "I led the redesign of both the mobile and internet banking platforms, simplifying financial management and creating a cleaner, more intuitive experience for individuals and businesses.",
       ],
-      image: "https://images.pexels.com/photos/4968630/pexels-photo-4968630.jpeg",
+      image: "/Project 2.png",
       bgColor: "bg-slate-100",
     },
     {
@@ -86,7 +86,7 @@ export const Work = (): JSX.Element => {
         "Motobills is Nigeria's most affordable bill payment platform for airtime, data, electricity, hotels, and flights.",
         "I designed the admin dashboard that empowers operations managers to restock bills faster, set selling prices and cashback percentages, and monitor balances in real time",
       ],
-      image: "https://images.pexels.com/photos/590041/pexels-photo-590041.jpeg",
+      image: "/Project 3.png",
       bgColor: "bg-blue-50",
     },
     {
@@ -95,7 +95,7 @@ export const Work = (): JSX.Element => {
       description: [
         "One Drug Store brings pharmacy services online — from prescriptions to everyday wellness essentials. I redesigned the checkout experience, reducing friction so users can place and receive orders seamlessly, ensuring trust and reliability throughout the flow.",
       ],
-      image: "https://images.pexels.com/photos/5998471/pexels-photo-5998471.jpeg",
+      image: "/Project 4.png",
       bgColor: "bg-pink-50",
     },
   ];
