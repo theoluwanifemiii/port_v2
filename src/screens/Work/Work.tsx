@@ -1,0 +1,116 @@
+import React from "react";
+import { Navigation } from "../../components/Navigation";
+
+const navigationItems = [
+  { text: "What have i done", href: "/work" },
+  { text: "Who am i ?", href: "/" },
+  { text: "My explorations", href: "/" },
+  { text: "Work with me", href: "/" },
+];
+
+interface ProjectProps {
+  title: string;
+  year: string;
+  description: string[];
+  image: string;
+  bgColor: string;
+}
+
+const Project: React.FC<ProjectProps> = ({
+  title,
+  year,
+  description,
+  image,
+  bgColor,
+}) => {
+  return (
+    <div className="w-full max-w-4xl mx-auto mb-16 sm:mb-20 lg:mb-24 transition-all ease-in-out duration-300">
+      <div
+        className={`w-full aspect-[4/3] sm:aspect-video ${bgColor} rounded-lg mb-6 overflow-hidden flex items-center justify-center transition-transform ease-in-out duration-300 hover:scale-[1.02]`}
+      >
+        <img
+          src={image}
+          alt={title}
+          className="w-full h-full object-contain p-8 sm:p-12"
+        />
+      </div>
+
+      <div className="flex flex-col sm:flex-row justify-between items-start gap-4 sm:gap-8">
+        <h2 className="[font-family:'Sometype_Mono',Helvetica] font-bold text-black text-xl sm:text-2xl tracking-tight uppercase flex-shrink-0">
+          {title}
+        </h2>
+        <span className="[font-family:'Sometype_Mono',Helvetica] font-normal text-gray-500 text-base sm:text-lg">
+          {year}
+        </span>
+      </div>
+
+      <div className="mt-4 space-y-4">
+        {description.map((paragraph, index) => (
+          <p
+            key={index}
+            className="[font-family:'Sometype_Mono',Helvetica] font-normal text-gray-700 text-sm sm:text-base lg:text-lg tracking-tight leading-relaxed"
+          >
+            {paragraph}
+          </p>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export const Work = (): JSX.Element => {
+  const projects: ProjectProps[] = [
+    {
+      title: "VITAL SWAP BACK OFFICE",
+      year: "2024",
+      description: [
+        "I designed the Vital Swap back office to support three different user types, ensuring smooth operations and efficient workflows. The focus was on clarity, usability, and enabling the team to run processes seamlessly.",
+      ],
+      image: "https://images.pexels.com/photos/7688336/pexels-photo-7688336.jpeg",
+      bgColor: "bg-amber-50",
+    },
+    {
+      title: "DIGITVANT PAY MOBILE & INTERNET REDESIGN",
+      year: "2024",
+      description: [
+        "Digitvant Pay is a microfinance digital banking platform offering transfers, bill payments, and savings options.",
+        "I led the redesign of both the mobile and internet banking platforms, simplifying financial management and creating a cleaner, more intuitive experience for individuals and businesses.",
+      ],
+      image: "https://images.pexels.com/photos/4968630/pexels-photo-4968630.jpeg",
+      bgColor: "bg-slate-100",
+    },
+    {
+      title: "MOTOBILLS ADMIN BILLS INVENTORY",
+      year: "2024",
+      description: [
+        "Motobills is Nigeria's most affordable bill payment platform for airtime, data, electricity, hotels, and flights.",
+        "I designed the admin dashboard that empowers operations managers to restock bills faster, set selling prices and cashback percentages, and monitor balances in real time",
+      ],
+      image: "https://images.pexels.com/photos/590041/pexels-photo-590041.jpeg",
+      bgColor: "bg-blue-50",
+    },
+    {
+      title: "ONE DRUG STORE CHECK OUT REDESIGN",
+      year: "2025",
+      description: [
+        "One Drug Store brings pharmacy services online — from prescriptions to everyday wellness essentials. I redesigned the checkout experience, reducing friction so users can place and receive orders seamlessly, ensuring trust and reliability throughout the flow.",
+      ],
+      image: "https://images.pexels.com/photos/5998471/pexels-photo-5998471.jpeg",
+      bgColor: "bg-pink-50",
+    },
+  ];
+
+  return (
+    <div className="bg-white w-full min-h-screen flex flex-col px-6 sm:px-12 lg:px-16">
+      <header className="w-full mt-12 sm:mt-16 lg:mt-20 mb-16 sm:mb-20">
+        <Navigation items={navigationItems} />
+      </header>
+
+      <main className="w-full pb-12 sm:pb-16 lg:pb-20">
+        {projects.map((project, index) => (
+          <Project key={index} {...project} />
+        ))}
+      </main>
+    </div>
+  );
+};
