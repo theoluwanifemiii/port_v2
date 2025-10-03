@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Navigation } from "../../components/Navigation";
 
 const navigationItems = [
@@ -13,6 +14,7 @@ interface ProjectProps {
   year: string;
   description: string[];
   image: string;
+  projectId?: string;
 }
 
 const Project: React.FC<ProjectProps> = ({
@@ -20,9 +22,10 @@ const Project: React.FC<ProjectProps> = ({
   year,
   description,
   image,
+  projectId,
 }) => {
-  return (
-    <div className="w-full max-w-4xl mx-auto mb-16 sm:mb-20 lg:mb-24 transition-all ease-in-out duration-300">
+  const content = (
+    <>
       <div className="w-full aspect-[4/3] sm:aspect-video rounded-lg mb-6 overflow-hidden transition-transform ease-in-out duration-300 hover:scale-[1.02]">
         <img
           src={image}
@@ -50,6 +53,18 @@ const Project: React.FC<ProjectProps> = ({
           </p>
         ))}
       </div>
+    </>
+  );
+
+  return (
+    <div className="w-full max-w-4xl mx-auto mb-16 sm:mb-20 lg:mb-24 transition-all ease-in-out duration-300">
+      {projectId ? (
+        <Link to={`/work/${projectId}`} className="block group cursor-pointer">
+          {content}
+        </Link>
+      ) : (
+        content
+      )}
     </div>
   );
 };
@@ -72,6 +87,7 @@ export const Work = (): JSX.Element => {
         "I led the redesign of both the mobile and internet banking platforms, simplifying financial management and creating a cleaner, more intuitive experience for individuals and businesses.",
       ],
       image: "/Project 2.png",
+      projectId: "digitvant-pay",
     },
     {
       title: "MOTOBILLS ADMIN BILLS INVENTORY",
