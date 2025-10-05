@@ -11,13 +11,14 @@ interface NavigationItem {
 interface NavigationProps {
   items: NavigationItem[];
   showBrand?: boolean;
+  className?: string;
 }
 
-export const Navigation: React.FC<NavigationProps> = ({ items, showBrand = true }) => {
+export const Navigation: React.FC<NavigationProps> = ({ items, showBrand = true, className }) => {
   const location = useLocation();
 
   return (
-    <nav className="w-full">
+    <nav className={className ? className : "w-full"}>
       <ul className="flex flex-col sm:flex-row w-full gap-0 sm:justify-start sm:space-x-8 lg:space-x-12">
         {showBrand && (
           <li className="transition-all ease-in-out duration-300">

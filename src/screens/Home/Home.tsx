@@ -23,7 +23,10 @@ export const Home: FC = () => {
     <div className="bg-white w-full min-h-screen flex flex-col px-6 sm:px-12 lg:px-16 xl:px-24">
       {/* Header Navigation */}
       <header className="w-full mt-10 sm:mt-14 lg:mt-20">
-        <Navigation items={navigationItems} />
+        <Navigation
+          items={navigationItems}
+          className="flex justify-between items-center w-full text-base sm:text-lg lg:text-xl gap-8"
+        />
       </header>
 
       {/* Main Section */}
