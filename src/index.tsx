@@ -1,3 +1,4 @@
+import '../tailwind.css'; // Correct path, file is in project root
 import { StrictMode, useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
