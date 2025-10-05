@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Splide, SplideSlide } from "@splidejs/react-splide";
+import "@splidejs/react-splide/css";
 
 interface ImageSliderProps {
   images: string[];
@@ -12,8 +13,6 @@ interface ImageGroup {
 
 export const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
   const [imageGroups, setImageGroups] = useState<ImageGroup[]>([]);
-  const [currentIndices, setCurrentIndices] = useState<number[]>([]);
-  const [hoveredGroup, setHoveredGroup] = useState<number | null>(null);
 
   useEffect(() => {
     const loadImages = async () => {
@@ -80,62 +79,15 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
       });
 
       setImageGroups(grouped);
-      setCurrentIndices(new Array(grouped.length).fill(0));
     };
 
     loadImages();
   }, [images]);
 
-  useEffect(() => {
-    const intervals = imageGroups.map((group, groupIndex) => {
-      if (group.images.length <= 1 || hoveredGroup === groupIndex) return null;
-
-      return setInterval(() => {
-        setCurrentIndices((prev) => {
-          const newIndices = [...prev];
-          newIndices[groupIndex] = (newIndices[groupIndex] + 1) % group.images.length;
-          return newIndices;
-        });
-      }, 3000);
-    });
-
-    return () => {
-      intervals.forEach((interval) => {
-        if (interval) clearInterval(interval);
-      });
-    };
-  }, [imageGroups, hoveredGroup]);
-
-  const goToNext = (groupIndex: number) => {
-    setCurrentIndices((prev) => {
-      const newIndices = [...prev];
-      const group = imageGroups[groupIndex];
-      newIndices[groupIndex] = (newIndices[groupIndex] + 1) % group.images.length;
-      return newIndices;
-    });
-  };
-
-  const goToPrevious = (groupIndex: number) => {
-    setCurrentIndices((prev) => {
-      const newIndices = [...prev];
-      const group = imageGroups[groupIndex];
-      newIndices[groupIndex] =
-        newIndices[groupIndex] === 0
-          ? group.images.length - 1
-          : newIndices[groupIndex] - 1;
-      return newIndices;
-    });
-  };
-
   return (
     <div className="w-full space-y-6">
       {imageGroups.map((group, groupIndex) => (
-        <div
-          key={groupIndex}
-          className="relative w-full"
-          onMouseEnter={() => setHoveredGroup(groupIndex)}
-          onMouseLeave={() => setHoveredGroup(null)}
-        >
+        <div key={groupIndex} className="relative w-full">
           {group.images.length === 1 ? (
             <div className="w-full">
               <img
@@ -145,56 +97,29 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
               />
             </div>
           ) : (
-            <div className="relative w-full group">
-              <div className="w-full overflow-hidden">
-                <img
-                  src={group.images[currentIndices[groupIndex]]}
-                  alt={`Screenshot ${groupIndex + 1}-${currentIndices[groupIndex] + 1}`}
-                  className="w-full h-auto transition-opacity duration-500"
-                />
-              </div>
-
-              <button
-                onClick={() => goToPrevious(groupIndex)}
-                className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-black text-white p-3 rounded-full shadow-lg transition-all opacity-0 group-hover:opacity-100"
-                aria-label="Previous image"
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-
-              <button
-                onClick={() => goToNext(groupIndex)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-black text-white p-3 rounded-full shadow-lg transition-all opacity-0 group-hover:opacity-100"
-                aria-label="Next image"
-              >
-                <ChevronRight className="w-5 h-5" />
-              </button>
-
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 bg-black/50 px-3 py-2 rounded-full">
-                {group.images.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => {
-                      setCurrentIndices((prev) => {
-                        const newIndices = [...prev];
-                        newIndices[groupIndex] = index;
-                        return newIndices;
-                      });
-                    }}
-                    className={`h-2 rounded-full transition-all ${
-                      index === currentIndices[groupIndex]
-                        ? "bg-white w-8"
-                        : "bg-white/50 hover:bg-white/75 w-2"
-                    }`}
-                    aria-label={`Go to image ${index + 1}`}
+            <Splide
+              options={{
+                type: 'loop',
+                autoplay: true,
+                interval: 3000,
+                pauseOnHover: true,
+                arrows: true,
+                pagination: true,
+                gap: '0',
+                speed: 800,
+              }}
+              aria-label={`Image group ${groupIndex + 1}`}
+            >
+              {group.images.map((image, imgIndex) => (
+                <SplideSlide key={imgIndex}>
+                  <img
+                    src={image}
+                    alt={`Screenshot ${groupIndex + 1}-${imgIndex + 1}`}
+                    className="w-full h-auto"
                   />
-                ))}
-              </div>
-
-              <div className="absolute top-4 right-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm [font-family:'Sometype_Mono',Helvetica]">
-                {currentIndices[groupIndex] + 1} / {group.images.length}
-              </div>
-            </div>
+                </SplideSlide>
+              ))}
+            </Splide>
           )}
         </div>
       ))}
