@@ -11,12 +11,12 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
         {images.map((image, index) => (
           <div
             key={index}
-            className="relative w-full aspect-video rounded-2xl overflow-hidden bg-white border-2 border-gray-900 shadow-lg hover:shadow-xl transition-shadow"
+            className="relative w-full"
           >
             <img
               src={image}
               alt={`Screenshot ${index + 1}`}
-              className="w-full h-full object-cover"
+              className="w-full h-auto"
             />
           </div>
         ))}
