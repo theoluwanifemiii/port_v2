@@ -11,6 +11,8 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [showContent, setShowContent] = useState(false);
 
+console.log("🚀 App started!");
+
   useEffect(() => {
     const hasSeenPreloader = sessionStorage.getItem("hasSeenPreloader");
     if (hasSeenPreloader) {
@@ -35,6 +37,7 @@ const App = () => {
             <Route path="/work" element={<Work />} />
             <Route path="/work/:projectId" element={<ProjectDetail />} />
             <Route path="/work-with-me" element={<WorkWithMe />} />
+            <Route path="*" element={<div style={{padding:'2rem',textAlign:'center'}}><h1>404 - Not Found</h1><p>The page you are looking for does not exist.</p></div>} />
           </Routes>
         </BrowserRouter>
       )}
@@ -42,7 +45,7 @@ const App = () => {
   );
 };
 
-createRoot(document.getElementById("app") as HTMLElement).render(
+createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>
     <App />
   </StrictMode>,

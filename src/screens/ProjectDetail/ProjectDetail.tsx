@@ -1,7 +1,8 @@
-import React from "react";
+import * as React from "react";
 import { useParams, Link } from "react-router-dom";
 import { Navigation } from "../../components/Navigation";
 import { ImageSlider } from "../../components/ImageSlider";
+import { LottieSection } from "../../components/LottieSection";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 
 const navigationItems = [
@@ -21,7 +22,6 @@ interface ProjectData {
   challengeImages?: string[];
   approach: string[];
   outcome: string;
-  outcomeImages?: string[];
   results: string;
   images: string[];
   tags: string[];
@@ -45,26 +45,15 @@ const projectsData: Record<string, ProjectData> = {
       "/Before Dashboard.png",
       "/Before 3.png",
       "/Before 2.png",
-      "/Before1.png"
+      "/Before1.png",
     ],
     approach: [
-      "I stepped in to untangle the experience. The first thing I did was a full UX audit — looking at user flows for payments, transfers, and savings. From there, I mapped the main journeys and spotted where users were getting stuck. I also noticed the design lacked structure, so I built a unified design system to keep mobile and web consistent.",
-      "The redesign focused on clarity: cleaner layouts, simpler navigation, and a visual identity that felt trustworthy. I kept iterating with quick feedback loops, aligning with both developers and stakeholders as I refined the details.",
+      "I stepped in to untangle the experience. The first thing I did was a full UX audit — looking at user flows for payments, transfers, and savings. From there, I mapped the main journeys and spotted where users were getting stuck.",
+      "I also noticed the design lacked structure, so I built a unified design system to keep mobile and web consistent. The redesign focused on clarity: cleaner layouts, simpler navigation, and a visual identity that felt trustworthy.",
       "In the end, the new design cut friction out of everyday tasks and gave developers a system they could actually work with. Stakeholders finally saw a product that reflected their vision, and early adopters shared positive feedback about how simple the experience felt.",
     ],
     outcome:
       "The redesigned platform delivered a cohesive, frictionless experience that users could trust and developers could build on confidently.",
-    outcomeImages: [
-      "/Afrer 1.png",
-      "/Afrer 2.png",
-      "/Afrer Dashboard.png",
-      "/afrer 3.png",
-      "/afrer 5.png",
-      "/afrer 8.png",
-      "/afrer6.png",
-      "/afrer7.png",
-      "/afrer9.png"
-    ],
     results:
       "Digitvant Pay crossed 1,000 users during beta and has now grown to over 10,000 active users — proof that a smoother experience drives adoption and retention.",
     images: ["/Project 2.png"],
@@ -158,6 +147,7 @@ export const ProjectDetail = (): JSX.Element => {
             </div>
           </div>
 
+          {/* Hero Images */}
           <div className="mb-16">
             {project.images.map((image, index) => (
               <div
@@ -173,106 +163,63 @@ export const ProjectDetail = (): JSX.Element => {
             ))}
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 mb-20">
-            <div className="lg:col-span-12">
-              <div className="max-w-4xl">
-                <h2 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-2xl sm:text-3xl tracking-tight mb-6">
-                  Overview
-                </h2>
-                {project.description.map((paragraph, index) => (
-                  <p
-                    key={index}
-                    className="[font-family:'Sometype_Mono',Helvetica] font-normal text-gray-700 text-base sm:text-lg leading-relaxed mb-4"
-                  >
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
+          {/* Overview */}
+          <section className="mb-20">
+            <h2 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-2xl sm:text-3xl mb-6">
+              Overview
+            </h2>
+            {project.description.map((p, i) => (
+              <p key={i} className="[font-family:'Sometype_Mono',Helvetica] text-gray-700 text-lg leading-relaxed mb-4">
+                {p}
+              </p>
+            ))}
+          </section>
+
+          {/* Challenge */}
+          <section className="mb-20">
+            <h2 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-2xl sm:text-3xl mb-6">
+              The Challenge
+            </h2>
+            <p className="[font-family:'Sometype_Mono',Helvetica] text-gray-700 text-lg leading-relaxed mb-8">
+              {project.challenge}
+            </p>
+            {project.challengeImages && (
+              <ImageSlider images={project.challengeImages} />
+            )}
+          </section>
+
+          {/* Approach */}
+          <section className="mb-20">
+            <h2 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-2xl sm:text-3xl mb-6">
+              My Approach
+            </h2>
+            {project.approach.map((p, i) => (
+              <p key={i} className="[font-family:'Sometype_Mono',Helvetica] text-gray-700 text-lg leading-relaxed mb-4">
+                {p}
+              </p>
+            ))}
+          </section>
+
+          {/* Outcome with Lottie */}
+          <section className="mb-20">
+            <h2 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-2xl sm:text-3xl mb-6">
+              The Outcome
+            </h2>
+            <p className="[font-family:'Sometype_Mono',Helvetica] text-gray-700 text-lg leading-relaxed mb-6">
+              {project.outcome}
+            </p>
+
+            <div className="bg-white rounded-lg p-8 border-l-4 border-black mb-8">
+              <p className="[font-family:'Sometype_Mono',Helvetica] font-medium text-black text-lg leading-relaxed">
+                <span className="text-2xl mr-2">🚀</span>
+                {project.results}
+              </p>
             </div>
-          </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 mb-20">
-            <div className="lg:col-span-12">
-              <div className="max-w-4xl">
-                <h2 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-2xl sm:text-3xl tracking-tight mb-6">
-                  The Challenge
-                </h2>
-                <p className="[font-family:'Sometype_Mono',Helvetica] font-normal text-gray-700 text-base sm:text-lg leading-relaxed mb-8">
-                  {project.challenge}
-                </p>
-                {project.challengeImages && project.challengeImages.length > 0 && (
-                  <div className="mt-8">
-                    <ImageSlider images={project.challengeImages} />
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+            <LottieSection animationPath="/Scene.json" />
+          </section>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 mb-20">
-            <div className="lg:col-span-12">
-              <div className="max-w-4xl">
-                <h2 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-2xl sm:text-3xl tracking-tight mb-6">
-                  My Approach
-                </h2>
-                {project.approach.map((paragraph, index) => (
-                  <p
-                    key={index}
-                    className="[font-family:'Sometype_Mono',Helvetica] font-normal text-gray-700 text-base sm:text-lg leading-relaxed mb-4"
-                  >
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 mb-20">
-            <div className="lg:col-span-12">
-              <div className="max-w-4xl">
-                <h2 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-2xl sm:text-3xl tracking-tight mb-6">
-                  The Outcome
-                </h2>
-                <p className="[font-family:'Sometype_Mono',Helvetica] font-normal text-gray-700 text-base sm:text-lg leading-relaxed mb-6">
-                  {project.outcome}
-                </p>
-                <div className="bg-white rounded-lg p-8 border-l-4 border-black mb-8">
-                  <p className="[font-family:'Sometype_Mono',Helvetica] font-medium text-black text-lg leading-relaxed">
-                    <span className="text-2xl mr-2">🚀</span>
-                    {project.results}
-                  </p>
-                </div>
-                {project.outcomeImages && project.outcomeImages.length > 0 && (
-                  <div className="mt-8">
-                    <ImageSlider images={project.outcomeImages} enableFadeEffect={true} />
-                  </div>
-                )}
-
-                <div className="mt-16 pt-8 border-t border-gray-300 flex justify-between items-center">
-                  {project.prevProject ? (
-                    <Link
-                      to={`/project/${project.prevProject.id}`}
-                      className="inline-flex items-center gap-2 [font-family:'Sometype_Mono',Helvetica] text-sm text-gray-600 hover:text-black transition-colors group"
-                    >
-                      <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
-                      <span>Previous: {project.prevProject.title}</span>
-                    </Link>
-                  ) : <div />}
-
-                  {project.nextProject && (
-                    <Link
-                      to={`/project/${project.nextProject.id}`}
-                      className="inline-flex items-center gap-2 [font-family:'Sometype_Mono',Helvetica] text-sm text-gray-600 hover:text-black transition-colors group"
-                    >
-                      <span>Next: {project.nextProject.title}</span>
-                      <ArrowLeft className="w-4 h-4 rotate-180 transition-transform group-hover:translate-x-1" />
-                    </Link>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-
+          {/* Tags */}
           <div className="border-t border-gray-300 pt-12 pb-20">
             <div className="flex flex-wrap gap-3">
               {project.tags.map((tag, index) => (
