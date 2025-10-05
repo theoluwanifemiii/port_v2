@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/react-splide/css";
 
 interface ImageSliderProps {
   images: string[];
+  enableFadeEffect?: boolean;
 }
 
 interface ImageGroup {
@@ -11,8 +12,10 @@ interface ImageGroup {
   aspectRatio: 'landscape' | 'portrait' | 'square';
 }
 
-export const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
+export const ImageSlider: React.FC<ImageSliderProps> = ({ images, enableFadeEffect = false }) => {
   const [imageGroups, setImageGroups] = useState<ImageGroup[]>([]);
+  const [visibleGroups, setVisibleGroups] = useState<Set<number>>(new Set());
+  const groupRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     const loadImages = async () => {
@@ -84,10 +87,54 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
     loadImages();
   }, [images]);
 
+  useEffect(() => {
+    if (!enableFadeEffect) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const index = parseInt(entry.target.getAttribute('data-group-index') || '0');
+          setVisibleGroups((prev) => {
+            const newSet = new Set(prev);
+            if (entry.isIntersecting) {
+              newSet.add(index);
+            } else {
+              newSet.delete(index);
+            }
+            return newSet;
+          });
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '50px',
+      }
+    );
+
+    groupRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [imageGroups, enableFadeEffect]);
+
   return (
     <div className="w-full space-y-6">
       {imageGroups.map((group, groupIndex) => (
-        <div key={groupIndex} className="relative w-full">
+        <div
+          key={groupIndex}
+          ref={(el) => (groupRefs.current[groupIndex] = el)}
+          data-group-index={groupIndex}
+          className={`relative w-full transition-all duration-700 ${
+            enableFadeEffect
+              ? visibleGroups.has(groupIndex)
+                ? 'opacity-100 translate-y-0'
+                : 'opacity-0 translate-y-8'
+              : 'opacity-100'
+          }`}
+        >
           {group.images.length === 1 ? (
             <div className="w-full">
               <img

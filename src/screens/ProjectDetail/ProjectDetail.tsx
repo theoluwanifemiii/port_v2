@@ -244,7 +244,7 @@ export const ProjectDetail = (): JSX.Element => {
                 </div>
                 {project.outcomeImages && project.outcomeImages.length > 0 && (
                   <div className="mt-8">
-                    <ImageSlider images={project.outcomeImages} />
+                    <ImageSlider images={project.outcomeImages} enableFadeEffect={true} />
                   </div>
                 )}
 
