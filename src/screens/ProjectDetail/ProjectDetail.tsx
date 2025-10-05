@@ -35,7 +35,7 @@ const projectsData: Record<string, ProjectData> = {
     id: "digitvant-pay",
     title: "Digitvant Pay",
     subtitle: "Mobile & Internet Banking Redesign",
-    year: "2024",
+    year: "2025",
     description: [
       "Digitvant Pay is a microfinance digital banking platform offering transfers, bill payments, and smart savings. The features were there, but the experience wasn't working. Screens felt cluttered, flows were inconsistent, and even developers flagged pushbacks because of UI issues. Stakeholders worried that if things stayed the same, adoption would stall.",
     ],
