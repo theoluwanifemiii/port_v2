@@ -31,7 +31,7 @@ export const Home: FC = () => {
 
       {/* Main Section */}
       <main className="flex flex-col w-full mt-auto pb-12 sm:pb-16 lg:pb-24">
-        <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between w-full">
+          <div className="flex flex-col lg:flex-row items-end justify-between w-full gap-4 lg:gap-8">
           {/* Headline + Text */}
           <div className="flex flex-col gap-4">
             <h1
