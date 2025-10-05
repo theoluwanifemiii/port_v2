@@ -1,4 +1,4 @@
-# Anima Project
+# Anima Projec
 
 ## Getting started
 
