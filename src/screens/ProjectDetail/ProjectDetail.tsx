@@ -1,4 +1,4 @@
-import * as React from "react";
+
 import { useParams, Link } from "react-router-dom";
 import { Navigation } from "../../components/Navigation";
 import { ImageSlider } from "../../components/ImageSlider";
@@ -62,7 +62,7 @@ const projectsData: Record<string, ProjectData> = {
   },
 };
 
-export const ProjectDetail = (): JSX.Element => {
+export const ProjectDetail = () => {
   const { projectId } = useParams<{ projectId: string }>();
   const project = projectId ? projectsData[projectId] : null;
 
