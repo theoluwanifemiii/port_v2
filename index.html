@@ -7,11 +7,19 @@
 <style>
       @import url("https://fonts.googleapis.com/css?family=Sometype+Mono:500");
     </style>
-    <link href="tailwind.css" rel="stylesheet" />
-    <link href="tailwind.css" rel="stylesheet" />
+      <!-- Tailwind CSS is imported in src/index.tsx, no need for link tags here -->
+      <!-- <link href="tailwind.css" rel="stylesheet" /> -->
+      <!-- <link href="tailwind.css" rel="stylesheet" /> -->
   </head>
   <body>
     <div id="root"></div>
   <script type="module" src="/src/index.tsx"></script>
   </body>
 </html>
+
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  }
+}
