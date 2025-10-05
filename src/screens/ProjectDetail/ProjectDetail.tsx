@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
 import { Navigation } from "../../components/Navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ExternalLink } from "lucide-react";
 
 const navigationItems = [
   { text: "What have i done", href: "/work", isNative: true },
@@ -22,6 +22,7 @@ interface ProjectData {
   results: string;
   images: string[];
   tags: string[];
+  liveUrl?: string;
 }
 
 const projectsData: Record<string, ProjectData> = {
@@ -46,6 +47,7 @@ const projectsData: Record<string, ProjectData> = {
       "Digitvant Pay crossed 1,000 users during beta and has now grown to over 10,000 active users — proof that a smoother experience drives adoption and retention.",
     images: ["/Project 2.png"],
     tags: ["UX Audit", "Design System", "Mobile Banking", "Web Platform"],
+    liveUrl: "https://ibank.digitvant.com/login",
   },
 };
 
@@ -79,13 +81,27 @@ export const ProjectDetail = (): JSX.Element => {
 
       <main className="w-full flex-1 mt-16 sm:mt-20 lg:mt-24">
         <div className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-16">
-          <Link
-            to="/work"
-            className="inline-flex items-center gap-2 [font-family:'Sometype_Mono',Helvetica] text-sm text-gray-600 hover:text-black transition-colors mb-8 group"
-          >
-            <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
-            Back to Work
-          </Link>
+          <div className="flex items-center justify-between mb-8">
+            <Link
+              to="/work"
+              className="inline-flex items-center gap-2 [font-family:'Sometype_Mono',Helvetica] text-sm text-gray-600 hover:text-black transition-colors group"
+            >
+              <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+              Back to Work
+            </Link>
+
+            {project.liveUrl && (
+              <a
+                href={project.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 [font-family:'Sometype_Mono',Helvetica] text-sm font-medium bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors group"
+              >
+                View Live Site
+                <ExternalLink className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </a>
+            )}
+          </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mb-16">
             <div className="lg:col-span-8">
