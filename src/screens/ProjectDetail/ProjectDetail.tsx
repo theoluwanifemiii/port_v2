@@ -56,7 +56,7 @@ export const ProjectDetail = (): JSX.Element => {
   if (!project) {
     return (
       <div className="bg-white w-full min-h-screen flex flex-col items-center justify-center px-6">
-        <h1 className="[font-family:'Linked',Helvetica] font-black text-black text-4xl mb-4">
+        <h1 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-4xl mb-4">
           Project Not Found
         </h1>
         <Link
@@ -89,10 +89,10 @@ export const ProjectDetail = (): JSX.Element => {
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mb-16">
             <div className="lg:col-span-8">
-              <h1 className="[font-family:'Linked',Helvetica] font-black text-black text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-[0.95] mb-3">
+              <h1 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-[0.95] mb-3">
                 {project.title}
               </h1>
-              <p className="[font-family:'Linked',Helvetica] font-black text-gray-500 text-2xl sm:text-3xl lg:text-4xl tracking-tight leading-[0.95]">
+              <p className="[font-family:'Neue_Montreal',Helvetica] font-bold text-gray-500 text-2xl sm:text-3xl lg:text-4xl tracking-tight leading-[0.95]">
                 {project.subtitle}
               </p>
             </div>
@@ -137,7 +137,7 @@ export const ProjectDetail = (): JSX.Element => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 mb-20">
             <div className="lg:col-span-12">
               <div className="max-w-4xl">
-                <h2 className="[font-family:'Linked',Helvetica] font-black text-black text-2xl sm:text-3xl tracking-tight mb-6">
+                <h2 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-2xl sm:text-3xl tracking-tight mb-6">
                   Overview
                 </h2>
                 {project.description.map((paragraph, index) => (
@@ -155,7 +155,7 @@ export const ProjectDetail = (): JSX.Element => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 mb-20">
             <div className="lg:col-span-12">
               <div className="max-w-4xl">
-                <h2 className="[font-family:'Linked',Helvetica] font-black text-black text-2xl sm:text-3xl tracking-tight mb-6">
+                <h2 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-2xl sm:text-3xl tracking-tight mb-6">
                   The Challenge
                 </h2>
                 <p className="[font-family:'Sometype_Mono',Helvetica] font-normal text-gray-700 text-base sm:text-lg leading-relaxed">
@@ -168,7 +168,7 @@ export const ProjectDetail = (): JSX.Element => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 mb-20">
             <div className="lg:col-span-12">
               <div className="max-w-4xl">
-                <h2 className="[font-family:'Linked',Helvetica] font-black text-black text-2xl sm:text-3xl tracking-tight mb-6">
+                <h2 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-2xl sm:text-3xl tracking-tight mb-6">
                   My Approach
                 </h2>
                 {project.approach.map((paragraph, index) => (
@@ -186,7 +186,7 @@ export const ProjectDetail = (): JSX.Element => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 mb-20">
             <div className="lg:col-span-12">
               <div className="max-w-4xl">
-                <h2 className="[font-family:'Linked',Helvetica] font-black text-black text-2xl sm:text-3xl tracking-tight mb-6">
+                <h2 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-2xl sm:text-3xl tracking-tight mb-6">
                   The Outcome
                 </h2>
                 <p className="[font-family:'Sometype_Mono',Helvetica] font-normal text-gray-700 text-base sm:text-lg leading-relaxed mb-6">

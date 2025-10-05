@@ -17,7 +17,7 @@ export const Home = (): JSX.Element => {
 
       <main className="flex flex-col w-full mt-auto pb-12 sm:pb-16 lg:pb-20">
         <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-4 lg:gap-16">
-          <h1 className="[font-family:'Linked',Helvetica] font-black text-black text-[80px] sm:text-[120px] lg:text-[180px] xl:text-[220px] tracking-tighter leading-[0.85] whitespace-nowrap flex-shrink-0">
+          <h1 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-[80px] sm:text-[120px] lg:text-[180px] xl:text-[220px] tracking-tighter leading-[0.85] whitespace-nowrap flex-shrink-0">
             I&apos;m Olu
           </h1>
 

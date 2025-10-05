@@ -39,7 +39,7 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
     >
       <div className="w-full max-w-md px-8">
         <div className="mb-8 text-center">
-          <h1 className="[font-family:'Linked',Helvetica] font-black text-black text-6xl sm:text-7xl tracking-tight mb-2">
+          <h1 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-6xl sm:text-7xl tracking-tight mb-2">
             OLU
           </h1>
           <p className="[font-family:'Sometype_Mono',Helvetica] text-sm text-gray-500 tracking-wider">

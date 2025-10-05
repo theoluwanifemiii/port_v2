@@ -16,7 +16,7 @@ export const WorkWithMe = (): JSX.Element => {
       </header>
 
       <main className="flex flex-col w-full max-w-4xl mx-auto mt-16 sm:mt-20 lg:mt-24 pb-12 sm:pb-16 lg:pb-20">
-        <h1 className="[font-family:'Linked',Helvetica] font-black text-black text-5xl sm:text-6xl lg:text-7xl tracking-tight leading-[0.95] mb-8">
+        <h1 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-5xl sm:text-6xl lg:text-7xl tracking-tight leading-[0.95] mb-8">
           Let's create something meaningful together
         </h1>
 
@@ -26,7 +26,7 @@ export const WorkWithMe = (): JSX.Element => {
           </p>
 
           <div className="pt-8">
-            <h2 className="[font-family:'Linked',Helvetica] font-black text-black text-2xl sm:text-3xl tracking-tight mb-6">
+            <h2 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-2xl sm:text-3xl tracking-tight mb-6">
               What I do
             </h2>
             <div className="space-y-6">
@@ -60,7 +60,7 @@ export const WorkWithMe = (): JSX.Element => {
           </div>
 
           <div className="pt-8">
-            <h2 className="[font-family:'Linked',Helvetica] font-black text-black text-2xl sm:text-3xl tracking-tight mb-6">
+            <h2 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-2xl sm:text-3xl tracking-tight mb-6">
               How we can work together
             </h2>
             <div className="space-y-6">
@@ -85,7 +85,7 @@ export const WorkWithMe = (): JSX.Element => {
           </div>
 
           <div className="pt-12 border-t border-gray-200">
-            <h2 className="[font-family:'Linked',Helvetica] font-black text-black text-2xl sm:text-3xl tracking-tight mb-6">
+            <h2 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-2xl sm:text-3xl tracking-tight mb-6">
               Get in touch
             </h2>
             <p className="[font-family:'Sometype_Mono',Helvetica] font-normal text-gray-700 text-base sm:text-lg leading-relaxed mb-6">

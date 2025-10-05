@@ -23,7 +23,7 @@ export const Navigation: React.FC<NavigationProps> = ({ items, showBrand = true 
           <li className="transition-all ease-in-out duration-300">
             <Link
               to="/"
-              className="[font-family:'Linked',Helvetica] font-black text-black text-sm sm:text-base lg:text-lg tracking-tight leading-relaxed cursor-pointer block w-full py-3 sm:py-2 transition-all ease-in-out duration-300 hover:text-gray-900"
+              className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-sm sm:text-base lg:text-lg tracking-tight leading-relaxed cursor-pointer block w-full py-3 sm:py-2 transition-all ease-in-out duration-300 hover:text-gray-900"
             >
               Olu
             </Link>
