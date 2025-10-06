@@ -73,6 +73,7 @@ const projectsData: Record<string, ProjectData> = {
     images: ["/Project 2.png"],
     tags: ["UX Audit", "Design System", "Mobile Banking", "Web Platform"],
     liveUrl: "https://ibank.digitvant.com/login",
+    lottieFile: "/Scene.json",
     nextProject: { id: "vital-swap", title: "Vital Swap" }
   },
   "vital-swap": {
