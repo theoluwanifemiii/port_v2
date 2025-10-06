@@ -5,59 +5,40 @@ interface PreloaderProps {
 }
 
 export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
-  const [progress, setProgress] = useState(0);
   const [isExiting, setIsExiting] = useState(false);
 
   useEffect(() => {
-    const duration = 2000;
-    const interval = 20;
-    const increment = (interval / duration) * 100;
+    const timer = setTimeout(() => {
+      setIsExiting(true);
+      setTimeout(onComplete, 600);
+    }, 2500);
 
-    const timer = setInterval(() => {
-      setProgress((prev) => {
-        const next = prev + increment;
-        if (next >= 100) {
-          clearInterval(timer);
-          setTimeout(() => {
-            setIsExiting(true);
-            setTimeout(onComplete, 600);
-          }, 200);
-          return 100;
-        }
-        return next;
-      });
-    }, interval);
-
-    return () => clearInterval(timer);
+    return () => clearTimeout(timer);
   }, [onComplete]);
 
   return (
     <div
-      className={`fixed inset-0 z-50 bg-white flex flex-col items-center justify-center transition-opacity duration-500 ${
+      className={`fixed inset-0 z-50 bg-[#1a1a1a] flex flex-col items-center justify-center transition-opacity duration-500 ${
         isExiting ? "opacity-0" : "opacity-100"
       }`}
     >
-      <div className="w-full max-w-md px-8">
-        <div className="mb-8 text-center">
-          <h1 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-6xl sm:text-7xl tracking-tight mb-2">
-            OLU
-          </h1>
-          <p className="[font-family:'Sometype_Mono',Helvetica] text-sm text-gray-500 tracking-wider">
-            PRODUCT DESIGNER
+      <div className="w-full max-w-md px-8 flex flex-col items-center justify-center">
+        <div className="relative w-64 h-64 mb-8">
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-48 h-48 border-4 border-white/20 rounded-full animate-spin-slow border-t-white"></div>
+          </div>
+        </div>
+
+        <div className="text-center">
+          <p className="[font-family:'Neue_Montreal',Helvetica] font-bold text-white text-sm tracking-[0.2em] mb-2">
+            DAILYMINIMAL
           </p>
-        </div>
-
-        <div className="relative h-1 bg-gray-200 rounded-full overflow-hidden">
-          <div
-            className="absolute inset-y-0 left-0 bg-black rounded-full transition-all duration-100 ease-out"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-
-        <div className="mt-4 text-center">
-          <span className="[font-family:'Sometype_Mono',Helvetica] text-xs text-gray-400 tabular-nums">
-            {Math.round(progress)}%
-          </span>
+          <p className="[font-family:'Neue_Montreal',Helvetica] text-white text-2xl font-bold tracking-wider">
+            NO. 202
+          </p>
+          <p className="[font-family:'Neue_Montreal',Helvetica] text-white/60 text-xs tracking-[0.3em] mt-1">
+            SERIE 2
+          </p>
         </div>
       </div>
     </div>
