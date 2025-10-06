@@ -17,6 +17,8 @@ interface ProjectProps {
   projectId?: string;
 }
 
+import { LottieSection } from "../../components/LottieSection";
+
 const Project: React.FC<ProjectProps> = ({
   title,
   year,
@@ -24,14 +26,25 @@ const Project: React.FC<ProjectProps> = ({
   image,
   projectId,
 }) => {
+  const isDigitvantPay = projectId === "digitvant-pay";
+  const [isHovered, setIsHovered] = React.useState(false);
   const content = (
     <>
-      <div className="w-full aspect-[4/3] sm:aspect-video rounded-lg mb-6 overflow-hidden transition-transform ease-in-out duration-300 hover:scale-[1.02]">
+      <div
+        className="w-full aspect-[4/3] sm:aspect-video rounded-lg mb-6 overflow-hidden transition-transform ease-in-out duration-300 hover:scale-[1.02] relative"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         <img
           src={image}
           alt={title}
-          className="w-full h-full object-cover"
+          className="w-full h-auto object-cover"
         />
+        {isDigitvantPay && isHovered && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
+            <LottieSection animationPath="/Scene.json" maxWidth="400px" />
+          </div>
+        )}
       </div>
 
       <div className="flex flex-col sm:flex-row justify-between items-start gap-4 sm:gap-8">
@@ -69,7 +82,7 @@ const Project: React.FC<ProjectProps> = ({
   );
 };
 
-export const Work = (): JSX.Element => {
+export const Work = () => {
   const projects: ProjectProps[] = [
     {
       title: "VITAL SWAP BACK OFFICE",
