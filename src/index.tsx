@@ -1,4 +1,5 @@
 import './tailwind.css';
+import { inject } from '@vercel/analytics';
 import { StrictMode, useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
@@ -8,6 +9,8 @@ import { Work } from "./screens/Work/Work";
 import { ProjectDetail } from "./screens/ProjectDetail/ProjectDetail";
 import { WorkWithMe } from "./screens/WorkWithMe/WorkWithMe";
 import { Preloader } from "./components/Preloader";
+
+inject();
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
