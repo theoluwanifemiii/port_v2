@@ -4,11 +4,12 @@ import Lottie from "lottie-react";
 interface LottieSectionProps {
   animationPath: string; // path to your JSON file inside public
   maxWidth?: string;
+  autoplay?: boolean;
 }
 
-export const LottieSection: React.FC<LottieSectionProps> = ({ animationPath, maxWidth = "800px" }) => {
-  const lottieRef = useRef<any>(null);
+export const LottieSection: React.FC<LottieSectionProps> = ({ animationPath, maxWidth = "800px", autoplay = false }) => {
   const sectionRef = useRef<HTMLDivElement | null>(null);
+  const lottieRef = useRef<any>(null);
   const [animationData, setAnimationData] = useState<any>(null);
 
   useEffect(() => {
@@ -21,16 +22,24 @@ export const LottieSection: React.FC<LottieSectionProps> = ({ animationPath, max
     <div
       ref={sectionRef}
       className="w-full h-full flex items-center justify-center bg-transparent"
-      onMouseEnter={() => lottieRef.current?.play()}
-      onMouseLeave={() => lottieRef.current?.stop()}
       style={{ width: "100%", height: "100%", maxWidth, background: "none" }}
+      onMouseEnter={() => {
+        if (lottieRef.current && typeof lottieRef.current.play === 'function') {
+          lottieRef.current.play();
+        }
+      }}
+      onMouseLeave={() => {
+        if (lottieRef.current && typeof lottieRef.current.stop === 'function') {
+          lottieRef.current.stop();
+        }
+      }}
     >
       {animationData && (
         <Lottie
           lottieRef={lottieRef}
           animationData={animationData}
           loop
-          autoplay={false}
+          autoplay={autoplay}
           style={{ width: "100%", height: "100%", display: "block" }}
         />
       )}

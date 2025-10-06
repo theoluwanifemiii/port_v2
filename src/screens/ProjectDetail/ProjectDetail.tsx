@@ -216,7 +216,7 @@ export const ProjectDetail = () => {
               </p>
             </div>
 
-            <LottieSection animationPath="/Scene.json" />
+            <LottieSection animationPath="/Scene.json" autoplay />
           </section>
 
           {/* Tags */}
