@@ -79,7 +79,7 @@ const projectsData: Record<string, ProjectData> = {
     id: "vital-swap",
     title: "Vital Swap",
     subtitle: "Designing a Back Office for Smooth Operations",
-    year: "2024",
+    year: "2025",
     description: [
       "Vital Swap needed a back office platform that could handle complex operations across three distinct user types — administrators, agents, and merchants. The existing workflow was fragmented, with tasks scattered across multiple tools. Operations often slowed down due to unclear permissions, inconsistent design patterns, and missing visibility into daily activities.",
       "The goal was simple but ambitious: build an operational backbone that could scale smoothly without confusion."
@@ -122,7 +122,7 @@ const projectsData: Record<string, ProjectData> = {
       "The new Bills Inventory module transformed how operations teams managed the platform. Workflows became more transparent, decisions faster, and overall efficiency improved significantly.",
     results:
       "Faster restocking time and improved daily operations. Clear visibility into bill balances and transactions. Positive feedback from operations and business dev teams.",
-    images: ["/Project 4.png"],
+    images: ["/Project 3.png"],
     tags: ["Admin Dashboard", "Inventory Management", "Bill Payments", "Operations"],
     liveUrl: "https://play.google.com/store/apps/details?id=com.motobills.app&hl=en",
     lottieFile: "/motobills.json",
