@@ -15,6 +15,7 @@ interface ProjectProps {
   description: string[];
   image: string;
   projectId?: string;
+  lottieFile?: string;
 }
 
 import { LottieSection } from "../../components/LottieSection";
@@ -25,8 +26,8 @@ const Project: React.FC<ProjectProps> = ({
   description,
   image,
   projectId,
+  lottieFile,
 }) => {
-  const isDigitvantPay = projectId === "digitvant-pay";
   const [isHovered, setIsHovered] = React.useState(false);
   const content = (
     <>
@@ -40,9 +41,9 @@ const Project: React.FC<ProjectProps> = ({
           alt={title}
           className="w-full h-auto object-cover"
         />
-        {isDigitvantPay && isHovered && (
+        {lottieFile && isHovered && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <LottieSection animationPath="/Scene.json" maxWidth="100%" />
+            <LottieSection animationPath={lottieFile} maxWidth="100%" />
             <style>{`.lottie-full { width: 100% !important; height: 100% !important; }`}</style>
           </div>
         )}
@@ -92,6 +93,8 @@ export const Work = () => {
         "I designed the Vital Swap back office to support three different user types, ensuring smooth operations and efficient workflows. The focus was on clarity, usability, and enabling the team to run processes seamlessly.",
       ],
       image: "/Project 1.png",
+      projectId: "vital-swap",
+      lottieFile: "/Vitalswap.json",
     },
     {
       title: "DIGITVANT PAY MOBILE & INTERNET REDESIGN",
@@ -102,6 +105,7 @@ export const Work = () => {
       ],
       image: "/Project 2.png",
       projectId: "digitvant-pay",
+      lottieFile: "/Scene.json",
     },
     {
       title: "MOTOBILLS ADMIN BILLS INVENTORY",
@@ -111,6 +115,8 @@ export const Work = () => {
         "I designed the admin dashboard that empowers operations managers to restock bills faster, set selling prices and cashback percentages, and monitor balances in real time",
       ],
       image: "/Project 3.png",
+      projectId: "motobills",
+      lottieFile: "/motobills.json",
     },
     {
       title: "ONE DRUG STORE CHECK OUT REDESIGN",

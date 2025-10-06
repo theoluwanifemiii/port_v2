@@ -311,7 +311,7 @@ export const ProjectDetail = () => {
 
             {project.outcomeImages && project.outcomeImages.length > 0 && (
               <div className="mb-8">
-                <ImageSlider images={project.outcomeImages} />
+                <ImageSlider images={project.outcomeImages} enableFadeEffect={true} />
               </div>
             )}
 
