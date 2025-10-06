@@ -41,8 +41,9 @@ const Project: React.FC<ProjectProps> = ({
           className="w-full h-auto object-cover"
         />
         {isDigitvantPay && isHovered && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
-            <LottieSection animationPath="/Scene.json" maxWidth="400px" />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <LottieSection animationPath="/Scene.json" maxWidth="100%" />
+            <style>{`.lottie-full { width: 100% !important; height: 100% !important; }`}</style>
           </div>
         )}
       </div>

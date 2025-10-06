@@ -6,44 +6,34 @@ interface LottieSectionProps {
   maxWidth?: string;
 }
 
-export const LottieSection: React.FC<LottieSectionProps> = ({
-  animationPath,
-  maxWidth = "800px",
-}) => {
+export const LottieSection: React.FC<LottieSectionProps> = ({ animationPath, maxWidth = "800px" }) => {
   const lottieRef = useRef<any>(null);
-  const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement | null>(null);
+  const [animationData, setAnimationData] = useState<any>(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          setIsVisible(entry.isIntersecting);
-        });
-      },
-      { threshold: 0.2 }
-    );
-
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
+    fetch(animationPath)
+      .then((res) => res.json())
+      .then((data) => setAnimationData(data));
+  }, [animationPath]);
 
   return (
     <div
       ref={sectionRef}
-      className={`flex justify-center transition-all duration-700 ${
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-      }`}
-      onMouseEnter={() => lottieRef.current?.pause()}
-      onMouseLeave={() => lottieRef.current?.play()}
+      className="w-full h-full flex items-center justify-center bg-transparent"
+      onMouseEnter={() => lottieRef.current?.play()}
+      onMouseLeave={() => lottieRef.current?.stop()}
+      style={{ width: "100%", height: "100%", maxWidth, background: "none" }}
     >
-      <Lottie
-        lottieRef={lottieRef}
-        path={animationPath}
-        loop
-        autoplay
-        style={{ width: "100%", maxWidth }}
-      />
+      {animationData && (
+        <Lottie
+          lottieRef={lottieRef}
+          animationData={animationData}
+          loop
+          autoplay={false}
+          style={{ width: "100%", height: "100%", display: "block" }}
+        />
+      )}
     </div>
   );
 };
