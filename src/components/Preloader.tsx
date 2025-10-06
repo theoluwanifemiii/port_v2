@@ -10,34 +10,31 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsExiting(true);
-      setTimeout(onComplete, 600);
-    }, 2500);
+      setTimeout(onComplete, 800);
+    }, 2200);
 
     return () => clearTimeout(timer);
   }, [onComplete]);
 
   return (
     <div
-      className={`fixed inset-0 z-50 bg-[#1a1a1a] flex flex-col items-center justify-center transition-opacity duration-500 ${
-        isExiting ? "opacity-0" : "opacity-100"
+      className={`fixed inset-0 z-50 bg-neutral-100 flex flex-col items-center justify-center transition-all duration-700 ${
+        isExiting ? "opacity-0 scale-95" : "opacity-100 scale-100"
       }`}
     >
-      <div className="w-full max-w-md px-8 flex flex-col items-center justify-center">
-        <div className="relative w-64 h-64 mb-8">
+      <div className="flex flex-col items-center justify-center">
+        <div className="relative w-32 h-32 mb-8">
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-48 h-48 border-4 border-white/20 rounded-full animate-spin-slow border-t-white"></div>
+            <div className="w-24 h-24 border-2 border-black/10 rounded-full animate-spin-slow border-t-black"></div>
           </div>
         </div>
 
         <div className="text-center">
-          <p className="[font-family:'Neue_Montreal',Helvetica] font-bold text-white text-sm tracking-[0.2em] mb-2">
-            DAILYMINIMAL
-          </p>
-          <p className="[font-family:'Neue_Montreal',Helvetica] text-white text-2xl font-bold tracking-wider">
-            NO. 202
-          </p>
-          <p className="[font-family:'Neue_Montreal',Helvetica] text-white/60 text-xs tracking-[0.3em] mt-1">
-            SERIE 2
+          <h1 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-5xl tracking-tight mb-1">
+            OLU
+          </h1>
+          <p className="[font-family:'Sometype_Mono',Helvetica] text-xs text-gray-500 tracking-wider uppercase">
+            Product Designer
           </p>
         </div>
       </div>

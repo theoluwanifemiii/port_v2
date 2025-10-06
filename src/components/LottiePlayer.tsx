@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import Lottie from "lottie-react";
+import React, { useState, useEffect, useRef } from "react";
+import Lottie, { LottieRefCurrentProps } from "lottie-react";
 
 interface LottiePlayerProps {
   animationPath: string;
@@ -17,7 +17,7 @@ export const LottiePlayer: React.FC<LottiePlayerProps> = ({
   className = ""
 }) => {
   const [animationData, setAnimationData] = useState<any>(null);
-  const [isPaused, setIsPaused] = useState(!autoplay);
+  const lottieRef = useRef<LottieRefCurrentProps>(null);
 
   useEffect(() => {
     fetch(animationPath)
@@ -26,19 +26,31 @@ export const LottiePlayer: React.FC<LottiePlayerProps> = ({
       .catch(error => console.error("Error loading animation:", error));
   }, [animationPath]);
 
+  const handleMouseEnter = () => {
+    if (pauseOnHover && lottieRef.current) {
+      lottieRef.current.pause();
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (pauseOnHover && lottieRef.current) {
+      lottieRef.current.play();
+    }
+  };
+
   if (!animationData) return null;
 
   return (
     <div
       className={className}
-      onMouseEnter={() => pauseOnHover && setIsPaused(!autoplay)}
-      onMouseLeave={() => pauseOnHover && setIsPaused(autoplay ? false : true)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <Lottie
+        lottieRef={lottieRef}
         animationData={animationData}
         loop={loop}
         autoplay={autoplay}
-        isPaused={isPaused}
       />
     </div>
   );

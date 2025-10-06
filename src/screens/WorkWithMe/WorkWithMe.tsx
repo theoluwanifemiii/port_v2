@@ -88,33 +88,115 @@ export const WorkWithMe = (): JSX.Element => {
             <h2 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-2xl sm:text-3xl tracking-tight mb-6">
               Get in touch
             </h2>
-            <p className="[font-family:'Sometype_Mono',Helvetica] font-normal text-gray-700 text-base sm:text-lg leading-relaxed mb-6">
+            <p className="[font-family:'Sometype_Mono',Helvetica] font-normal text-gray-700 text-base sm:text-lg leading-relaxed mb-8">
               I'd love to hear about what you're building. Drop me a message and let's explore how I can help bring your vision to life.
             </p>
-            <div className="space-y-4">
+
+            <form className="space-y-6">
               <div>
-                <p className="[font-family:'Sometype_Mono',Helvetica] text-sm text-gray-500 mb-1">
-                  Email
-                </p>
-                <a
-                  href="mailto:hello@olu.design"
-                  className="[font-family:'Sometype_Mono',Helvetica] font-medium text-black text-lg hover:text-gray-600 transition-colors"
-                >
-                  hello@olu.design
-                </a>
+                <label htmlFor="name" className="[font-family:'Sometype_Mono',Helvetica] text-sm text-gray-700 mb-2 block">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  required
+                  className="w-full px-4 py-3 [font-family:'Sometype_Mono',Helvetica] text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all"
+                  placeholder="Your name"
+                />
               </div>
+
               <div>
-                <p className="[font-family:'Sometype_Mono',Helvetica] text-sm text-gray-500 mb-1">
-                  LinkedIn
-                </p>
-                <a
-                  href="https://linkedin.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="[font-family:'Sometype_Mono',Helvetica] font-medium text-black text-lg hover:text-gray-600 transition-colors"
+                <label htmlFor="email" className="[font-family:'Sometype_Mono',Helvetica] text-sm text-gray-700 mb-2 block">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  className="w-full px-4 py-3 [font-family:'Sometype_Mono',Helvetica] text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all"
+                  placeholder="your@email.com"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="company" className="[font-family:'Sometype_Mono',Helvetica] text-sm text-gray-700 mb-2 block">
+                  Company (Optional)
+                </label>
+                <input
+                  type="text"
+                  id="company"
+                  name="company"
+                  className="w-full px-4 py-3 [font-family:'Sometype_Mono',Helvetica] text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all"
+                  placeholder="Your company"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="project" className="[font-family:'Sometype_Mono',Helvetica] text-sm text-gray-700 mb-2 block">
+                  Tell me about your project
+                </label>
+                <textarea
+                  id="project"
+                  name="project"
+                  required
+                  rows={6}
+                  className="w-full px-4 py-3 [font-family:'Sometype_Mono',Helvetica] text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all resize-none"
+                  placeholder="Share details about your project, timeline, and what you're looking for..."
+                />
+              </div>
+
+              <div>
+                <label htmlFor="budget" className="[font-family:'Sometype_Mono',Helvetica] text-sm text-gray-700 mb-2 block">
+                  Budget Range (Optional)
+                </label>
+                <select
+                  id="budget"
+                  name="budget"
+                  className="w-full px-4 py-3 [font-family:'Sometype_Mono',Helvetica] text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all bg-white"
                 >
-                  Connect with me
-                </a>
+                  <option value="">Select a range</option>
+                  <option value="under-5k">Under $5,000</option>
+                  <option value="5k-10k">$5,000 - $10,000</option>
+                  <option value="10k-25k">$10,000 - $25,000</option>
+                  <option value="25k-50k">$25,000 - $50,000</option>
+                  <option value="50k-plus">$50,000+</option>
+                </select>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full sm:w-auto px-8 py-4 [font-family:'Sometype_Mono',Helvetica] font-medium text-base bg-black text-white rounded-lg hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
+              >
+                Send Message
+              </button>
+            </form>
+
+            <div className="mt-12 pt-8 border-t border-gray-200">
+              <p className="[font-family:'Sometype_Mono',Helvetica] text-sm text-gray-500 mb-4">
+                Or reach out directly:
+              </p>
+              <div className="space-y-3">
+                <div>
+                  <a
+                    href="mailto:hello@olu.design"
+                    className="[font-family:'Sometype_Mono',Helvetica] font-medium text-black text-base hover:text-gray-600 transition-colors"
+                  >
+                    hello@olu.design
+                  </a>
+                </div>
+                <div>
+                  <a
+                    href="https://linkedin.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="[font-family:'Sometype_Mono',Helvetica] font-medium text-black text-base hover:text-gray-600 transition-colors"
+                  >
+                    Connect on LinkedIn
+                  </a>
+                </div>
               </div>
             </div>
           </div>
