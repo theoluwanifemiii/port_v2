@@ -45,10 +45,10 @@ export const Home: FC = () => {
 
       {/* Main Section */}
       <main className="flex flex-col w-full mt-auto pb-12 sm:pb-16 lg:pb-24">
-        <div className="flex flex-col lg:flex-row items-start lg:items-end w-full gap-8 lg:gap-16">
+        <div className="flex flex-col lg:flex-row items-start lg:items-end w-full bg-red-400 gap-8 lg:gap-16">
           {/* Headline */}
           <h1
-            className="[font-family:'Neue_Montreal',Helvetica] font-black text-black tracking-tighter leading-[0.85] whitespace-nowrap flex-shrink-0 bg-red-400"
+            className="[font-family:'Neue_Montreal',Helvetica] font-black text-black tracking-tighter leading-[0.85] whitespace-nowrap flex-shrink-0"
             style={{
               fontSize: "235px",
             }}
