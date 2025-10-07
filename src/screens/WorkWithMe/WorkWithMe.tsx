@@ -158,8 +158,8 @@ export const WorkWithMe = (): JSX.Element => {
                   className="w-full px-4 py-3 [font-family:'Sometype_Mono',Helvetica] text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all bg-white"
                 >
                   <option value="">Select a range</option>
-                  <option value="under-5k">Under $5,000</option>
-                  <option value="5k-10k">$5,000 - $10,000</option>
+                  <option value="under-5k">$500- $1,000</option>
+                  <option value="5k-10k">$1,000 - $5,000</option>
                   <option value="10k-25k">$10,000 - $25,000</option>
                   <option value="25k-50k">$25,000 - $50,000</option>
                   <option value="50k-plus">$50,000+</option>
@@ -184,12 +184,12 @@ export const WorkWithMe = (): JSX.Element => {
                     href="mailto:hello@olu.design"
                     className="[font-family:'Sometype_Mono',Helvetica] font-medium text-black text-base hover:text-gray-600 transition-colors"
                   >
-                    hello@olu.design
+                    theoluwanifemi@gmail.com
                   </a>
                 </div>
                 <div>
                   <a
-                    href="https://linkedin.com"
+                    href="https://www.linkedin.com/in/oluwanifemiosunsanya/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="[font-family:'Sometype_Mono',Helvetica] font-medium text-black text-base hover:text-gray-600 transition-colors"
