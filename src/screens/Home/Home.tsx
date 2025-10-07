@@ -19,7 +19,7 @@ export const Home: FC = () => {
     <div className="bg-white w-full min-h-screen flex flex-col px-6 sm:px-12 lg:px-16 xl:px-24">
       {/* Header */}
       <header className="w-full mt-10 sm:mt-14 lg:mt-20">
-        <nav className="flex flex-col sm:flex-row sm:items-center w-full max-w-7xl mx-auto transition-all duration-300 ease-in-out">
+        <nav className="flex flex-col sm:flex-row sm:items-center w-full bg-red-400 max-w-7xl mx-auto transition-all duration-300 ease-in-out">
           {/* Logo */}
           <div className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-lg sm:text-xl cursor-pointer transition-colors duration-300 hover:text-gray-800 sm:flex-none">
             Olu
