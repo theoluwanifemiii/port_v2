@@ -98,7 +98,7 @@ export const Work = () => {
     },
     {
       title: "DIGITVANT PAY MOBILE & INTERNET REDESIGN",
-      year: "2024",
+      year: "2025",
       description: [
         "Digitvant Pay is a microfinance digital banking platform offering transfers, bill payments, and savings options.",
         "I led the redesign of both the mobile and internet banking platforms, simplifying financial management and creating a cleaner, more intuitive experience for individuals and businesses.",
