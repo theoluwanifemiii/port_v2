@@ -50,7 +50,7 @@ export const Home: FC = () => {
           <h1
             className="[font-family:'Neue_Montreal',Helvetica] font-black text-black tracking-tighter leading-[0.85] whitespace-nowrap flex-shrink-0"
             style={{
-              fontSize: "clamp(4rem, 10vw, 13rem)",
+              fontSize: "235px",
             }}
           >
             I&apos;m Olu
