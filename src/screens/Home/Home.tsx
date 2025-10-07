@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
+import { Navigation } from "../../components/Navigation";
 
 interface NavigationItem {
   text: string;
@@ -19,28 +20,7 @@ export const Home: FC = () => {
     <div className="bg-white w-full min-h-screen flex flex-col px-6 sm:px-12 lg:px-16 xl:px-24">
       {/* Header */}
       <header className="w-full mt-10 sm:mt-14 lg:mt-20">
-        <nav className="flex flex-col sm:flex-row sm:items-center w-full transition-all duration-300 ease-in-out">
-          {/* Logo */}
-          <div className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-lg sm:text-xl cursor-pointer transition-colors duration-300 hover:text-gray-800 sm:flex-none">
-            Olu
-          </div>
-
-          {/* Navigation Items */}
-          <ul className="flex flex-col sm:flex-row justify-between sm:flex-1 sm:ml-20 mt-4 sm:mt-0 w-full gap-4 sm:gap-0">
-            {navigationItems.map((item, index) => (
-              <li
-                key={index}
-                className="text-center [font-family:'Sometype_Mono',monospace] text-gray-500 text-base sm:text-lg font-normal tracking-tight leading-relaxed hover:text-black transition-colors duration-300 ease-in-out"
-              >
-                {item.isNative ? (
-                  <Link to={item.href}>{item.text}</Link>
-                ) : (
-                  <a href={item.href}>{item.text}</a>
-                )}
-              </li>
-            ))}
-          </ul>
-        </nav>
+      <Navigation/>    
       </header>
 
       {/* Main Section */}
