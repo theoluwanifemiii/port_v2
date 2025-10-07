@@ -57,24 +57,14 @@ const projectsData: Record<string, ProjectData> = {
     ],
     outcome:
       "The redesigned platform delivered a cohesive, frictionless experience that users could trust and developers could build on confidently.",
-    outcomeImages: [
-      "/Afrer 1.png",
-      "/Afrer 2.png",
-      "/Afrer Dashboard.png",
-      "/afrer 3.png",
-      "/afrer 5.png",
-      "/afrer 8.png",
-      "/afrer6.png",
-      "/afrer7.png",
-      "/afrer9.png"
-    ],
     results:
       "Digitvant Pay crossed 1,000 users during beta and has now grown to over 10,000 active users — proof that a smoother experience drives adoption and retention.",
     images: ["/Project 2.png"],
     tags: ["UX Audit", "Design System", "Mobile Banking", "Web Platform"],
     liveUrl: "https://ibank.digitvant.com/login",
     lottieFile: "/Scene.json",
-    nextProject: { id: "vital-swap", title: "Vital Swap" }
+    prevProject: { id: "vital-swap", title: "Vital Swap" },
+    nextProject: { id: "motobills", title: "Motobills Admin" }
   },
   "vital-swap": {
     id: "vital-swap",
@@ -100,8 +90,8 @@ const projectsData: Record<string, ProjectData> = {
     tags: ["Back Office", "Admin Dashboard", "Multi-User System", "Operations"],
     liveUrl: "https://vitalswap.com/",
     lottieFile: "/Vitalswap.json",
-    prevProject: { id: "digitvant-pay", title: "Digitvant Pay" },
-    nextProject: { id: "motobills", title: "Motobills Admin" }
+    prevProject: { id: "onedrugstore", title: "One Drug Store" },
+    nextProject: { id: "digitvant-pay", title: "Digitvant Pay" }
   },
   "motobills": {
     id: "motobills",
@@ -127,7 +117,9 @@ const projectsData: Record<string, ProjectData> = {
     tags: ["Admin Dashboard", "Inventory Management", "Bill Payments", "Operations"],
     liveUrl: "https://play.google.com/store/apps/details?id=com.motobills.app&hl=en",
     lottieFile: "/motobills.json",
-    prevProject: { id: "vital-swap", title: "Vital Swap" }
+    nextProject: { id: "onedrugstore", title: "One Drug Store" },
+   prevProject: { id: "digitvant-pay", title: "Digitvant Pay" }
+    
   }
 };
 
