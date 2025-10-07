@@ -45,7 +45,7 @@ export const Home: FC = () => {
 
       {/* Main Section */}
       <main className="flex flex-col w-full mt-auto pb-12 sm:pb-16 lg:pb-24">
-        <div className="flex flex-col lg:flex-row items-start lg:items-end w-full bg-red-400 gap-8 lg:gap-8">
+        <div className="flex flex-col lg:flex-row items-start lg:items-end w-full gap-8 lg:gap-8">
           {/* Headline */}
           <h1
             className="[font-family:'Neue_Montreal',Helvetica] font-black text-black tracking-tighter leading-[0.85] whitespace-nowrap flex-shrink-0"
@@ -57,7 +57,7 @@ export const Home: FC = () => {
           </h1>
 
           {/* Paragraph */}
-          <p className="w-full lg:max-w-[520px] xl:max-w-[600px] [font-family:'Sometype_Mono',monospace] font-normal text-gray-700 text-base sm:text-lg lg:text-xl tracking-tight leading-relaxed transition-all duration-300 ease-in-out">
+          <p className="w-full [font-family:'Sometype_Mono',monospace] font-normal text-gray-700 text-base sm:text-lg lg:text-xl tracking-tight leading-relaxed transition-all duration-300 ease-in-out">
             I help startups and SaaS teams simplify complexity through
             thoughtful, user-centered design. Every screen I craft tells a story
             where users feel seen and products feel effortless.
