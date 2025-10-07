@@ -19,7 +19,7 @@ export const Navigation: React.FC<NavigationProps> = ({ items, showBrand = true,
 
   return (
     <nav className={className ? className : "w-full"}>
-      <ul className="flex flex-col sm:flex-row w-full gap-0 bg-red-400 sm:justify-between sm:space-x-8 lg:space-x-12">
+      <ul className="flex flex-col sm:flex-row w-full gap-0 sm:justify-between sm:space-x-8 lg:space-x-12">
         {showBrand && (
           <li className="transition-all ease-in-out duration-300">
             <Link
