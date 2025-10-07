@@ -80,7 +80,7 @@ const projectsData: Record<string, ProjectData> = {
     id: "vital-swap",
     title: "Vital Swap",
     subtitle: "Designing a Back Office for Smooth Operations",
-    year: "2025",
+    year: "2024",
     description: [
       "Vital Swap needed a back office platform that could handle complex operations across three distinct user types — administrators, agents, and merchants. The existing workflow was fragmented, with tasks scattered across multiple tools. Operations often slowed down due to unclear permissions, inconsistent design patterns, and missing visibility into daily activities.",
       "The goal was simple but ambitious: build an operational backbone that could scale smoothly without confusion."
@@ -96,7 +96,7 @@ const projectsData: Record<string, ProjectData> = {
       "The new back office became the engine of Vital Swap's daily operations. It allowed different user types to work seamlessly without overlapping responsibilities or confusion.",
     results:
       "Faster onboarding for new staff and agents. Reduced operational errors due to clearer data visibility. Consistent, scalable design system across all user types. What started as a scattered workflow became a unified, efficient system that helped Vital Swap's operations run smoothly and confidently.",
-    images: ["/Project 3.png"],
+    images: ["/Project 1.png"],
     tags: ["Back Office", "Admin Dashboard", "Multi-User System", "Operations"],
     liveUrl: "https://vitalswap.com/",
     lottieFile: "/Vitalswap.json",
