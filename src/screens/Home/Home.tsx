@@ -48,7 +48,7 @@ export const Home: FC = () => {
         <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between w-full gap-8 lg:gap-16">
           {/* Headline */}
           <h1
-            className="[font-family:'Neue_Montreal',Helvetica] font-black text-black tracking-tighter leading-[0.85] whitespace-nowrap flex-shrink-0"
+            className="[font-family:'Neue_Montreal',Helvetica] font-black text-black tracking-tighter leading-[0.85] whitespace-nowrap flex-shrink-0 bg-red-400"
             style={{
               fontSize: "235px",
             }}
