@@ -24,14 +24,14 @@ export const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
         fadeEffect={{
           crossFade: true,
         }}
-        className="w-full h-auto"
+        className="w-[400px] h-auto"
       >
         {images.map((src, index) => (
           <SwiperSlide key={index}>
             <img
               src={src}
               alt={`slide-${index}`}
-              className="w-full h-auto object-cover"
+              className="object-cover w-full h-auto"
             />
           </SwiperSlide>
         ))}

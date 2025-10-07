@@ -15,10 +15,10 @@ interface ProjectProps {
   description: string[];
   image: string;
   projectId?: string;
-  lottieFile?: string;
+  lottieFile: string;
 }
 
-import { LottieSection } from "../../components/LottieSection";
+import { LottiePlayer } from "../../components/LottiePlayer";
 
 const Project: React.FC<ProjectProps> = ({
   title,
@@ -32,24 +32,26 @@ const Project: React.FC<ProjectProps> = ({
   const content = (
     <>
       <div
-        className="w-full aspect-[4/3] sm:aspect-video rounded-lg mb-6 overflow-hidden transition-transform ease-in-out duration-300 hover:scale-[1.02] relative"
+        className="w-full rounded-lg mb-6 overflow-hidden transition-transform ease-in-out duration-300 hover:scale-[1.02] relative"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <img
-          src={image}
-          alt={title}
-          className="w-full h-auto object-cover"
-        />
+        <img src={image} alt={title} className="object-cover w-full h-auto" />
+
         {lottieFile && isHovered && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <LottieSection animationPath={lottieFile} maxWidth="100%" />
-            <style>{`.lottie-full { width: 100% !important; height: 100% !important; }`}</style>
+          <div className="absolute inset-0 flex">
+            <LottiePlayer
+              animationPath={lottieFile}
+              autoplay={true}
+              loop={true}
+              pauseOnHover={false}
+              className="w-full h-full"
+            />
           </div>
         )}
       </div>
 
-      <div className="flex flex-col sm:flex-row justify-between items-start gap-4 sm:gap-8">
+      <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:gap-8">
         <h2 className="[font-family:'Sometype_Mono',Helvetica] font-bold text-black text-xl sm:text-2xl tracking-tight uppercase flex-shrink-0">
           {title}
         </h2>
@@ -72,9 +74,9 @@ const Project: React.FC<ProjectProps> = ({
   );
 
   return (
-    <div className="w-full max-w-4xl mx-auto mb-16 sm:mb-20 lg:mb-24 transition-all ease-in-out duration-300">
+    <div className="w-full max-w-4xl mx-auto mb-16 transition-all duration-300 ease-in-out sm:mb-20 lg:mb-24">
       {projectId ? (
-        <Link to={`/work/${projectId}`} className="block group cursor-pointer">
+        <Link to={`/work/${projectId}`} className="block cursor-pointer group">
           {content}
         </Link>
       ) : (
@@ -124,13 +126,14 @@ export const Work = () => {
       description: [
         "One Drug Store brings pharmacy services online — from prescriptions to everyday wellness essentials. I redesigned the checkout experience, reducing friction so users can place and receive orders seamlessly, ensuring trust and reliability throughout the flow.",
       ],
+      lottieFile: "",
       image: "/Project 4.png",
     },
   ];
 
   return (
-    <div className="bg-white w-full min-h-screen flex flex-col px-6 sm:px-12 lg:px-16">
-      <header className="w-full mt-12 sm:mt-16 lg:mt-20 mb-16 sm:mb-20">
+    <div className="flex flex-col w-full min-h-screen px-6 bg-white sm:px-12 lg:px-16">
+      <header className="w-full mt-12 mb-16 sm:mt-16 lg:mt-20 sm:mb-20">
         <Navigation items={navigationItems} />
       </header>
 
