@@ -5,7 +5,7 @@ import { Navigation } from "../../components/Navigation";
 const navigationItems = [
   { text: "What have i done", href: "/work", isNative: true },
   { text: "Who am i ?", href: "/", isNative: true },
-  { text: "My explorations", href: "https://www.behance.net/olumideakinyemi", isNative: false },
+  { text: "My explorations", href: "#", isNative: false },
   { text: "Work with me", href: "/work-with-me", isNative: true },
 ];
 

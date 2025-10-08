@@ -11,7 +11,7 @@ interface NavigationItem {
 const navigationItems: NavigationItem[] = [
   { text: "What have I done", href: "/work", isNative: true },
   { text: "Who am I ?", href: "#", isNative: false },
-  { text: "My explorations", href: "https://www.behance.net/olumideakinyemi", isNative: false },
+  { text: "My explorations", href: "#", isNative: false },
   { text: "Work with me", href: "/work-with-me", isNative: true },
 ];
 
