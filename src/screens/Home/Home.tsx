@@ -17,22 +17,17 @@ const navigationItems: NavigationItem[] = [
 
 export const Home: FC = () => {
   return (
-    <div className="bg-white w-full min-h-screen flex flex-col px-6 sm:px-12 lg:px-16 xl:px-24">
+    <div className="flex flex-col w-full min-h-screen px-6 bg-white sm:px-12 lg:px-16 xl:px-24">
       {/* Header */}
       <header className="w-full mt-10 sm:mt-14 lg:mt-20">
-      <Navigation items={navigationItems} />
+        <Navigation items={navigationItems} />
       </header>
 
       {/* Main Section */}
-      <main className="flex flex-col w-full mt-auto pb-12 sm:pb-16 lg:pb-24">
-        <div className="flex flex-col lg:flex-row items-start lg:items-end w-full gap-8 lg:gap-8">
+      <main className="flex flex-col w-full pb-12 mt-auto sm:pb-16 lg:pb-24">
+        <div className="flex flex-col items-start w-full gap-8 lg:flex-row lg:items-end lg:gap-8">
           {/* Headline */}
-          <h1
-            className="[font-family:'Neue_Montreal',Helvetica] font-black text-black tracking-tighter leading-[0.85] whitespace-nowrap flex-shrink-0"
-            style={{
-              fontSize: "235px",
-            }}
-          >
+          <h1 className="[font-family:'Neue_Montreal',Helvetica] font-black text-black tracking-tighter leading-[0.85] whitespace-nowrap flex-shrink-0 text-[100px] lg:text-[150px] xl:text-[235px]">
             I&apos;m Olu
           </h1>
 
