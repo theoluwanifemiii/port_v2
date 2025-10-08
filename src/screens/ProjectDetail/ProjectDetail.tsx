@@ -28,6 +28,7 @@ interface ProjectData {
   tags: string[];
   liveUrl?: string;
   lottieFile?: string;
+  behanceEmbed?: string;
   nextProject?: { id: string; title: string };
   prevProject?: { id: string; title: string };
 }
@@ -62,6 +63,7 @@ const projectsData: Record<string, ProjectData> = {
     tags: ["UX Audit", "Design System", "Mobile Banking", "Web Platform"],
     liveUrl: "https://ibank.digitvant.com/login",
     lottieFile: "/Scene.json",
+    behanceEmbed: "https://www.behance.net/embed/project/173528357?ilo0=1",
     prevProject: { id: "vital-swap", title: "Vital Swap" },
     nextProject: { id: "motobills", title: "Motobills Admin" },
   },
@@ -323,6 +325,22 @@ export const ProjectDetail = () => {
                   pauseOnHover={true}
                   className="w-full mx-auto"
                 />
+              </div>
+            )}
+
+            {project.behanceEmbed && (
+              <div className="mt-8">
+                <div className="relative w-full" style={{ paddingBottom: "78.22%" }}>
+                  <iframe
+                    src={project.behanceEmbed}
+                    className="absolute top-0 left-0 w-full h-full rounded-lg"
+                    allowFullScreen
+                    loading="lazy"
+                    frameBorder="0"
+                    allow="clipboard-write"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                  />
+                </div>
               </div>
             )}
 
