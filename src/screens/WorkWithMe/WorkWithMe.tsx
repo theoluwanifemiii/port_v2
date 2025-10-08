@@ -41,7 +41,7 @@ export const WorkWithMe = () => {
           message: formData.project,
           budget: formData.budget,
           company: formData.company,
-          to_email: "oluwanifemi@gmail.com", // Your email address
+          to_email: "theoluwanifemi@gmail.com", // Your email address
         },
         publicKey
       )
@@ -296,18 +296,18 @@ export const WorkWithMe = () => {
               <p className="[font-family:'Sometype_Mono',Helvetica] text-sm text-gray-500 mb-4">
                 Or reach out directly:
               </p>
-              <div className="space-y-3">
+              <div className="flex items-center gap-5">
                 <div>
                   <a
                     href="mailto:hello@olu.design"
                     className="[font-family:'Sometype_Mono',Helvetica] font-medium text-black text-base hover:text-gray-600 transition-colors"
                   >
-                    hello@olu.design
+                    theoluwanifemi@gmail.com
                   </a>
                 </div>
                 <div>
                   <a
-                    href="https://linkedin.com"
+                    href="https://www.linkedin.com/in/oluwanifemiosunsanya/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="[font-family:'Sometype_Mono',Helvetica] font-medium text-black text-base hover:text-gray-600 transition-colors"

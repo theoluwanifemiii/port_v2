@@ -16,6 +16,7 @@ interface ProjectProps {
   image: string;
   projectId?: string;
   lottieFile: string;
+  href?: string;
 }
 
 import { LottiePlayer } from "../../components/LottiePlayer";
@@ -27,6 +28,7 @@ const Project: React.FC<ProjectProps> = ({
   image,
   projectId,
   lottieFile,
+  href,
 }) => {
   const [isHovered, setIsHovered] = React.useState(false);
   const content = (
@@ -79,6 +81,15 @@ const Project: React.FC<ProjectProps> = ({
         <Link to={`/work/${projectId}`} className="block cursor-pointer group">
           {content}
         </Link>
+      ) : href ? (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block cursor-pointer group"
+        >
+          {content}
+        </a>
       ) : (
         content
       )}
@@ -129,6 +140,16 @@ export const Work = () => {
       lottieFile: "",
       image: "/Project 4.png",
     },
+    {
+      title: "Creative Pay",
+      year: "UX Case Study 2023",
+      description: [
+        "Creators and innovators are the lifeblood of our society, bringing fresh ideas and perspectives to the table across industries. However, these talented people often struggle to find the perfect job that matches their skills, experience and interests.",
+      ],
+      lottieFile: "",
+      href: "https://www.behance.net/gallery/173528357/Creative-Pay-UX-Case-Study",
+      image: "/Project 5.png",
+    },
   ];
 
   return (
@@ -142,7 +163,7 @@ export const Work = () => {
           <Project key={index} {...project} />
         ))}
 
-        <div className="mt-8">
+        {/* <div className="mt-8">
           <div className="relative w-full" style={{ paddingBottom: "78.22%" }}>
             <iframe
               src={"https://www.behance.net/embed/project/173528357?ilo0=1"}
@@ -153,7 +174,7 @@ export const Work = () => {
               referrerPolicy="strict-origin-when-cross-origin"
             />
           </div>
-        </div>
+        </div> */}
       </main>
     </div>
   );
