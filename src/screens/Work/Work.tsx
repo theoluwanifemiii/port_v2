@@ -141,6 +141,19 @@ export const Work = () => {
         {projects.map((project, index) => (
           <Project key={index} {...project} />
         ))}
+
+        <div className="mt-8">
+          <div className="relative w-full" style={{ paddingBottom: "78.22%" }}>
+            <iframe
+              src={"https://www.behance.net/embed/project/173528357?ilo0=1"}
+              className="absolute top-0 left-0 w-full h-full rounded-lg"
+              allowFullScreen
+              loading="lazy"
+              allow="clipboard-write"
+              referrerPolicy="strict-origin-when-cross-origin"
+            />
+          </div>
+        </div>
       </main>
     </div>
   );

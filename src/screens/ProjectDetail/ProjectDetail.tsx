@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Navigation } from "../../components/Navigation";
-import { ImageSlider } from "../../components/ImageSlider";
 import { LottiePlayer } from "../../components/LottiePlayer";
 import { ArrowLeft, ExternalLink } from "lucide-react";
+import Marquee from "react-fast-marquee";
 
 const navigationItems = [
   { text: "What have i done", href: "/work", isNative: true },
@@ -272,7 +272,11 @@ export const ProjectDetail = () => {
               {project.challenge}
             </p>
             {project.challengeImages && (
-              <ImageSlider images={project.challengeImages} />
+              // <ImageSlider images={project.challengeImages} />
+              <Marquee pauseOnHover={true}>
+                <img src="/Digtvant Before 1.png" alt="" className="w-full" />
+                <img src="/Digtvant Before 2.png" alt="" className="w-full" />
+              </Marquee>
             )}
           </section>
 
@@ -309,10 +313,7 @@ export const ProjectDetail = () => {
 
             {project.outcomeImages && project.outcomeImages.length > 0 && (
               <div className="mb-8">
-                <ImageSlider
-                  images={project.outcomeImages}
-                  enableFadeEffect={true}
-                />
+                <ImageSlider images={project.outcomeImages} />
               </div>
             )}
 
@@ -325,22 +326,6 @@ export const ProjectDetail = () => {
                   pauseOnHover={true}
                   className="w-full mx-auto"
                 />
-              </div>
-            )}
-
-            {project.behanceEmbed && (
-              <div className="mt-8">
-                <div className="relative w-full" style={{ paddingBottom: "78.22%" }}>
-                  <iframe
-                    src={project.behanceEmbed}
-                    className="absolute top-0 left-0 w-full h-full rounded-lg"
-                    allowFullScreen
-                    loading="lazy"
-                    frameBorder="0"
-                    allow="clipboard-write"
-                    referrerPolicy="strict-origin-when-cross-origin"
-                  />
-                </div>
               </div>
             )}
 

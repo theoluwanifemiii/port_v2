@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Navigation } from "../../components/Navigation";
+import emailjs from "@emailjs/browser";
 
 const navigationItems = [
   { text: "What have i done", href: "/work", isNative: true },
@@ -8,7 +9,7 @@ const navigationItems = [
   { text: "Work with me", href: "/work-with-me", isNative: true },
 ];
 
-export const WorkWithMe = (): JSX.Element => {
+export const WorkWithMe = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -17,58 +18,78 @@ export const WorkWithMe = (): JSX.Element => {
     budget: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSubmitStatus("idle");
 
-    try {
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+    const serviceID = "service_re8uhg5";
+    const templateID = "template_eq7d19d";
+    const publicKey = "Su42_SzYHjjezO72q";
 
-      const response = await fetch(`${supabaseUrl}/functions/v1/send-contact-email`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${supabaseAnonKey}`,
+    emailjs
+      .send(
+        serviceID,
+        templateID,
+        {
+          title: "Work with me",
+          from_name: formData.name,
+          from_email: formData.email,
+          message: formData.project,
+          budget: formData.budget,
+          company: formData.company,
+          to_email: "oluwanifemi@gmail.com", // Your email address
         },
-        body: JSON.stringify(formData),
+        publicKey
+      )
+      .then((result) => {
+        console.log(result.text);
+        setSubmitStatus("success");
+        setFormData({
+          name: "",
+          email: "",
+          company: "",
+          project: "",
+          budget: "",
+        });
+      })
+      .catch((error) => {
+        console.log(error.text);
+        setSubmitStatus("error");
+      })
+      .finally(() => {
+        setIsSubmitting(false);
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to send message");
-      }
-
-      setSubmitStatus("success");
-      setFormData({ name: "", email: "", company: "", project: "", budget: "" });
-    } catch (error) {
-      console.error("Error sending message:", error);
-      setSubmitStatus("error");
-    } finally {
-      setIsSubmitting(false);
-    }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   return (
-    <div className="bg-white w-full min-h-screen flex flex-col px-6 sm:px-12 lg:px-16">
+    <div className="flex flex-col w-full min-h-screen px-6 bg-white sm:px-12 lg:px-16">
       <header className="w-full mt-12 sm:mt-16 lg:mt-20">
         <Navigation items={navigationItems} />
       </header>
 
-      <main className="flex flex-col w-full max-w-4xl mx-auto mt-16 sm:mt-20 lg:mt-24 pb-12 sm:pb-16 lg:pb-20">
+      <main className="flex flex-col w-full max-w-4xl pb-12 mx-auto mt-16 sm:mt-20 lg:mt-24 sm:pb-16 lg:pb-20">
         <h1 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-5xl sm:text-6xl lg:text-7xl tracking-tight leading-[0.95] mb-8">
           Let's create something meaningful together
         </h1>
 
         <div className="space-y-8">
           <p className="[font-family:'Sometype_Mono',Helvetica] font-normal text-gray-700 text-base sm:text-lg lg:text-xl leading-relaxed">
-            I partner with startups and SaaS teams to design digital products that users love and businesses can build on. Whether you're refining an existing experience or starting from scratch, I bring clarity to complexity and craft experiences that feel effortless.
+            I partner with startups and SaaS teams to design digital products
+            that users love and businesses can build on. Whether you're refining
+            an existing experience or starting from scratch, I bring clarity to
+            complexity and craft experiences that feel effortless.
           </p>
 
           <div className="pt-8">
@@ -81,7 +102,9 @@ export const WorkWithMe = (): JSX.Element => {
                   Product Design
                 </h3>
                 <p className="[font-family:'Sometype_Mono',Helvetica] font-normal text-gray-700 text-base leading-relaxed">
-                  End-to-end design for web and mobile applications, from research and wireframes to high-fidelity prototypes and developer handoff.
+                  End-to-end design for web and mobile applications, from
+                  research and wireframes to high-fidelity prototypes and
+                  developer handoff.
                 </p>
               </div>
 
@@ -90,7 +113,8 @@ export const WorkWithMe = (): JSX.Element => {
                   UX Audits & Strategy
                 </h3>
                 <p className="[font-family:'Sometype_Mono',Helvetica] font-normal text-gray-700 text-base leading-relaxed">
-                  Identifying friction points in existing products and mapping strategic improvements that drive adoption and retention.
+                  Identifying friction points in existing products and mapping
+                  strategic improvements that drive adoption and retention.
                 </p>
               </div>
 
@@ -99,7 +123,8 @@ export const WorkWithMe = (): JSX.Element => {
                   Design Systems
                 </h3>
                 <p className="[font-family:'Sometype_Mono',Helvetica] font-normal text-gray-700 text-base leading-relaxed">
-                  Building cohesive, scalable design systems that keep teams aligned and developers efficient.
+                  Building cohesive, scalable design systems that keep teams
+                  aligned and developers efficient.
                 </p>
               </div>
             </div>
@@ -115,7 +140,9 @@ export const WorkWithMe = (): JSX.Element => {
                   Full-time or Contract
                 </h3>
                 <p className="[font-family:'Sometype_Mono',Helvetica] font-normal text-gray-700 text-base leading-relaxed">
-                  I'm open to full-time roles and contract engagements. Whether you need someone embedded in your team or focused support for a specific project, let's talk.
+                  I'm open to full-time roles and contract engagements. Whether
+                  you need someone embedded in your team or focused support for
+                  a specific project, let's talk.
                 </p>
               </div>
 
@@ -124,7 +151,8 @@ export const WorkWithMe = (): JSX.Element => {
                   Project-based
                 </h3>
                 <p className="[font-family:'Sometype_Mono',Helvetica] font-normal text-gray-700 text-base leading-relaxed">
-                  Have a defined scope? I work on project basis for redesigns, MVP launches, and design system builds.
+                  Have a defined scope? I work on project basis for redesigns,
+                  MVP launches, and design system builds.
                 </p>
               </div>
             </div>
@@ -135,11 +163,12 @@ export const WorkWithMe = (): JSX.Element => {
               Get in touch
             </h2>
             <p className="[font-family:'Sometype_Mono',Helvetica] font-normal text-gray-700 text-base sm:text-lg leading-relaxed mb-8">
-              I'd love to hear about what you're building. Drop me a message and let's explore how I can help bring your vision to life.
+              I'd love to hear about what you're building. Drop me a message and
+              let's explore how I can help bring your vision to life.
             </p>
 
             {submitStatus === "success" && (
-              <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+              <div className="p-4 mb-6 border border-green-200 rounded-lg bg-green-50">
                 <p className="[font-family:'Sometype_Mono',Helvetica] text-green-800 text-sm">
                   Thank you for reaching out! I'll get back to you soon.
                 </p>
@@ -147,16 +176,20 @@ export const WorkWithMe = (): JSX.Element => {
             )}
 
             {submitStatus === "error" && (
-              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <div className="p-4 mb-6 border border-red-200 rounded-lg bg-red-50">
                 <p className="[font-family:'Sometype_Mono',Helvetica] text-red-800 text-sm">
-                  Sorry, something went wrong. Please try again or email me directly.
+                  Sorry, something went wrong. Please try again or email me
+                  directly.
                 </p>
               </div>
             )}
 
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
-                <label htmlFor="name" className="[font-family:'Sometype_Mono',Helvetica] text-sm text-gray-700 mb-2 block">
+                <label
+                  htmlFor="name"
+                  className="[font-family:'Sometype_Mono',Helvetica] text-sm text-gray-700 mb-2 block"
+                >
                   Name
                 </label>
                 <input
@@ -172,7 +205,10 @@ export const WorkWithMe = (): JSX.Element => {
               </div>
 
               <div>
-                <label htmlFor="email" className="[font-family:'Sometype_Mono',Helvetica] text-sm text-gray-700 mb-2 block">
+                <label
+                  htmlFor="email"
+                  className="[font-family:'Sometype_Mono',Helvetica] text-sm text-gray-700 mb-2 block"
+                >
                   Email
                 </label>
                 <input
@@ -188,7 +224,10 @@ export const WorkWithMe = (): JSX.Element => {
               </div>
 
               <div>
-                <label htmlFor="company" className="[font-family:'Sometype_Mono',Helvetica] text-sm text-gray-700 mb-2 block">
+                <label
+                  htmlFor="company"
+                  className="[font-family:'Sometype_Mono',Helvetica] text-sm text-gray-700 mb-2 block"
+                >
                   Company (Optional)
                 </label>
                 <input
@@ -203,7 +242,10 @@ export const WorkWithMe = (): JSX.Element => {
               </div>
 
               <div>
-                <label htmlFor="project" className="[font-family:'Sometype_Mono',Helvetica] text-sm text-gray-700 mb-2 block">
+                <label
+                  htmlFor="project"
+                  className="[font-family:'Sometype_Mono',Helvetica] text-sm text-gray-700 mb-2 block"
+                >
                   Tell me about your project
                 </label>
                 <textarea
@@ -219,7 +261,10 @@ export const WorkWithMe = (): JSX.Element => {
               </div>
 
               <div>
-                <label htmlFor="budget" className="[font-family:'Sometype_Mono',Helvetica] text-sm text-gray-700 mb-2 block">
+                <label
+                  htmlFor="budget"
+                  className="[font-family:'Sometype_Mono',Helvetica] text-sm text-gray-700 mb-2 block"
+                >
                   Budget Range (Optional)
                 </label>
                 <select
@@ -247,7 +292,7 @@ export const WorkWithMe = (): JSX.Element => {
               </button>
             </form>
 
-            <div className="mt-12 pt-8 border-t border-gray-200">
+            <div className="pt-8 mt-12 border-t border-gray-200">
               <p className="[font-family:'Sometype_Mono',Helvetica] text-sm text-gray-500 mb-4">
                 Or reach out directly:
               </p>
