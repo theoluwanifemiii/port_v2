@@ -81,7 +81,7 @@ Sent from olu.design contact form
       },
       body: JSON.stringify({
         from: "Portfolio Contact <onboarding@resend.dev>",
-        to: ["your-email@example.com"],
+        to: ["theoluwanifemi@gmail.com"],
         reply_to: email,
         subject: emailSubject,
         text: emailBody,
