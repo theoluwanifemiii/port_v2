@@ -50,7 +50,7 @@ export const Home: FC = () => {
                   </h1>
                 </div>
 
-                <p className="font-normal text-gray-800 text-base lg:text-lg leading-relaxed" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
+                <p className="font-normal text-gray-800 text-base lg:text-lg leading-relaxed" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
                   I help startups and SaaS teams simplify complexity through
                   thoughtful, user-centered design. Every screen I craft tells a story
                   where users feel seen and products feel effortless.
@@ -74,21 +74,26 @@ export const Home: FC = () => {
             </div>
 
             <div className="flex-shrink-0">
-              <div className="w-64 h-64 bg-gradient-to-br from-[#0054e3] to-[#5a7fdc] rounded-lg border-4 border-white shadow-lg flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-32 h-32 mx-auto mb-4 bg-white/20 backdrop-blur rounded-full flex items-center justify-center">
-                    <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-                      <rect x="15" y="25" width="50" height="35" rx="3" fill="#ece9d8"/>
-                      <rect x="15" y="25" width="50" height="12" rx="3" fill="url(#header-gradient)"/>
-                      <defs>
-                        <linearGradient id="header-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                          <stop offset="0%" stopColor="#0997ff"/>
-                          <stop offset="100%" stopColor="#0053ee"/>
-                        </linearGradient>
-                      </defs>
-                    </svg>
+              <div className="relative">
+                <div className="w-64 h-80 bg-white border-4 border-[#003da8] shadow-2xl overflow-hidden">
+                  <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-r from-[#0997ff] to-[#0053ee] flex items-center px-2">
+                    <div className="w-4 h-4 bg-white/30 rounded-sm"></div>
+                    <span className="text-white text-xs ml-2 font-bold" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>Olu.jpg</span>
                   </div>
-                  <p className="text-white font-bold" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>Product Designer</p>
+
+                  <div className="mt-8 p-2">
+                    <img
+                      src="/IMG_7861 2.jpg"
+                      alt="Olu - Product Designer"
+                      className="w-full h-64 object-cover border-2 border-gray-300"
+                    />
+                  </div>
+
+                  <div className="absolute bottom-0 left-0 right-0 bg-[#ece9d8] border-t-2 border-[#b4b4b4] p-2">
+                    <p className="text-center text-black text-xs font-medium" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
+                      Product Designer
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

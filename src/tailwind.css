@@ -5,7 +5,7 @@
 @layer base {
   body {
     background: #5a7fdc;
-    font-family: 'Tahoma', 'Arial', sans-serif;
+    font-family: 'Sometype Mono', 'Courier New', monospace;
   }
 
   :root {
