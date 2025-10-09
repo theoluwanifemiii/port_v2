@@ -34,7 +34,7 @@ const Project: React.FC<ProjectProps> = ({
   const content = (
     <>
       <div
-        className="w-full rounded-lg mb-6 overflow-hidden transition-transform ease-in-out duration-300 hover:scale-[1.02] relative"
+        className="w-full mb-6 overflow-hidden border-2 border-[#7f9db9] relative"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -53,20 +53,21 @@ const Project: React.FC<ProjectProps> = ({
         )}
       </div>
 
-      <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:gap-8">
-        <h2 className="[font-family:'Sometype_Mono',Helvetica] font-bold text-black text-xl sm:text-2xl tracking-tight uppercase flex-shrink-0">
+      <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:gap-8 mb-4 pb-3 border-b border-gray-300">
+        <h2 className="font-bold text-[#003da8] text-xl sm:text-2xl uppercase flex-shrink-0" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
           {title}
         </h2>
-        <span className="[font-family:'Sometype_Mono',Helvetica] font-normal text-gray-500 text-base sm:text-lg">
+        <span className="font-normal text-gray-600 text-base sm:text-lg" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
           {year}
         </span>
       </div>
 
-      <div className="mt-4 space-y-4">
+      <div className="space-y-3">
         {description.map((paragraph, index) => (
           <p
             key={index}
-            className="[font-family:'Sometype_Mono',Helvetica] font-normal text-gray-700 text-sm sm:text-base lg:text-lg tracking-tight leading-relaxed"
+            className="font-normal text-gray-800 text-sm sm:text-base leading-relaxed"
+            style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}
           >
             {paragraph}
           </p>
@@ -76,23 +77,25 @@ const Project: React.FC<ProjectProps> = ({
   );
 
   return (
-    <div className="w-full max-w-4xl mx-auto mb-16 transition-all duration-300 ease-in-out sm:mb-20 lg:mb-24">
-      {projectId ? (
-        <Link to={`/work/${projectId}`} className="block cursor-pointer group">
-          {content}
-        </Link>
-      ) : href ? (
-        <a
-          href={href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block cursor-pointer group"
-        >
-          {content}
-        </a>
-      ) : (
-        content
-      )}
+    <div className="w-full max-w-4xl mx-auto mb-8 sm:mb-12">
+      <div className="bg-white border-2 border-[#b4b4b4] shadow-md p-6">
+        {projectId ? (
+          <Link to={`/work/${projectId}`} className="block cursor-pointer group">
+            {content}
+          </Link>
+        ) : href ? (
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block cursor-pointer group"
+          >
+            {content}
+          </a>
+        ) : (
+          content
+        )}
+      </div>
     </div>
   );
 };
@@ -153,29 +156,47 @@ export const Work = () => {
   ];
 
   return (
-    <div className="flex flex-col w-full min-h-screen px-6 bg-white sm:px-12 lg:px-16">
-      <header className="w-full mt-12 mb-16 sm:mt-16 lg:mt-20 sm:mb-20">
-        <Navigation items={navigationItems} />
-      </header>
-
-      <main className="w-full pb-12 sm:pb-16 lg:pb-20">
-        {projects.map((project, index) => (
-          <Project key={index} {...project} />
-        ))}
-
-        {/* <div className="mt-8">
-          <div className="relative w-full" style={{ paddingBottom: "78.22%" }}>
-            <iframe
-              src={"https://www.behance.net/embed/project/173528357?ilo0=1"}
-              className="absolute top-0 left-0 w-full h-full rounded-lg"
-              allowFullScreen
-              loading="lazy"
-              allow="clipboard-write"
-              referrerPolicy="strict-origin-when-cross-origin"
-            />
+    <div className="flex flex-col w-full min-h-screen px-6 sm:px-12 lg:px-16" style={{ background: '#5a7fdc' }}>
+      <div className="xp-window max-w-7xl w-full mx-auto mt-8 mb-8 min-h-[calc(100vh-4rem)]">
+        <div className="xp-title-bar">
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-white/20 rounded-sm"></div>
+            <span className="text-white font-bold text-sm" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
+              My Work - Microsoft Internet Explorer
+            </span>
           </div>
-        </div> */}
-      </main>
+          <div className="flex gap-1">
+            <button className="w-6 h-5 bg-[#2c5fdb] hover:bg-[#2050c0] border border-[#1a4db5] text-white text-xs font-bold">_</button>
+            <button className="w-6 h-5 bg-[#2c5fdb] hover:bg-[#2050c0] border border-[#1a4db5] text-white text-xs font-bold">□</button>
+            <button className="w-6 h-5 bg-[#d93831] hover:bg-[#c02820] border border-[#b02018] text-white text-xs font-bold">×</button>
+          </div>
+        </div>
+
+        <header className="w-full px-6 pt-8 pb-4 border-b-2 border-[#b4b4b4]" style={{ background: 'var(--xp-gray)' }}>
+          <Navigation items={navigationItems} />
+        </header>
+
+        <main className="w-full px-6 py-8" style={{ background: 'var(--xp-gray)', minHeight: '60vh' }}>
+          {projects.map((project, index) => (
+            <Project key={index} {...project} />
+          ))}
+        </main>
+
+        <footer className="xp-taskbar px-4 py-2 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <button className="xp-start-button flex items-center gap-2">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <rect width="20" height="20" fill="transparent"/>
+                <path d="M3 3 L17 10 L3 17 Z" fill="white"/>
+              </svg>
+              start
+            </button>
+          </div>
+          <div className="text-white text-xs font-medium" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
+            {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+          </div>
+        </footer>
+      </div>
     </div>
   );
 };

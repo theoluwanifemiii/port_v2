@@ -23,12 +23,13 @@ export const Navigation: React.FC<NavigationProps> = ({
 
   return (
     <nav className={className ? className : "w-full"}>
-      <ul className="flex flex-col items-start w-full gap-0 sm:flex-row sm:justify-between sm:space-x-8 lg:space-x-12 sm:items-center">
+      <ul className="flex flex-col items-start w-full gap-2 sm:flex-row sm:justify-between sm:space-x-4 lg:space-x-6 sm:items-center">
         {showBrand && (
-          <li className="flex items-center gap-4 transition-all duration-300 ease-in-out">
+          <li className="flex items-center gap-4">
             <Link
               to="/"
-              className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-sm sm:text-base lg:text-lg tracking-tight leading-relaxed cursor-pointer block py-3 sm:py-2 transition-all ease-in-out duration-300 hover:text-gray-900"
+              className="font-bold text-[#003da8] text-sm sm:text-base tracking-tight cursor-pointer block py-2 hover:text-[#0054e3]"
+              style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}
             >
               Olu
             </Link>
@@ -39,20 +40,15 @@ export const Navigation: React.FC<NavigationProps> = ({
             item.isNative !== false && location.pathname === item.href;
 
           return (
-            <li key={index} className="transition-all duration-300 ease-in-out">
+            <li key={index}>
               <Link
                 to={item.href || "#"}
                 onClick={item.onClick}
-                className={`[font-family:'Sometype_Mono',Helvetica] font-normal text-sm sm:text-base lg:text-lg tracking-tight leading-relaxed cursor-pointer block w-full py-3 sm:py-2 transition-all ease-in-out duration-300 hover:text-gray-900 hover:bg-gray-50 active:text-black active:bg-gray-100 relative group ${
-                  isActive ? "text-black font-medium" : "text-gray-500"
+                className={`xp-button text-xs sm:text-sm no-underline inline-block ${
+                  isActive ? "bg-[#d4d0c8]" : ""
                 }`}
               >
                 {item.text}
-                <span
-                  className={`absolute bottom-0 left-0 h-0.5 bg-gray-900 transition-all ease-in-out duration-300 ${
-                    isActive ? "w-full" : "w-0 group-hover:w-full"
-                  }`}
-                ></span>
               </Link>
             </li>
           );
@@ -62,7 +58,7 @@ export const Navigation: React.FC<NavigationProps> = ({
           href="https://drive.google.com/file/d/1ECIrky5LKSqD7UoULMbYi7zt35m3VXe9/view?usp=sharing"
           target="_blank"
           rel="noopener noreferrer"
-          className="[font-family:'Sometype_Mono',Helvetica] text-xs sm:text-sm px-3 py-1.5 bg-black text-white rounded hover:bg-gray-800 transition-colors"
+          className="xp-button-green text-xs sm:text-sm no-underline inline-block"
         >
           Resume
         </a>

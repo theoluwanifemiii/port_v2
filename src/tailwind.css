@@ -1,3 +1,116 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    background: #5a7fdc;
+    font-family: 'Tahoma', 'Arial', sans-serif;
+  }
+
+  :root {
+    --xp-blue: #0054e3;
+    --xp-light-blue: #5a7fdc;
+    --xp-dark-blue: #003da8;
+    --xp-green-start: #69d669;
+    --xp-green-end: #3cb538;
+    --xp-taskbar: #245edb;
+    --xp-window-border: #0831d9;
+    --xp-title-bar-start: #0997ff;
+    --xp-title-bar-end: #0053ee;
+    --xp-gray: #ece9d8;
+  }
+}
+
+@keyframes windowsXpLoad {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.xp-window {
+  background: var(--xp-gray);
+  border: 3px solid;
+  border-color: #0831d9 #0831d9 #042472 #042472;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+  border-radius: 8px 8px 0 0;
+}
+
+.xp-title-bar {
+  background: linear-gradient(to right, var(--xp-title-bar-start), var(--xp-title-bar-end));
+  padding: 4px 6px;
+  border-radius: 6px 6px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.xp-button {
+  background: linear-gradient(to bottom, #ffffff, #d4d0c8);
+  border: 1px solid;
+  border-color: #ffffff #404040 #404040 #ffffff;
+  box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #dfdfdf;
+  padding: 4px 16px;
+  cursor: pointer;
+  font-family: 'Tahoma', sans-serif;
+  font-size: 11px;
+}
+
+.xp-button:active {
+  border-color: #404040 #ffffff #ffffff #404040;
+  box-shadow: inset 1px 1px 0 #808080;
+}
+
+.xp-button-green {
+  background: linear-gradient(to bottom, var(--xp-green-start), var(--xp-green-end));
+  border: 1px solid #2d8c2d;
+  color: white;
+  font-weight: bold;
+  padding: 6px 20px;
+  border-radius: 3px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.xp-taskbar {
+  background: linear-gradient(to bottom, #3f7dde, #245edb);
+  border-top: 2px solid #1e4db5;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.xp-start-button {
+  background: linear-gradient(to bottom, #3fb73f, #2d8c2d);
+  border: 1px solid;
+  border-color: #6dd36d #1f691f #1f691f #6dd36d;
+  border-radius: 0 8px 8px 0;
+  padding: 4px 12px;
+  color: white;
+  font-weight: bold;
+  font-family: 'Tahoma', sans-serif;
+  font-size: 13px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.xp-start-button:active {
+  border-color: #1f691f #6dd36d #6dd36d #1f691f;
+}
+
+.xp-input {
+  background: white;
+  border: 1px solid;
+  border-color: #7f9db9 #a6c3e5 #a6c3e5 #7f9db9;
+  padding: 4px 6px;
+  font-family: 'Tahoma', sans-serif;
+  font-size: 11px;
+}
+
+.xp-input:focus {
+  outline: 1px solid var(--xp-blue);
+  outline-offset: -1px;
+}
