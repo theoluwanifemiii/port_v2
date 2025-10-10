@@ -6,6 +6,19 @@
   body {
     background: #5a7fdc;
     font-family: 'Sometype Mono', 'Courier New', monospace;
+    cursor: default;
+  }
+
+  * {
+    cursor: inherit;
+  }
+
+  a, button, [role="button"], input[type="submit"], input[type="button"] {
+    cursor: pointer;
+  }
+
+  input[type="text"], input[type="email"], textarea, select {
+    cursor: text;
   }
 
   :root {

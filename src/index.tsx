@@ -8,6 +8,7 @@ import { Home } from "./screens/Home/Home";
 import { Work } from "./screens/Work/Work";
 import { ProjectDetail } from "./screens/ProjectDetail/ProjectDetail";
 import { WorkWithMe } from "./screens/WorkWithMe/WorkWithMe";
+import { About } from "./screens/About/About";
 import { Preloader } from "./components/Preloader";
 
 inject();
@@ -43,6 +44,7 @@ console.log("🚀 App started!");
             <Route path="/work" element={<Work />} />
             <Route path="/work/:projectId" element={<ProjectDetail />} />
             <Route path="/work-with-me" element={<WorkWithMe />} />
+            <Route path="/about" element={<About />} />
             <Route path="*" element={<div style={{padding:'2rem',textAlign:'center'}}><h1>404 - Not Found</h1><p>The page you are looking for does not exist.</p></div>} />
           </Routes>
         </PageTransition>

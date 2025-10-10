@@ -7,7 +7,7 @@ import Marquee from "react-fast-marquee";
 
 const navigationItems = [
   { text: "What have i done", href: "/work", isNative: true },
-  { text: "Who am i ?", href: "/", isNative: true },
+  { text: "Who am i ?", href: "/about", isNative: true },
   { text: "My explorations", href: "#", isNative: false },
   { text: "Work with me", href: "/work-with-me", isNative: true },
 ];
@@ -151,68 +151,82 @@ export const ProjectDetail = () => {
   }
 
   return (
-    <div className="flex flex-col w-full min-h-screen bg-neutral-100">
-      <div className="px-6 sm:px-12 lg:px-16">
-        <header className="w-full mt-12 sm:mt-16 lg:mt-20">
+    <div className="flex flex-col w-full min-h-screen px-6 sm:px-12 lg:px-16" style={{ background: '#5a7fdc' }}>
+      <div className="xp-window max-w-7xl w-full mx-auto mt-8 mb-8 min-h-[calc(100vh-4rem)]">
+        <div className="xp-title-bar">
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-white/20 rounded-sm"></div>
+            <span className="text-white font-bold text-sm" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
+              {project.title} - Microsoft Internet Explorer
+            </span>
+          </div>
+          <div className="flex gap-1">
+            <button className="w-6 h-5 bg-[#2c5fdb] hover:bg-[#2050c0] border border-[#1a4db5] text-white text-xs font-bold">_</button>
+            <button className="w-6 h-5 bg-[#2c5fdb] hover:bg-[#2050c0] border border-[#1a4db5] text-white text-xs font-bold">□</button>
+            <button className="w-6 h-5 bg-[#d93831] hover:bg-[#c02820] border border-[#b02018] text-white text-xs font-bold">×</button>
+          </div>
+        </div>
+
+        <header className="w-full px-6 pt-8 pb-4 border-b-2 border-[#b4b4b4]" style={{ background: 'var(--xp-gray)' }}>
           <Navigation items={navigationItems} />
         </header>
-      </div>
 
-      <main className="flex-1 w-full mt-16 sm:mt-20 lg:mt-24">
-        <div className="px-6 mx-auto max-w-7xl sm:px-12 lg:px-16">
-          <div className="grid grid-cols-1 gap-8 mb-16 lg:grid-cols-12 lg:gap-12">
-            <div className="lg:col-span-8">
-              <h1 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-[0.95] mb-3">
-                {project.title}
-              </h1>
-              <p className="[font-family:'Neue_Montreal',Helvetica] font-bold text-gray-500 text-2xl sm:text-3xl lg:text-4xl tracking-tight leading-[0.95]">
-                {project.subtitle}
-              </p>
-            </div>
+        <main className="flex-1 w-full px-6 py-8" style={{ background: 'var(--xp-gray)', minHeight: '60vh' }}>
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-8 p-6 bg-white border-2 border-[#b4b4b4] shadow-md">
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12">
+              <div className="lg:col-span-8">
+                <h1 className="font-bold text-[#003da8] text-3xl sm:text-4xl lg:text-5xl mb-3" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
+                  {project.title}
+                </h1>
+                <p className="font-medium text-gray-700 text-xl sm:text-2xl lg:text-3xl" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
+                  {project.subtitle}
+                </p>
+              </div>
 
-            <div className="flex flex-col justify-end lg:col-span-4">
-              <div className="space-y-6">
-                <div className="flex justify-between">
-                  <div>
-                    <p className="[font-family:'Sometype_Mono',Helvetica] text-xs uppercase tracking-wider text-gray-500 mb-2">
-                      Role
-                    </p>
-                    <p className="[font-family:'Sometype_Mono',Helvetica] font-medium text-black text-lg">
-                      Product Designer
-                    </p>
+              <div className="flex flex-col justify-end lg:col-span-4">
+                <div className="space-y-4">
+                  <div className="flex justify-between gap-6">
+                    <div>
+                      <p className="text-xs uppercase tracking-wider text-gray-600 mb-2 font-medium" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
+                        Role
+                      </p>
+                      <p className="font-medium text-black text-base" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
+                        Product Designer
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs uppercase tracking-wider text-gray-600 mb-2 font-medium" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
+                        Year
+                      </p>
+                      <p className="font-medium text-black text-base" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
+                        {project.year}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="[font-family:'Sometype_Mono',Helvetica] text-xs uppercase tracking-wider text-gray-500 mb-2">
-                      Year
-                    </p>
-                    <p className="[font-family:'Sometype_Mono',Helvetica] font-medium text-black text-lg">
-                      {project.year}
-                    </p>
-                  </div>
+
+                  {project.liveUrl && (
+                    <div className="w-full">
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="xp-button-green text-sm w-full justify-center flex items-center gap-2"
+                      >
+                        View Live Site
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                    </div>
+                  )}
                 </div>
-
-                {project.liveUrl && (
-                  <div className="w-full">
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 [font-family:'Sometype_Mono',Helvetica] text-sm font-medium bg-black text-white w-full justify-center px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors group"
-                    >
-                      View Live Site
-                      <ExternalLink className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                    </a>
-                  </div>
-                )}
               </div>
             </div>
           </div>
 
-          {/* Hero Images with Lottie */}
-          <div className="mb-16">
+          <div className="mb-8 p-4 bg-white border-2 border-[#b4b4b4] shadow-md">
             {project.lottieFile ? (
               <div
-                className="relative w-full overflow-hidden bg-white rounded-lg shadow-sm aspect-video"
+                className="relative w-full overflow-hidden border-2 border-[#7f9db9] aspect-video"
                 onMouseEnter={() => setIsHoveringHero(true)}
                 onMouseLeave={() => setIsHoveringHero(false)}
               >
@@ -248,27 +262,25 @@ export const ProjectDetail = () => {
             )}
           </div>
 
-          {/* Overview */}
-          <section className="mb-20">
-            <h2 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-2xl sm:text-3xl mb-6">
+          <section className="mb-8 p-6 bg-white border-2 border-[#b4b4b4] shadow-md">
+            <h2 className="font-bold text-[#003da8] text-2xl sm:text-3xl mb-6 pb-3 border-b border-gray-300" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
               Overview
             </h2>
             {project.description.map((p, i) => (
               <p
                 key={i}
-                className="[font-family:'Sometype_Mono',Helvetica] text-gray-700 text-lg leading-relaxed mb-4"
+                className="text-gray-800 text-base leading-relaxed mb-4" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}
               >
                 {p}
               </p>
             ))}
           </section>
 
-          {/* Challenge */}
-          <section className="mb-20">
-            <h2 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-2xl sm:text-3xl mb-6">
+          <section className="mb-8 p-6 bg-white border-2 border-[#b4b4b4] shadow-md">
+            <h2 className="font-bold text-[#003da8] text-2xl sm:text-3xl mb-6 pb-3 border-b border-gray-300" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
               The Challenge
             </h2>
-            <p className="[font-family:'Sometype_Mono',Helvetica] text-gray-700 text-lg leading-relaxed mb-8">
+            <p className="text-gray-800 text-base leading-relaxed mb-8" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
               {project.challenge}
             </p>
             {project.challengeImages && (
@@ -280,33 +292,31 @@ export const ProjectDetail = () => {
             )}
           </section>
 
-          {/* Approach */}
-          <section className="mb-20">
-            <h2 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-2xl sm:text-3xl mb-6">
+          <section className="mb-8 p-6 bg-white border-2 border-[#b4b4b4] shadow-md">
+            <h2 className="font-bold text-[#003da8] text-2xl sm:text-3xl mb-6 pb-3 border-b border-gray-300" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
               My Approach
             </h2>
             {project.approach.map((p, i) => (
               <p
                 key={i}
-                className="[font-family:'Sometype_Mono',Helvetica] text-gray-700 text-lg leading-relaxed mb-4"
+                className="text-gray-800 text-base leading-relaxed mb-4" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}
               >
                 {p}
               </p>
             ))}
           </section>
 
-          {/* Outcome with Lottie */}
-          <section className="mb-20">
-            <h2 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-2xl sm:text-3xl mb-6">
+          <section className="mb-8 p-6 bg-white border-2 border-[#b4b4b4] shadow-md">
+            <h2 className="font-bold text-[#003da8] text-2xl sm:text-3xl mb-6 pb-3 border-b border-gray-300" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
               The Outcome
             </h2>
-            <p className="[font-family:'Sometype_Mono',Helvetica] text-gray-700 text-lg leading-relaxed mb-6">
+            <p className="text-gray-800 text-base leading-relaxed mb-6" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
               {project.outcome}
             </p>
 
-            <div className="p-8 mb-8 bg-white border-l-4 border-black rounded-lg">
-              <p className="[font-family:'Sometype_Mono',Helvetica] font-medium text-black text-lg leading-relaxed">
-                <span className="mr-2 text-2xl">🚀</span>
+            <div className="p-6 mb-6 bg-[#fffacd] border-2 border-[#b4b4b4]">
+              <p className="font-medium text-black text-base leading-relaxed" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
+                <span className="mr-2 text-xl">🚀</span>
                 {project.results}
               </p>
             </div>
@@ -329,14 +339,14 @@ export const ProjectDetail = () => {
               </div>
             )}
 
-            <div className="flex items-center justify-between pt-8 mt-16 border-t border-gray-300">
+            <div className="flex items-center justify-between pt-6 mt-8 border-t-2 border-gray-300">
               {project.prevProject ? (
                 <Link
                   to={`/work/${project.prevProject.id}`}
-                  className="inline-flex items-center gap-2 [font-family:'Sometype_Mono',Helvetica] text-sm text-gray-600 hover:text-black transition-colors group"
+                  className="xp-button text-xs inline-flex items-center gap-2 no-underline"
                 >
-                  <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
-                  <span>Previous: {project.prevProject.title}</span>
+                  <ArrowLeft className="w-3 h-3" />
+                  <span>Prev: {project.prevProject.title}</span>
                 </Link>
               ) : (
                 <div />
@@ -345,22 +355,21 @@ export const ProjectDetail = () => {
               {project.nextProject && (
                 <Link
                   to={`/work/${project.nextProject.id}`}
-                  className="inline-flex items-center gap-2 [font-family:'Sometype_Mono',Helvetica] text-sm text-gray-600 hover:text-black transition-colors group"
+                  className="xp-button text-xs inline-flex items-center gap-2 no-underline"
                 >
                   <span>Next: {project.nextProject.title}</span>
-                  <ArrowLeft className="w-4 h-4 transition-transform rotate-180 group-hover:translate-x-1" />
+                  <ArrowLeft className="w-3 h-3 rotate-180" />
                 </Link>
               )}
             </div>
           </section>
 
-          {/* Tags */}
-          <div className="pt-12 pb-20 border-t border-gray-300">
-            <div className="flex flex-wrap gap-3">
+          <div className="p-6 bg-white border-2 border-[#b4b4b4] shadow-md">
+            <div className="flex flex-wrap gap-2">
               {project.tags.map((tag, index) => (
                 <span
                   key={index}
-                  className="[font-family:'Sometype_Mono',Helvetica] text-xs uppercase tracking-wider px-4 py-2 bg-white rounded-full text-gray-700 border border-gray-300"
+                  className="xp-button text-xs"
                 >
                   {tag}
                 </span>
@@ -368,7 +377,23 @@ export const ProjectDetail = () => {
             </div>
           </div>
         </div>
-      </main>
+        </main>
+
+        <footer className="xp-taskbar px-4 py-2 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <button className="xp-start-button flex items-center gap-2">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <rect width="20" height="20" fill="transparent"/>
+                <path d="M3 3 L17 10 L3 17 Z" fill="white"/>
+              </svg>
+              start
+            </button>
+          </div>
+          <div className="text-white text-xs font-medium" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
+            {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+          </div>
+        </footer>
+      </div>
     </div>
   );
 };
