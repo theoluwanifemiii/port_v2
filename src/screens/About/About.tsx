@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { Navigation } from "../../components/Navigation";
+import { WindowControls } from "../../components/WindowControls";
 
 const navigationItems = [
   { text: "What have i done", href: "/work", isNative: true },
@@ -15,28 +16,42 @@ interface TestimonialProps {
   text: string;
 }
 
-const Testimonial: React.FC<TestimonialProps> = ({ name, role, company, text }) => (
-  <div className="mb-4 p-4 bg-white border-2 border-[#b4b4b4] shadow-sm">
-    <div className="flex items-start gap-3 mb-3 pb-3 border-b border-gray-300">
-      <div className="w-8 h-8 bg-gradient-to-br from-[#0054e3] to-[#5a7fdc] rounded-full flex items-center justify-center flex-shrink-0">
-        <span className="text-white font-bold text-sm" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-          {name.charAt(0)}
-        </span>
+const Testimonial: React.FC<TestimonialProps> = ({ name, role, company, text }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const shouldTruncate = text.length > 200;
+  const displayText = !shouldTruncate || isExpanded ? text : `${text.substring(0, 200)}...`;
+
+  return (
+    <div className="mb-4 p-4 bg-white border-2 border-[#b4b4b4] shadow-sm hover:shadow-md transition-shadow">
+      <div className="flex items-start gap-3 mb-3 pb-3 border-b border-gray-300">
+        <div className="w-8 h-8 bg-gradient-to-br from-[#0054e3] to-[#5a7fdc] rounded-full flex items-center justify-center flex-shrink-0">
+          <span className="text-white font-bold text-sm" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
+            {name.charAt(0)}
+          </span>
+        </div>
+        <div className="flex-1">
+          <h4 className="font-bold text-black text-sm" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
+            {name}
+          </h4>
+          <p className="text-xs text-gray-600" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
+            {role} {company && `- ${company}`}
+          </p>
+        </div>
       </div>
-      <div>
-        <h4 className="font-bold text-black text-sm" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-          {name}
-        </h4>
-        <p className="text-xs text-gray-600" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
-          {role} {company && `- ${company}`}
-        </p>
-      </div>
+      <p className="text-sm text-gray-800 leading-relaxed mb-2" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
+        {displayText}
+      </p>
+      {shouldTruncate && (
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="xp-button text-xs mt-2"
+        >
+          {isExpanded ? 'Show Less' : 'Read More'}
+        </button>
+      )}
     </div>
-    <p className="text-sm text-gray-800 leading-relaxed" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
-      {text}
-    </p>
-  </div>
-);
+  );
+};
 
 export const About = () => {
   const testimonials: TestimonialProps[] = [
@@ -73,27 +88,15 @@ export const About = () => {
   ];
 
   return (
-    <div className="flex flex-col w-full min-h-screen px-6 sm:px-12 lg:px-16" style={{ background: '#5a7fdc' }}>
-      <div className="xp-window max-w-7xl w-full mx-auto mt-8 mb-8 min-h-[calc(100vh-4rem)]">
-        <div className="xp-title-bar">
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-white/20 rounded-sm"></div>
-            <span className="text-white font-bold text-sm" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-              About Me - Microsoft Internet Explorer
-            </span>
-          </div>
-          <div className="flex gap-1">
-            <button className="w-6 h-5 bg-[#2c5fdb] hover:bg-[#2050c0] border border-[#1a4db5] text-white text-xs font-bold">_</button>
-            <button className="w-6 h-5 bg-[#2c5fdb] hover:bg-[#2050c0] border border-[#1a4db5] text-white text-xs font-bold">□</button>
-            <button className="w-6 h-5 bg-[#d93831] hover:bg-[#c02820] border border-[#b02018] text-white text-xs font-bold">×</button>
-          </div>
-        </div>
+    <div className="flex flex-col w-full min-h-screen px-2 sm:px-6 lg:px-12" style={{ background: '#5a7fdc' }}>
+      <div className="xp-window max-w-7xl w-full mx-auto mt-2 sm:mt-8 mb-2 sm:mb-8 min-h-[calc(100vh-1rem)] sm:min-h-[calc(100vh-4rem)]">
+        <WindowControls title="About Me - Microsoft Internet Explorer" />
 
-        <header className="w-full px-6 pt-8 pb-4 border-b-2 border-[#b4b4b4]" style={{ background: 'var(--xp-gray)' }}>
+        <header className="w-full px-3 sm:px-6 pt-4 sm:pt-8 pb-3 sm:pb-4 border-b-2 border-[#b4b4b4] hidden sm:block" style={{ background: 'var(--xp-gray)' }}>
           <Navigation items={navigationItems} />
         </header>
 
-        <main className="w-full px-6 py-8 overflow-y-auto" style={{ background: 'var(--xp-gray)', maxHeight: 'calc(100vh - 14rem)' }}>
+        <main className="w-full px-3 sm:px-6 py-4 sm:py-8 overflow-y-auto" style={{ background: 'var(--xp-gray)', maxHeight: 'calc(100vh - 8rem)' }}>
           <div className="max-w-5xl mx-auto">
             <div className="mb-6 p-6 bg-white border-2 border-[#b4b4b4] shadow-md">
               <h1 className="font-bold text-[#003da8] text-3xl sm:text-4xl mb-4 flex items-center gap-3" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Navigation } from "../../components/Navigation";
+import { WindowControls } from "../../components/WindowControls";
 import { LottiePlayer } from "../../components/LottiePlayer";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import Marquee from "react-fast-marquee";
@@ -151,27 +152,15 @@ export const ProjectDetail = () => {
   }
 
   return (
-    <div className="flex flex-col w-full min-h-screen px-6 sm:px-12 lg:px-16" style={{ background: '#5a7fdc' }}>
-      <div className="xp-window max-w-7xl w-full mx-auto mt-8 mb-8 min-h-[calc(100vh-4rem)]">
-        <div className="xp-title-bar">
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-white/20 rounded-sm"></div>
-            <span className="text-white font-bold text-sm" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-              {project.title} - Microsoft Internet Explorer
-            </span>
-          </div>
-          <div className="flex gap-1">
-            <button className="w-6 h-5 bg-[#2c5fdb] hover:bg-[#2050c0] border border-[#1a4db5] text-white text-xs font-bold">_</button>
-            <button className="w-6 h-5 bg-[#2c5fdb] hover:bg-[#2050c0] border border-[#1a4db5] text-white text-xs font-bold">□</button>
-            <button className="w-6 h-5 bg-[#d93831] hover:bg-[#c02820] border border-[#b02018] text-white text-xs font-bold">×</button>
-          </div>
-        </div>
+    <div className="flex flex-col w-full min-h-screen px-2 sm:px-6 lg:px-12" style={{ background: '#5a7fdc' }}>
+      <div className="xp-window max-w-7xl w-full mx-auto mt-2 sm:mt-8 mb-2 sm:mb-8 min-h-[calc(100vh-1rem)] sm:min-h-[calc(100vh-4rem)]">
+        <WindowControls title={`${project.title} - Microsoft Internet Explorer`} />
 
-        <header className="w-full px-6 pt-8 pb-4 border-b-2 border-[#b4b4b4]" style={{ background: 'var(--xp-gray)' }}>
+        <header className="w-full px-3 sm:px-6 pt-4 sm:pt-8 pb-3 sm:pb-4 border-b-2 border-[#b4b4b4] hidden sm:block" style={{ background: 'var(--xp-gray)' }}>
           <Navigation items={navigationItems} />
         </header>
 
-        <main className="flex-1 w-full px-6 py-8" style={{ background: 'var(--xp-gray)', minHeight: '60vh' }}>
+        <main className="flex-1 w-full px-3 sm:px-6 py-4 sm:py-8 overflow-y-auto" style={{ background: 'var(--xp-gray)', minHeight: '60vh', maxHeight: 'calc(100vh - 8rem)' }}>
         <div className="mx-auto max-w-6xl">
           <div className="mb-8 p-6 bg-white border-2 border-[#b4b4b4] shadow-md">
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12">
