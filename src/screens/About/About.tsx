@@ -17,10 +17,6 @@ interface TestimonialProps {
 }
 
 const Testimonial: React.FC<TestimonialProps> = ({ name, role, company, text }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const shouldTruncate = text.length > 200;
-  const displayText = !shouldTruncate || isExpanded ? text : `${text.substring(0, 200)}...`;
-
   return (
     <div className="mb-4 p-4 bg-white border-2 border-[#b4b4b4] shadow-sm hover:shadow-md transition-shadow">
       <div className="flex items-start gap-3 mb-3 pb-3 border-b border-gray-300">
@@ -38,9 +34,14 @@ const Testimonial: React.FC<TestimonialProps> = ({ name, role, company, text }) 
           </p>
         </div>
       </div>
+
+      <p className="text-sm text-gray-800 leading-relaxed" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
+        {text}
+      </p>
     </div>
   );
 };
+
 
 export const About = () => {
   const testimonials: TestimonialProps[] = [
