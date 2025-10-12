@@ -100,7 +100,7 @@ export const About = () => {
               </div>
 
               <p className="text-base text-gray-800 leading-relaxed mb-4" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
-                Hi, I'm Olu, a Product Designer who believes every pixel should tell a story. I help startups and SaaS teams simplify complexity through thoughtful, human-centered design.
+                Hi, I'm Oluwanifemi Osunsanya, a Product Designer who believes every pixel should tell a story. I help startups and SaaS teams simplify complexity through thoughtful, human-centered design.
               </p>
 
               <div className="space-y-4">
@@ -127,7 +127,8 @@ export const About = () => {
                     <span>🧩</span> When idle:
                   </h3>
                   <p className="text-sm text-gray-800 leading-relaxed" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
-                    You'll find me vibe-coding experimental interfaces, exploring nostalgic UI ideas, or documenting creative experiments that remind me why I fell in love with design in the first place.
+                    You'll find me vibe-coding experimental interfaces, exploring nostalgic UI ideas, or documenting creative experiments that remind me why I fell in love with design in the first place.You’ll often find me vibe-coding experimental interfaces, exploring nostalgic UI ideas, or designing posters that merge storytelling and aesthetics. 
+                    I also love writing about my creative journey, the lessons, pivots, and little sparks that shape how I see design. And when I’m not creating, I’m probably binge-watching one of my favorite series, letting my mind wander through new worlds and ideas.
                   </p>
                 </div>
               </div>
@@ -144,7 +145,7 @@ export const About = () => {
                     <span>💡</span> Role:
                   </p>
                   <p className="text-sm text-black font-medium" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
-                    Senior Product Designer (UI/UX & Design Systems)
+                    Product Designer (UI/UX, Design Systems & Design Engineer)
                   </p>
                 </div>
 
@@ -153,7 +154,7 @@ export const About = () => {
                     <span>🧭</span> Experience:
                   </p>
                   <p className="text-sm text-black font-medium" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
-                    3+ years in fintech, real estate, and SaaS
+                    3+ years in fintech, real estate, Healthtech, and SaaS
                   </p>
                 </div>
 
@@ -162,7 +163,7 @@ export const About = () => {
                     <span>🛠️</span> Tools:
                   </p>
                   <p className="text-sm text-black font-medium" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
-                    Figma, FigJam, Framer, Notion, Webflow
+                    Figma, FigJam, Framer, Notion, Webflow, Framer, Photoshop, Miro
                   </p>
                 </div>
 
@@ -171,7 +172,7 @@ export const About = () => {
                     <span>🧠</span> Specialties:
                   </p>
                   <p className="text-sm text-black font-medium" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
-                    Design Systems, Product Thinking, Interaction Design
+                    Design Systems, Product Thinking, Interaction Design, Software Design 
                   </p>
                 </div>
 
