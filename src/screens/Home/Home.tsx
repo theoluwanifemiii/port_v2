@@ -92,7 +92,7 @@ export const Home: FC = () => {
     { id: "work", icon: "📁", label: "My Work", to: "/work", position: { x: 20, y: 20 } },
     { id: "about", icon: "👤", label: "About Me", to: "/about", position: { x: 20, y: 140 } },
     { id: "contact", icon: "💼", label: "Work With Me", to: "/work-with-me", position: { x: 20, y: 260 } },
-    { id: "photo", icon: "🖼️", label: "My Photo", to: "/about", position: { x: 20, y: 380 } },
+    { id: "photo", icon: "🖼️", label: "My Photo", to: "#", position: { x: 20, y: 380 } },
   ]);
 
   const handleDragEnd = (id: string, position: { x: number; y: number }) => {
