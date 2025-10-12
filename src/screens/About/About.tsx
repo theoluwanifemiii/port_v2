@@ -38,10 +38,6 @@ const Testimonial: React.FC<TestimonialProps> = ({ name, role, company, text }) 
           </p>
         </div>
       </div>
-      <p className="text-sm text-gray-800 leading-relaxed mb-2" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
-        {displayText}
-      </p>
-      {shouldTruncate && }
     </div>
   );
 };
