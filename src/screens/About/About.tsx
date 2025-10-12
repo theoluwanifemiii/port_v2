@@ -41,14 +41,7 @@ const Testimonial: React.FC<TestimonialProps> = ({ name, role, company, text }) 
       <p className="text-sm text-gray-800 leading-relaxed mb-2" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
         {displayText}
       </p>
-      {shouldTruncate && (
-        <button
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="xp-button text-xs mt-2"
-        >
-          {isExpanded ? 'Show Less' : 'Read More'}
-        </button>
-      )}
+      {shouldTruncate && }
     </div>
   );
 };
