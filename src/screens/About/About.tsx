@@ -127,9 +127,11 @@ export const About = () => {
                     <span>🧩</span> When idle:
                   </h3>
                   <p className="text-sm text-gray-800 leading-relaxed" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
-                    You'll find me vibe-coding experimental interfaces, exploring nostalgic UI ideas, or documenting creative experiments that remind me why I fell in love with design in the first place.You’ll often find me vibe-coding experimental interfaces, exploring nostalgic UI ideas, or designing posters that merge storytelling and aesthetics. 
-                    I also love writing about my creative journey, the lessons, pivots, and little sparks that shape how I see design. And when I’m not creating, I’m probably binge-watching one of my favorite series, letting my mind wander through new worlds and ideas.
+                    You’ll often find me vibe-coding experimental interfaces, exploring nostalgic UI ideas, or designing posters that merge storytelling and aesthetics. 
                   </p>
+                   <p className="text-sm text-gray-800 leading-relaxed" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
+                  I also love writing about my creative journey, the lessons, pivots, and little sparks that shape how I see design. And when I’m not creating, I’m probably binge-watching one of my favorite series, letting my mind wander through new worlds and ideas.
+                </p>     
                 </div>
               </div>
             </div>
