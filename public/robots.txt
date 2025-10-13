@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://olusworks.vercel.app/sitemap.xml
+
+# SEO Notes:
+# - This allows all pages to be crawled.
+# - The sitemap link helps Google discover your pages faster.
+# - No disallow rules, since this is a public portfolio site.
