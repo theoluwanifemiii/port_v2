@@ -10,26 +10,38 @@ import { ProjectDetail } from "./screens/ProjectDetail/ProjectDetail";
 import { WorkWithMe } from "./screens/WorkWithMe/WorkWithMe";
 import { About } from "./screens/About/About";
 import { Preloader } from "./components/Preloader";
+import { BootSequence } from "./components/BootSequence";
 
 inject();
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [showContent, setShowContent] = useState(false);
+  const [showBootSequence, setShowBootSequence] = useState(false);
 
 console.log("🚀 App started!");
 
   useEffect(() => {
     const hasSeenPreloader = sessionStorage.getItem("hasSeenPreloader");
-    if (hasSeenPreloader) {
+    const hasSeenBootSequence = sessionStorage.getItem("hasSeenBootSequence");
+    if (hasSeenPreloader && hasSeenBootSequence) {
       setIsLoading(false);
       setShowContent(true);
+    } else if (hasSeenPreloader) {
+      setIsLoading(false);
+      setShowBootSequence(true);
     }
   }, []);
 
   const handlePreloaderComplete = () => {
     sessionStorage.setItem("hasSeenPreloader", "true");
     setIsLoading(false);
+    setTimeout(() => setShowBootSequence(true), 100);
+  };
+
+  const handleBootSequenceComplete = () => {
+    sessionStorage.setItem("hasSeenBootSequence", "true");
+    setShowBootSequence(false);
     setTimeout(() => setShowContent(true), 100);
   };
 
@@ -37,6 +49,7 @@ console.log("🚀 App started!");
   return (
     <>
       {isLoading && <Preloader onComplete={handlePreloaderComplete} />}
+      {showBootSequence && <BootSequence onComplete={handleBootSequenceComplete} />}
       {showContent && (
         <PageTransition key={location.pathname}>
           <Routes location={location}>

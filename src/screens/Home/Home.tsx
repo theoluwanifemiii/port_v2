@@ -1,5 +1,11 @@
 import { FC, useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { StartMenu } from '../../components/StartMenu';
+import { XPWindow } from '../../components/XPWindow';
+import { PinballGame } from '../../components/PinballGame';
+import { WallpaperSwitcher } from '../../components/WallpaperSwitcher';
+import { Taskbar } from '../../components/Taskbar';
+import { useSoundEffects } from '../../hooks/useSoundEffects';
 
 interface DesktopIconProps {
   icon: string;
@@ -92,8 +98,13 @@ export const Home: FC = () => {
     { id: "work", icon: "📁", label: "My Work", to: "/work", position: { x: 20, y: 20 } },
     { id: "about", icon: "👤", label: "About Me", to: "/about", position: { x: 20, y: 140 } },
     { id: "contact", icon: "💼", label: "Work With Me", to: "/work-with-me", position: { x: 20, y: 260 } },
-    { id: "photo", icon: "🖼️", label: "My Photo", to: "#", position: { x: 20, y: 380 } },
+    { id: "pinball", icon: "🎮", label: "3D Pinball", to: "#", position: { x: 20, y: 380 } },
+    { id: "settings", icon: "⚙️", label: "Settings", to: "#", position: { x: 20, y: 500 } },
   ]);
+  const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
+  const [openApp, setOpenApp] = useState<string | null>(null);
+  const [wallpaper, setWallpaper] = useState('xp-blue');
+  const sounds = useSoundEffects(true);
 
   const handleDragEnd = (id: string, position: { x: number; y: number }) => {
     setIconPositions((prev) =>
@@ -101,11 +112,34 @@ export const Home: FC = () => {
     );
   };
 
+  const handleIconClick = (id: string, to: string) => {
+    if (id === 'pinball') {
+      setOpenApp('pinball');
+      sounds.playClick();
+    } else if (id === 'settings') {
+      setOpenApp('settings');
+      sounds.playClick();
+    }
+  };
+
+  const getWallpaperStyle = () => {
+    switch (wallpaper) {
+      case 'bliss':
+        return 'linear-gradient(180deg, #87CEEB 0%, #90EE90 50%, #228B22 100%)';
+      case 'dark':
+        return 'linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)';
+      case 'sunset':
+        return 'linear-gradient(180deg, #ff6b6b 0%, #feca57 50%, #48dbfb 100%)';
+      default:
+        return 'linear-gradient(180deg, #5a7fdc 0%, #4169e1 100%)';
+    }
+  };
+
   return (
     <div
       className="relative w-full min-h-screen overflow-hidden select-none"
       style={{
-        background: 'linear-gradient(180deg, #5a7fdc 0%, #4169e1 100%)',
+        background: getWallpaperStyle(),
       }}
     >
       <div className="absolute top-4 right-4 hidden sm:block">
@@ -133,59 +167,71 @@ export const Home: FC = () => {
 
       <div className="relative min-h-[calc(100vh-60px)]">
         {iconPositions.map((icon) => (
-          <DesktopIcon
+          <div
             key={icon.id}
-            id={icon.id}
-            icon={icon.icon}
-            label={icon.label}
-            to={icon.to}
-            position={icon.position}
-            onDragEnd={handleDragEnd}
-          />
+            onClick={(e) => {
+              if (icon.to === '#') {
+                e.preventDefault();
+                handleIconClick(icon.id, icon.to);
+              }
+            }}
+          >
+            <DesktopIcon
+              id={icon.id}
+              icon={icon.icon}
+              label={icon.label}
+              to={icon.to}
+              position={icon.position}
+              onDragEnd={handleDragEnd}
+            />
+          </div>
         ))}
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 xp-taskbar px-2 py-1 flex items-center justify-between flex-wrap gap-2">
-        <div className="flex items-center gap-2">
-          <button className="xp-start-button flex items-center gap-1 px-3 py-1">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <rect width="16" height="16" fill="transparent"/>
-              <path d="M2 2 L14 8 L2 14 Z" fill="white"/>
-            </svg>
-            <span className="text-xs">start</span>
-          </button>
+      <Taskbar
+        onStartMenuToggle={() => {
+          setIsStartMenuOpen(!isStartMenuOpen);
+          sounds.playClick();
+        }}
+        isStartMenuOpen={isStartMenuOpen}
+        openWindows={openApp ? [openApp] : []}
+      />
 
-          <div className="hidden sm:flex gap-1">
-            <Link
-              to="/work"
-              className="px-3 py-1 bg-[#1e4db5] hover:bg-[#2c5fdb] active:bg-[#0831d9] border border-[#0831d9] text-white text-xs no-underline flex items-center gap-2 transition-colors"
-              style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}
-            >
-              <span>📁</span>
-              <span>My Work</span>
-            </Link>
-            <Link
-              to="/about"
-              className="px-3 py-1 bg-[#1e4db5] hover:bg-[#2c5fdb] active:bg-[#0831d9] border border-[#0831d9] text-white text-xs no-underline flex items-center gap-2 transition-colors"
-              style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}
-            >
-              <span>👤</span>
-              <span>About</span>
-            </Link>
-          </div>
-        </div>
+      <StartMenu
+        isOpen={isStartMenuOpen}
+        onClose={() => setIsStartMenuOpen(false)}
+        onOpenApp={(appName) => {
+          setOpenApp(appName);
+          sounds.playClick();
+        }}
+      />
 
-        <div className="flex items-center gap-3">
-          <div className="px-2 sm:px-3 py-1 bg-[#0c3db5] border border-[#0831d9] flex items-center gap-2">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M7 1 L8 6 L13 7 L8 8 L7 13 L6 8 L1 7 L6 6 Z" fill="#ffd700"/>
-            </svg>
-            <span className="text-white text-xs" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-              {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
-            </span>
-          </div>
-        </div>
-      </div>
+      {openApp === 'pinball' && (
+        <XPWindow
+          title="3D Pinball for Windows - Space Cadet"
+          icon="🎮"
+          onClose={() => setOpenApp(null)}
+          onMinimize={() => setOpenApp(null)}
+          defaultSize={{ width: 600, height: 700 }}
+        >
+          <PinballGame />
+        </XPWindow>
+      )}
+
+      {openApp === 'settings' && (
+        <XPWindow
+          title="Display Properties"
+          icon="⚙️"
+          onClose={() => setOpenApp(null)}
+          defaultSize={{ width: 500, height: 500 }}
+        >
+          <WallpaperSwitcher
+            currentWallpaper={wallpaper}
+            onWallpaperChange={setWallpaper}
+            onClose={() => setOpenApp(null)}
+          />
+        </XPWindow>
+      )}
     </div>
   );
 };
