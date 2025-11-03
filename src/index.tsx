@@ -9,7 +9,6 @@ import { Work } from "./screens/Work/Work";
 import { ProjectDetail } from "./screens/ProjectDetail/ProjectDetail";
 import { WorkWithMe } from "./screens/WorkWithMe/WorkWithMe";
 import { About } from "./screens/About/About";
-import { BentoPortfolio } from "./screens/BentoPortfolio/BentoPortfolio";
 import { Preloader } from "./components/Preloader";
 import { BootSequence } from "./components/BootSequence";
 
@@ -54,8 +53,7 @@ console.log("🚀 App started!");
       {showContent && (
         <PageTransition key={location.pathname}>
           <Routes location={location}>
-            <Route path="/" element={<BentoPortfolio />} />
-            <Route path="/xp" element={<Home />} />
+            <Route path="/" element={<Home />} />
             <Route path="/work" element={<Work />} />
             <Route path="/work/:projectId" element={<ProjectDetail />} />
             <Route path="/work-with-me" element={<WorkWithMe />} />
