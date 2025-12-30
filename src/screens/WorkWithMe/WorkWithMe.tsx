@@ -294,11 +294,11 @@ export const WorkWithMe = () => {
                   className="xp-input w-full text-base"
                 >
                   <option value="">Select a range</option>
-                  <option value="under-5k">Under $5,000</option>
-                  <option value="5k-10k">$5,000 - $10,000</option>
-                  <option value="10k-25k">$10,000 - $25,000</option>
-                  <option value="25k-50k">$25,000 - $50,000</option>
-                  <option value="50k-plus">$50,000+</option>
+                  <option value="under-5k">Under $500</option>
+                  <option value="5k-10k">$500 - $1,000</option>
+                  <option value="10k-25k">$2,000 - $5,000</option>
+                  <option value="25k-50k">$5,000 - $10,000</option>
+                  <option value="50k-plus">$10,000+</option>
                 </select>
               </div>
 
@@ -322,7 +322,7 @@ export const WorkWithMe = () => {
                     className="font-medium text-[#0054e3] text-base hover:text-[#003da8] underline"
                     style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}
                   >
-                    theoluwanifemi@gmail.com
+                    olu@olusworks.xyz
                   </a>
                 </div>
                 <div>
