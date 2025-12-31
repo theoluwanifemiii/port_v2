@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Navigation } from "../../components/Navigation";
-import emailjs from "@emailjs/browser";
 
 const navigationItems = [
   { text: "What have i done", href: "/work", isNative: true },
@@ -18,57 +17,51 @@ export const WorkWithMe = () => {
     budget: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<
-    "idle" | "success" | "error"
-  >("idle");
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  setIsSubmitting(true);
+  setSubmitStatus("idle");
 
-    const serviceID = "service_re8uhg5";
-    const templateID = "template_eq7d19d";
-    const publicKey = "Su42_SzYHjjezO72q";
-
-    emailjs
-      .send(
-        serviceID,
-        templateID,
-        {
-          title: "Work with me",
-          from_name: formData.name,
-          from_email: formData.email,
-          message: formData.project,
-          budget: formData.budget,
-          company: formData.company,
-          to_email: "theoluwanifemi@gmail.com", // Your email address
+  try {
+    // Direct fetch - no Supabase client needed
+    const response = await fetch(
+      'https://uwcrhwvsogxdyzxyuhtr.supabase.co/functions/v1/send-contact-email',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        publicKey
-      )
-      .then((result) => {
-        console.log(result.text);
-        setSubmitStatus("success");
-        setFormData({
-          name: "",
-          email: "",
-          company: "",
-          project: "",
-          budget: "",
-        });
-      })
-      .catch((error) => {
-        console.log(error.text);
-        setSubmitStatus("error");
-      })
-      .finally(() => {
-        setIsSubmitting(false);
+        body: JSON.stringify(formData),
+      }
+    );
+
+    const data = await response.json();
+
+    if (response.ok) {
+      setSubmitStatus("success");
+      setFormData({
+        name: "",
+        email: "",
+        company: "",
+        project: "",
+        budget: "",
       });
-  };
+    } else {
+      console.error('Server error:', data);
+      throw new Error(data.error || 'Failed to send email');
+    }
+  } catch (error) {
+    console.error('Error sending email:', error);
+    setSubmitStatus("error");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -198,7 +191,7 @@ export const WorkWithMe = () => {
               <div className="p-4 mb-6 border-2 border-[#d93831] bg-[#f8d7da]">
                 <p className="text-red-900 text-sm font-medium" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
                   Sorry, something went wrong. Please try again or email me
-                  directly.
+                  directly at works@olusworks.xyz
                 </p>
               </div>
             )}
@@ -295,7 +288,7 @@ export const WorkWithMe = () => {
                 >
                   <option value="">Select a range</option>
                   <option value="under-5k">Under $500</option>
-                  <option value="5k-10k">$500 - $1,000</option>
+                  <option value="5k-10k">$500 - $2,000</option>
                   <option value="10k-25k">$2,000 - $5,000</option>
                   <option value="25k-50k">$5,000 - $10,000</option>
                   <option value="50k-plus">$10,000+</option>
@@ -318,11 +311,11 @@ export const WorkWithMe = () => {
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
                 <div>
                   <a
-                    href="mailto:hello@olu.design"
+                    href="mailto:works@olusworks.xyz"
                     className="font-medium text-[#0054e3] text-base hover:text-[#003da8] underline"
                     style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}
                   >
-                    olu@olusworks.xyz
+                    works@olusworks.xyz
                   </a>
                 </div>
                 <div>

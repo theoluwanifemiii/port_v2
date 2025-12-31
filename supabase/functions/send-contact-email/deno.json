@@ -1,0 +1,11 @@
+cat > supabase/functions/deno.json << 'EOF'
+{
+  "compilerOptions": {
+    "lib": ["deno.window"],
+    "strict": true
+  },
+  "imports": {
+    "std/": "https://deno.land/std@0.168.0/"
+  }
+}
+EOF
