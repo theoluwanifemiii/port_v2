@@ -42,7 +42,7 @@ serve(async (req) => {
         'Authorization': `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: 'Oluwanifemi Portfolio <noreply@olusworks.xyz>',
+        from: 'Oluwanifemi Portfolio <noreply@mail.olusworks.xyz>',
         to: ['works@olusworks.xyz'],
         reply_to: email,
         subject: `New Portfolio Contact: ${name}`,
@@ -124,9 +124,11 @@ serve(async (req) => {
         'Authorization': `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: 'Oluwanifemi Osunsanya <works@olusworks.xyz>',
-        to: [email],
-        subject: 'Thanks for reaching out!',
+       from: 'Oluwanifemi <hello@mail.olusworks.xyz>',
+       to: [email],
+       reply_to: 'works@olusworks.xyz',
+       subject: 'Thanks for reaching out!',
+       
         html: `
           <!DOCTYPE html>
           <html>
