@@ -11,6 +11,8 @@ import { WorkWithMe } from "./screens/WorkWithMe/WorkWithMe";
 import { About } from "./screens/About/About";
 import { Preloader } from "./components/Preloader";
 import { Fintech } from "./screens/Fintech/Fintech";
+import { PaybleV21 } from "./screens/PaybleV21/PaybleV21";
+import { Explorations } from "./screens/Explorations/Explorations";
 
 inject();
 
@@ -47,6 +49,8 @@ console.log("🚀 App started!");
             <Route path="/work-with-me" element={<WorkWithMe />} />
             <Route path="/about" element={<About />} />
             <Route path="/fintech" element={<Fintech />} /> {/* Hidden page */}
+            <Route path="/payble-v21" element={<PaybleV21 />} />
+            <Route path="/explorations" element={<Explorations />} />
             <Route path="*" element={<div style={{padding:'2rem',textAlign:'center'}}><h1>404 - Not Found</h1><p>The page you are looking for does not exist.</p></div>} />
           </Routes>
         </PageTransition>

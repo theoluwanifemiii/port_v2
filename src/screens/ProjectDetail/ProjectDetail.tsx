@@ -1,17 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
-import { Navigation } from "../../components/Navigation";
-import { WindowControls } from "../../components/WindowControls";
-import { LottiePlayer } from "../../components/LottiePlayer";
-import { ArrowLeft, ExternalLink } from "lucide-react";
-import Marquee from "react-fast-marquee";
-
-const navigationItems = [
-  { text: "What have i done", href: "/work", isNative: true },
-  { text: "Who am i ?", href: "/about", isNative: true },
-  { text: "My explorations", href: "#", isNative: false },
-  { text: "Work with me", href: "/work-with-me", isNative: true },
-];
+import React, { useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Calendar,
+  LayoutList,
+  TrendingUp,
+  Zap,
+} from "lucide-react";
 
 interface ProjectData {
   id: string;
@@ -23,13 +19,10 @@ interface ProjectData {
   challengeImages?: string[];
   approach: string[];
   outcome: string;
-  outcomeImages?: string[];
   results: string;
   images: string[];
   tags: string[];
   liveUrl?: string;
-  lottieFile?: string;
-  behanceEmbed?: string;
   nextProject?: { id: string; title: string };
   prevProject?: { id: string; title: string };
 }
@@ -52,7 +45,7 @@ const projectsData: Record<string, ProjectData> = {
       "/Before1.png",
     ],
     approach: [
-      "I stepped in to untangle the experience. The first thing I did was a full UX audit — looking at user flows for payments, transfers, and savings. From there, I mapped the main journeys and spotted where users were getting stuck. I also noticed the design lacked structure, so I built a unified design system to keep mobile and web consistent.",
+      "I stepped in to untangle the experience. The first thing I did was a full UX audit — looking at user flows for payments, transfers, and savings. From there, I mapped the main journeys and spotted where users were getting stuck.",
       "The redesign focused on clarity: cleaner layouts, simpler navigation, and a visual identity that felt trustworthy. I kept iterating with quick feedback loops, aligning with both developers and stakeholders as I refined the details.",
       "In the end, the new design cut friction out of everyday tasks and gave developers a system they could actually work with. Stakeholders finally saw a product that reflected their vision, and early adopters shared positive feedback about how simple the experience felt.",
     ],
@@ -63,8 +56,6 @@ const projectsData: Record<string, ProjectData> = {
     images: ["/Project 2.png"],
     tags: ["UX Audit", "Design System", "Mobile Banking", "Web Platform"],
     liveUrl: "https://ibank.digitvant.com/login",
-    lottieFile: "/Scene.json",
-    behanceEmbed: "https://www.behance.net/embed/project/173528357?ilo0=1",
     prevProject: { id: "vital-swap", title: "Vital Swap" },
     nextProject: { id: "motobills", title: "Motobills Admin" },
   },
@@ -74,24 +65,23 @@ const projectsData: Record<string, ProjectData> = {
     subtitle: "Designing a Back Office for Smooth Operations",
     year: "2024",
     description: [
-      "Vital Swap needed a back office platform that could handle complex operations across three distinct user types — administrators, agents, and merchants. The existing workflow was fragmented, with tasks scattered across multiple tools. Operations often slowed down due to unclear permissions, inconsistent design patterns, and missing visibility into daily activities.",
+      "Vital Swap needed a back office platform that could handle complex operations across three distinct user types — administrators, agents, and merchants. The existing workflow was fragmented, with tasks scattered across multiple tools.",
       "The goal was simple but ambitious: build an operational backbone that could scale smoothly without confusion.",
     ],
     challenge:
       "The existing workflow was fragmented, with tasks scattered across multiple tools. Operations often slowed down due to unclear permissions, inconsistent design patterns, and missing visibility into daily activities.",
     approach: [
       "I started by mapping how each user type interacted with the system — what they needed to see, approve, or monitor daily. From there, I designed a structure that brought everything together in one consistent, intuitive experience.",
-      "What I focused on: Streamlining navigation to reduce the number of steps per task, defining clear permission levels and access controls, creating reusable UI patterns for consistency and scalability, and designing dashboards that gave instant visibility into critical data and transactions.",
-      "Throughout the process, I worked closely with developers and stakeholders to ensure every component aligned with real operational needs, not just design goals.",
+      "I focused on streamlining navigation, defining clear permission levels, creating reusable UI patterns, and designing dashboards that gave instant visibility into critical data and transactions.",
+      "I worked closely with developers and stakeholders to ensure every component aligned with real operational needs, not just design goals.",
     ],
     outcome:
       "The new back office became the engine of Vital Swap's daily operations. It allowed different user types to work seamlessly without overlapping responsibilities or confusion.",
     results:
-      "Faster onboarding for new staff and agents. Reduced operational errors due to clearer data visibility. Consistent, scalable design system across all user types. What started as a scattered workflow became a unified, efficient system that helped Vital Swap's operations run smoothly and confidently.",
+      "Faster onboarding for new staff and agents. Reduced operational errors due to clearer data visibility. Consistent, scalable design system across all user types.",
     images: ["/Project 1.png"],
     tags: ["Back Office", "Admin Dashboard", "Multi-User System", "Operations"],
     liveUrl: "https://vitalswap.com/",
-    lottieFile: "/Vitalswap.json",
     prevProject: { id: "onedrugstore", title: "One Drug Store" },
     nextProject: { id: "digitvant-pay", title: "Digitvant Pay" },
   },
@@ -102,286 +92,394 @@ const projectsData: Record<string, ProjectData> = {
     year: "2024",
     description: [
       "Motobills is one of Nigeria's most affordable bill payment platforms — offering users cheap airtime, electricity, data, hotel bookings, and flight payments. Behind the scenes, the operations team managed a complex system that often broke their flow.",
-      "The Bills Inventory module — responsible for tracking balances, restocking, and managing cashback — lacked visibility, speed, and structure. Managers couldn't easily see provider balances or adjust selling prices without multiple manual steps, which slowed down restocking and caused delays across the platform.",
+      "The Bills Inventory module — responsible for tracking balances, restocking, and managing cashback — lacked visibility, speed, and structure. Managers couldn't easily see provider balances or adjust selling prices without multiple manual steps.",
     ],
     challenge:
       "The Bills Inventory module lacked visibility, speed, and structure. Managers couldn't easily see provider balances or adjust selling prices without multiple manual steps, which slowed down restocking and caused delays across the platform.",
     approach: [
-      "I worked across six key admin modules — from Customer Support to Influencer and Hotel Management Dashboards — but the Bills Inventory became my main focus. I started by mapping out how the operations team interacted with inventory data daily.",
-      "From there, I redesigned the experience with three key goals in mind: Clarity - Make bill balances and provider info instantly visible. Control - Simplify how prices and cashback percentages are adjusted. Speed - Reduce time spent restocking or verifying balances.",
-      "I designed a streamlined dashboard where managers could view real-time balances across all providers, restock faster with fewer clicks, set and update selling prices and cashback instantly, and track bill history for accountability.",
+      "I mapped how the operations team interacted with inventory data daily, then redesigned the experience with three goals: clarity, control, and speed.",
+      "The new dashboard made balances instantly visible, simplified restocking, and made price and cashback updates effortless.",
+      "I validated the changes with operations and business development teams to ensure every workflow felt faster and more reliable.",
     ],
     outcome:
       "The new Bills Inventory module transformed how operations teams managed the platform. Workflows became more transparent, decisions faster, and overall efficiency improved significantly.",
     results:
-      "Faster restocking time and improved daily operations. Clear visibility into bill balances and transactions. Positive feedback from operations and business dev teams.",
+      "Faster restocking time and improved daily operations. Clear visibility into bill balances and transactions. Positive feedback from operations and business development teams.",
     images: ["/Project 3.png"],
-    tags: [
-      "Admin Dashboard",
-      "Inventory Management",
-      "Bill Payments",
-      "Operations",
-    ],
+    tags: ["Admin Dashboard", "Inventory Management", "Bill Payments", "Operations"],
     liveUrl:
       "https://play.google.com/store/apps/details?id=com.motobills.app&hl=en",
-    lottieFile: "/motobills.json",
     nextProject: { id: "onedrugstore", title: "One Drug Store" },
     prevProject: { id: "digitvant-pay", title: "Digitvant Pay" },
   },
 };
 
+const portfolioTestimonial = {
+  quote:
+    "I've had the pleasure of working alongside Nifemi, and he's one of the most talented and collaborative designers I've met. His attention to detail, strong UX instincts, and ability to turn complex problems into elegant solutions consistently impressed me.",
+  name: "Oluwafemi Oluwatobi",
+  role: "Product Designer",
+  company: "Teckholic",
+  avatar:
+    "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=64&h=64",
+};
+
 export const ProjectDetail = () => {
   const { projectId } = useParams<{ projectId: string }>();
   const project = projectId ? projectsData[projectId] : null;
-  const [isHoveringHero, setIsHoveringHero] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.remove("opacity-0", "translate-y-6");
+          entry.target.classList.add("opacity-100", "translate-y-0");
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const els = Array.from(document.querySelectorAll(".animate-on-scroll"));
+    els.forEach((el) => {
+      el.classList.add(
+        "transition-all",
+        "duration-700",
+        "opacity-0",
+        "translate-y-6"
+      );
+      observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   if (!project) {
     return (
       <div className="flex flex-col items-center justify-center w-full min-h-screen px-6 bg-white">
-        <h1 className="[font-family:'Neue_Montreal',Helvetica] font-bold text-black text-4xl mb-4">
-          Project Not Found
-        </h1>
-        <Link
-          to="/work"
-          className="[font-family:'Sometype_Mono',Helvetica] text-gray-600 hover:text-black transition-colors"
-        >
+        <h1 className="font-bold text-slate-900 text-4xl mb-4">Project Not Found</h1>
+        <Link to="/work" className="text-slate-500 hover:text-slate-900">
           ← Back to Work
         </Link>
       </div>
     );
   }
 
+  const heroTags = project.tags.slice(0, 2);
+  const resultSentences = project.results
+    .split(".")
+    .map((sentence) => sentence.trim())
+    .filter(Boolean);
+  const resultCards = project.tags.slice(0, 3).map((tag, index) => ({
+    value: tag,
+    label: index === 0 ? "Key Focus" : index === 1 ? "Design Driver" : "Impact Area",
+    description: resultSentences[index] || project.results,
+  }));
+  const challengeImages =
+    project.challengeImages && project.challengeImages.length > 0
+      ? project.challengeImages
+      : project.images;
+  const solutionImage = project.images[0] || challengeImages[0];
+
   return (
-    <div className="flex flex-col w-full min-h-screen px-2 sm:px-6 lg:px-12" style={{ background: '#5a7fdc' }}>
-      <div className="xp-window max-w-7xl w-full mx-auto mt-2 sm:mt-8 mb-2 sm:mb-8 min-h-[calc(100vh-1rem)] sm:min-h-[calc(100vh-4rem)]">
-        <WindowControls title={`${project.title} - Microsoft Internet Explorer`} />
-
-        <header className="w-full px-3 sm:px-6 pt-4 sm:pt-8 pb-3 sm:pb-4 border-b-2 border-[#b4b4b4] hidden sm:block" style={{ background: 'var(--xp-gray)' }}>
-          <Navigation items={navigationItems} />
-        </header>
-
-        <main className="flex-1 w-full px-3 sm:px-6 py-4 sm:py-8 overflow-y-auto" style={{ background: 'var(--xp-gray)', minHeight: '60vh', maxHeight: 'calc(100vh - 8rem)' }}>
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-8 p-6 bg-white border-2 border-[#b4b4b4] shadow-md">
-            <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12">
-              <div className="lg:col-span-8">
-                <h1 className="font-bold text-[#003da8] text-3xl sm:text-4xl lg:text-5xl mb-3" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-                  {project.title}
-                </h1>
-                <p className="font-medium text-gray-700 text-xl sm:text-2xl lg:text-3xl" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
-                  {project.subtitle}
-                </p>
-              </div>
-
-              <div className="flex flex-col justify-end lg:col-span-4">
-                <div className="space-y-4">
-                  <div className="flex justify-between gap-6">
-                    <div>
-                      <p className="text-xs uppercase tracking-wider text-gray-600 mb-2 font-medium" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
-                        Role
-                      </p>
-                      <p className="font-medium text-black text-base" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
-                        Product Designer
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs uppercase tracking-wider text-gray-600 mb-2 font-medium" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
-                        Year
-                      </p>
-                      <p className="font-medium text-black text-base" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
-                        {project.year}
-                      </p>
-                    </div>
-                  </div>
-
-                  {project.liveUrl && (
-                    <div className="w-full">
-                      <a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="xp-button-green text-sm w-full justify-center flex items-center gap-2"
-                      >
-                        View Live Site
-                        <ExternalLink className="w-4 h-4" />
-                      </a>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
+    <div style={{ all: "initial" } as React.CSSProperties}>
+      <div className="min-h-screen bg-white text-slate-900 antialiased selection:bg-slate-200 selection:text-slate-900 font-sans scroll-smooth">
+      <nav className="fixed top-0 w-full z-50 border-b border-slate-100 bg-white/80 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+          <Link
+            to="/fintech"
+            className="font-semibold text-lg tracking-tight hover:opacity-70 transition-opacity"
+          >
+            Oluwanifemi.
+          </Link>
+          <div className="flex items-center gap-6 text-sm font-medium text-slate-500">
+            <Link
+              to="/work"
+              className="hover:text-slate-900 transition-colors flex items-center gap-2"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Work
+            </Link>
           </div>
+          <a
+            href="#contact"
+            className="hidden md:flex items-center gap-2 bg-slate-900 text-white text-xs font-medium px-4 py-2 rounded-full hover:bg-slate-800 transition-colors hover:scale-105 active:scale-95 transition-transform duration-200"
+          >
+            Book a Call
+          </a>
+        </div>
+      </nav>
 
-          <div className="mb-8 p-4 bg-white border-2 border-[#b4b4b4] shadow-md">
-            {project.lottieFile ? (
-              <div
-                className="relative w-full overflow-hidden border-2 border-[#7f9db9] aspect-video"
-                onMouseEnter={() => setIsHoveringHero(true)}
-                onMouseLeave={() => setIsHoveringHero(false)}
-              >
-                {!isHoveringHero ? (
-                  <img
-                    src={project.images[0]}
-                    alt={`${project.title} - Hero Image`}
-                    className="object-cover w-full h-full"
-                  />
-                ) : (
-                  <LottiePlayer
-                    animationPath={project.lottieFile}
-                    autoplay={true}
-                    loop={true}
-                    pauseOnHover={false}
-                    className="w-full h-full"
-                  />
-                )}
-              </div>
-            ) : (
-              project.images.map((image, index) => (
-                <div
-                  key={index}
-                  className="w-full overflow-hidden bg-white rounded-lg shadow-sm aspect-video"
-                >
-                  <img
-                    src={image}
-                    alt={`${project.title} - Image ${index + 1}`}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-              ))
-            )}
-          </div>
-
-          <section className="mb-8 p-6 bg-white border-2 border-[#b4b4b4] shadow-md">
-            <h2 className="font-bold text-[#003da8] text-2xl sm:text-3xl mb-6 pb-3 border-b border-gray-300" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-              Overview
-            </h2>
-            {project.description.map((p, i) => (
-              <p
-                key={i}
-                className="text-gray-800 text-base leading-relaxed mb-4" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}
-              >
-                {p}
-              </p>
-            ))}
-          </section>
-
-          <section className="mb-8 p-6 bg-white border-2 border-[#b4b4b4] shadow-md">
-            <h2 className="font-bold text-[#003da8] text-2xl sm:text-3xl mb-6 pb-3 border-b border-gray-300" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-              The Challenge
-            </h2>
-            <p className="text-gray-800 text-base leading-relaxed mb-8" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
-              {project.challenge}
-            </p>
-            {project.challengeImages && (
-              // <ImageSlider images={project.challengeImages} />
-              <Marquee pauseOnHover={true}>
-                <img src="/Digtvant Before 1.png" alt="" className="w-full" />
-                <img src="/Digtvant Before 2.png" alt="" className="w-full" />
-              </Marquee>
-            )}
-          </section>
-
-          <section className="mb-8 p-6 bg-white border-2 border-[#b4b4b4] shadow-md">
-            <h2 className="font-bold text-[#003da8] text-2xl sm:text-3xl mb-6 pb-3 border-b border-gray-300" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-              My Approach
-            </h2>
-            {project.approach.map((p, i) => (
-              <p
-                key={i}
-                className="text-gray-800 text-base leading-relaxed mb-4" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}
-              >
-                {p}
-              </p>
-            ))}
-          </section>
-
-          <section className="mb-8 p-6 bg-white border-2 border-[#b4b4b4] shadow-md">
-            <h2 className="font-bold text-[#003da8] text-2xl sm:text-3xl mb-6 pb-3 border-b border-gray-300" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-              The Outcome
-            </h2>
-            <p className="text-gray-800 text-base leading-relaxed mb-6" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
-              {project.outcome}
-            </p>
-
-            <div className="p-6 mb-6 bg-[#fffacd] border-2 border-[#b4b4b4]">
-              <p className="font-medium text-black text-base leading-relaxed" style={{ fontFamily: 'Sometype Mono, Courier New, monospace' }}>
-                <span className="mr-2 text-xl">🚀</span>
-                {project.results}
-              </p>
+      <header className="pt-32 pb-16 px-6 md:px-12 max-w-5xl mx-auto">
+        <div className="flex flex-col md:flex-row gap-4 md:items-center mb-8 animate-on-scroll">
+          {heroTags.map((tag) => (
+            <div
+              key={tag}
+              className="inline-flex items-center gap-1.5 border border-slate-200 bg-slate-50 px-2.5 py-1 rounded-md text-slate-600 text-[11px] uppercase font-semibold tracking-wider"
+            >
+              {tag}
             </div>
+          ))}
+        </div>
 
-            {project.outcomeImages && project.outcomeImages.length > 0 && (
-              <div className="mb-8">
-                <ImageSlider images={project.outcomeImages} />
+        <h1 className="text-4xl md:text-6xl font-semibold text-slate-900 tracking-tight mb-8 leading-[1.1] animate-on-scroll delay-100">
+          {project.subtitle}
+        </h1>
+
+        <p className="text-xl text-slate-500 max-w-2xl leading-relaxed animate-on-scroll delay-200">
+          {project.description[0]}
+        </p>
+      </header>
+
+      <section className="border-y border-slate-100 bg-slate-50/50">
+        <div className="max-w-5xl mx-auto px-6 md:px-12 py-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div>
+              <div className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-2">
+                Project
               </div>
-            )}
-
-            {project.lottieFile && (
-              <div className="mt-8">
-                <LottiePlayer
-                  animationPath={project.lottieFile}
-                  autoplay={true}
-                  loop={true}
-                  pauseOnHover={true}
-                  className="w-full mx-auto"
-                />
-              </div>
-            )}
-
-            <div className="flex items-center justify-between pt-6 mt-8 border-t-2 border-gray-300">
-              {project.prevProject ? (
-                <Link
-                  to={`/work/${project.prevProject.id}`}
-                  className="xp-button text-xs inline-flex items-center gap-2 no-underline"
-                >
-                  <ArrowLeft className="w-3 h-3" />
-                  <span>Prev: {project.prevProject.title}</span>
-                </Link>
-              ) : (
-                <div />
-              )}
-
-              {project.nextProject && (
-                <Link
-                  to={`/work/${project.nextProject.id}`}
-                  className="xp-button text-xs inline-flex items-center gap-2 no-underline"
-                >
-                  <span>Next: {project.nextProject.title}</span>
-                  <ArrowLeft className="w-3 h-3 rotate-180" />
-                </Link>
-              )}
+              <div className="font-medium text-slate-900">{project.title}</div>
             </div>
-          </section>
-
-          <div className="p-6 bg-white border-2 border-[#b4b4b4] shadow-md">
-            <div className="flex flex-wrap gap-2">
-              {project.tags.map((tag, index) => (
-                <span
-                  key={index}
-                  className="xp-button text-xs"
-                >
-                  {tag}
-                </span>
-              ))}
+            <div>
+              <div className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-2">
+                Year
+              </div>
+              <div className="font-medium text-slate-900">{project.year}</div>
+            </div>
+            <div>
+              <div className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-2">
+                My Role
+              </div>
+              <div className="font-medium text-slate-900">Product Designer</div>
+            </div>
+            <div>
+              <div className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-2">
+                Outcome
+              </div>
+              <div className="font-medium text-green-600 flex items-center gap-1">
+                {resultSentences[0] || "Improved outcomes"}
+                <TrendingUp className="w-3 h-3" />
+              </div>
             </div>
           </div>
         </div>
-        </main>
+      </section>
 
-        <footer className="xp-taskbar px-4 py-2 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <button className="xp-start-button flex items-center gap-2">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <rect width="20" height="20" fill="transparent"/>
-                <path d="M3 3 L17 10 L3 17 Z" fill="white"/>
-              </svg>
-              start
-            </button>
+      <main className="max-w-5xl mx-auto px-6 md:px-12 py-24 space-y-32">
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start animate-on-scroll">
+          <div className="md:col-span-4 sticky top-24">
+            <h2 className="text-2xl font-semibold tracking-tight text-slate-900 mb-4">
+              The Challenge
+            </h2>
+            <p className="text-slate-500 text-base leading-relaxed mb-6">
+              {project.challenge}
+            </p>
+            <ul className="space-y-3 text-sm text-slate-600">
+              {project.tags.map((tag) => (
+                <li key={tag} className="flex gap-2">
+                  <span className="text-red-400">•</span> {tag}
+                </li>
+              ))}
+            </ul>
           </div>
-          <div className="text-white text-xs font-medium" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-            {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+          <div className="md:col-span-8">
+            <div className="bg-slate-100 rounded-xl p-6 border border-slate-200 relative overflow-hidden">
+              <div className="absolute top-4 right-4 bg-white/80 backdrop-blur px-3 py-1 rounded text-xs font-medium text-red-500 border border-red-100 z-10">
+                Before: Pain Points
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {challengeImages.slice(0, 4).map((image, index) => (
+                  <div
+                    key={image}
+                    className={`rounded-lg overflow-hidden border border-slate-200 bg-white shadow-sm ${
+                      index === 0 ? "sm:col-span-2" : ""
+                    }`}
+                  >
+                    <img
+                      src={image}
+                      alt={`${project.title} challenge ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+              <p className="text-xs text-slate-400 mt-4 italic text-center">
+                Early exploration surfaces that informed the redesign direction.
+              </p>
+            </div>
           </div>
-        </footer>
+        </section>
+
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start animate-on-scroll">
+          <div className="md:col-span-4 sticky top-24">
+            <h2 className="text-2xl font-semibold tracking-tight text-slate-900 mb-4">
+              The Solution
+            </h2>
+            <p className="text-slate-500 text-base leading-relaxed mb-6">
+              {project.outcome}
+            </p>
+            <div className="space-y-4">
+              {project.approach.slice(0, 2).map((item, index) => (
+                <div key={item} className="flex items-start gap-3">
+                  <div className="w-6 h-6 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 mt-0.5">
+                    {index === 0 ? (
+                      <LayoutList className="w-3.5 h-3.5" />
+                    ) : (
+                      <Zap className="w-3.5 h-3.5" />
+                    )}
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium text-slate-900">
+                      {project.tags[index] || "Key Focus"}
+                    </h3>
+                    <p className="text-xs text-slate-500 mt-1">{item}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="md:col-span-8">
+            <div className="bg-slate-900 rounded-xl p-8 border border-slate-800 relative overflow-hidden shadow-2xl">
+              <div className="absolute top-4 right-4 bg-white/10 backdrop-blur px-3 py-1 rounded text-xs font-medium text-green-400 border border-white/10 z-10">
+                After: Action-Oriented
+              </div>
+              <div className="bg-white rounded-lg shadow-xl overflow-hidden">
+                {solutionImage && (
+                  <img
+                    src={solutionImage}
+                    alt={`${project.title} solution`}
+                    className="w-full h-full object-cover"
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="animate-on-scroll">
+          <h2 className="text-2xl font-semibold tracking-tight text-slate-900 mb-8">
+            The Results
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {resultCards.map((card) => (
+              <div
+                key={card.value}
+                className="p-8 bg-slate-50 border border-slate-200 rounded-2xl"
+              >
+                <div className="text-3xl font-semibold text-slate-900 mb-2 tracking-tight">
+                  {card.value}
+                </div>
+                <div className="text-sm font-medium text-slate-600">
+                  {card.label}
+                </div>
+                <p className="text-xs text-slate-400 mt-2">{card.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="border-t border-slate-100 pt-16 animate-on-scroll">
+          <div className="bg-blue-50/50 rounded-2xl p-8 md:p-12 text-center border border-blue-100">
+            <p className="text-xl md:text-2xl font-medium text-slate-800 leading-relaxed mb-8 max-w-3xl mx-auto">
+              "{portfolioTestimonial.quote}"
+            </p>
+            <div className="flex items-center justify-center gap-3">
+              <div className="w-10 h-10 bg-slate-200 rounded-full overflow-hidden">
+                <img
+                  src={portfolioTestimonial.avatar}
+                  alt={portfolioTestimonial.name}
+                  className="w-full h-full object-cover opacity-90"
+                />
+              </div>
+              <div className="text-left">
+                <div className="text-sm font-semibold text-slate-900">
+                  {portfolioTestimonial.name}
+                </div>
+                <div className="text-xs text-slate-500">
+                  {portfolioTestimonial.role}
+                  {portfolioTestimonial.company
+                    ? `, ${portfolioTestimonial.company}`
+                    : ""}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div className="flex justify-between items-center py-8 border-t border-slate-100">
+          {project.prevProject ? (
+            <Link
+              to={`/work/${project.prevProject.id}`}
+              className="group flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+              Previous Project
+            </Link>
+          ) : (
+            <div />
+          )}
+          {project.nextProject && (
+            <Link to={`/work/${project.nextProject.id}`} className="group text-right">
+              <div className="text-xs text-slate-400 mb-1">Next Case Study</div>
+              <div className="text-lg font-semibold text-slate-900 flex items-center gap-2">
+                {project.nextProject.title}
+                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+              </div>
+            </Link>
+          )}
+        </div>
+      </main>
+
+      <footer id="contact" className="bg-slate-900 text-white py-24 px-6 md:px-12">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-3xl md:text-5xl font-semibold tracking-tight mb-6">
+            Is your ops team <br />
+            <span className="text-slate-400">fighting their own tools?</span>
+          </h2>
+          <p className="text-lg text-slate-400 mb-10 leading-relaxed">
+            I help fintechs turn messy data into clear action. Book a free 15-minute
+            audit of your current dashboard.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              to="/work-with-me"
+              className="w-full sm:w-auto bg-white text-slate-900 font-medium px-8 py-3.5 rounded-full hover:bg-slate-100 transition-colors flex items-center justify-center gap-2 hover:scale-105 active:scale-95 transition-transform duration-200"
+            >
+              Book Dashboard Audit
+              <Calendar className="w-4 h-4" />
+            </Link>
+            <a
+              href="mailto:works@olusworks.xyz"
+              className="w-full sm:w-auto bg-transparent border border-slate-700 text-white font-medium px-8 py-3.5 rounded-full hover:bg-slate-800 transition-colors"
+            >
+              Email Me
+            </a>
+          </div>
+          <div className="mt-16 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500">
+            <div>© 2024 Oluwanifemi Design.</div>
+            <div className="flex gap-6">
+              <a
+                href="https://www.behance.net/gallery/173528357/Creative-Pay-UX-Case-Study"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white transition-colors"
+              >
+                Behance
+              </a>
+              <a
+                href="https://www.linkedin.com/in/oluwanifemiosunsanya/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white transition-colors"
+              >
+                LinkedIn
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
       </div>
     </div>
   );
