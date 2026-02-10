@@ -65,7 +65,7 @@ const projectsData: Record<string, ProjectData> = {
     subtitle: "Designing a Back Office for Smooth Operations",
     year: "2024",
     description: [
-      "Vital Swap needed a back office platform that could handle complex operations across three distinct user types — administrators, agents, and merchants. The existing workflow was fragmented, with tasks scattered across multiple tools.",
+      "Vital Swap needed a back office platform that could handle complex operations across three distinct user types — Super Administrators, Support, and Admin. The existing workflow was fragmented, with tasks scattered across multiple tools.",
       "The goal was simple but ambitious: build an operational backbone that could scale smoothly without confusion.",
     ],
     challenge:
