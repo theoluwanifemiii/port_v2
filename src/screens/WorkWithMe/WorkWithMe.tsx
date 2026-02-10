@@ -1,11 +1,47 @@
 import React, { useState } from "react";
-import { Navigation } from "../../components/Navigation";
+import { PortfolioShell } from "../../components/PortfolioShell";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
 
-const navigationItems = [
-  { text: "What have i done", href: "/work", isNative: true },
-  { text: "Who am i ?", href: "/about", isNative: true },
-  { text: "My explorations", href: "/explorations", isNative: true },
-  { text: "Work with me", href: "/work-with-me", isNative: true },
+const inputClassName =
+  "w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm text-[#191c20] outline-none transition-all placeholder:text-[#8a9098] focus:border-[#121316] focus:ring-4 focus:ring-black/5";
+
+interface Testimonial {
+  quote: string;
+  name: string;
+  role: string;
+  company?: string;
+}
+
+const testimonials: Testimonial[] = [
+  {
+    quote:
+      "I've had the pleasure of working alongside Nifemi. His UX instincts and ability to turn complex product problems into elegant solutions always stood out.",
+    name: "Oluwafemi Oluwatobi",
+    role: "Product Designer",
+    company: "Teckholic",
+  },
+  {
+    quote:
+      "He brings clarity to complex problems and balances user needs with business goals. He is a strong partner across product and engineering.",
+    name: "Timothy Fabiyi",
+    role: "Product Manager",
+  },
+  {
+    quote:
+      "Oluwanifemi combines creativity and practical execution. His solutions are thoughtful, implementation-friendly, and focused on real user outcomes.",
+    name: "Oluseyi Adisa",
+    role: "Frontend Engineer",
+  },
+  {
+    quote:
+      "His curiosity, collaboration style, and user-centered mindset consistently elevate projects. I highly recommend him for product teams.",
+    name: "Aduragbemi Abiola",
+    role: "Product Designer",
+    company: "Interswitch",
+  },
 ];
 
 export const WorkWithMe = () => {
@@ -19,27 +55,28 @@ export const WorkWithMe = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
 
- const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  setIsSubmitting(true);
-  setSubmitStatus("idle");
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus("idle");
 
-  try {
-    // Direct fetch - no Supabase client needed
-    const response = await fetch(
-      'https://uwcrhwvsogxdyzxyuhtr.supabase.co/functions/v1/send-contact-email',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+    try {
+      const response = await fetch(
+        "https://uwcrhwvsogxdyzxyuhtr.supabase.co/functions/v1/send-contact-email",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to send email");
       }
-    );
 
-    const data = await response.json();
-
-    if (response.ok) {
       setSubmitStatus("success");
       setFormData({
         name: "",
@@ -48,17 +85,13 @@ export const WorkWithMe = () => {
         project: "",
         budget: "",
       });
-    } else {
-      console.error('Server error:', data);
-      throw new Error(data.error || 'Failed to send email');
+    } catch (error) {
+      console.error("Error sending email:", error);
+      setSubmitStatus("error");
+    } finally {
+      setIsSubmitting(false);
     }
-  } catch (error) {
-    console.error('Error sending email:', error);
-    setSubmitStatus("error");
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -67,289 +100,191 @@ export const WorkWithMe = () => {
   };
 
   return (
-    <div className="flex flex-col w-full min-h-screen px-6 sm:px-12 lg:px-16" style={{ background: '#5a7fdc' }}>
-      <div className="xp-window max-w-7xl w-full mx-auto mt-8 mb-8 min-h-[calc(100vh-4rem)]">
-        <div className="xp-title-bar">
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-white/20 rounded-sm"></div>
-            <span className="text-white font-bold text-sm" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-              Work With Me - Microsoft Internet Explorer
-            </span>
+    <PortfolioShell contentClassName="max-w-[980px]">
+      <section className="reveal-up">
+        <p className="text-[11px] uppercase tracking-[0.14em] text-[#70747b]">Contact</p>
+        <h1 className="section-title mt-3 text-5xl leading-[1.04] text-[#111214] sm:text-6xl">
+          Let&apos;s design something users genuinely enjoy using.
+        </h1>
+      </section>
+
+      <section className="mt-8 grid gap-4 overflow-x-hidden reveal-up reveal-up-delay-1 lg:flex lg:items-start">
+        <aside className="hairline-card w-full min-w-0 overflow-hidden rounded-3xl p-6 lg:w-[380px] lg:max-w-[380px] lg:flex-shrink-0 lg:basis-[380px] lg:p-8">
+          <Swiper
+            modules={[Autoplay, Pagination]}
+            slidesPerView={1}
+            loop={true}
+            speed={700}
+            autoplay={{
+              delay: 4200,
+              disableOnInteraction: false,
+              pauseOnMouseEnter: true,
+            }}
+            pagination={{ clickable: true }}
+            className="h-[400px] w-full max-w-full [&_.swiper-pagination]:!bottom-0 [&_.swiper-pagination-bullet-active]:!bg-[#111214] [&_.swiper-pagination-bullet]:!bg-black/30"
+          >
+            {testimonials.map((testimonial, index) => (
+              <SwiperSlide key={`${testimonial.name}-${index}`} className="!h-full">
+                <div className="grid h-full grid-rows-[auto_minmax(0,1fr)_auto] pb-8">
+                  <p className="text-4xl text-black/20">“</p>
+                  <div className="mt-2 min-h-0 overflow-hidden max-h-[180px] sm:max-h-[200px] lg:max-h-[220px]">
+                    <p
+                      className="break-words text-2xl leading-[1.24] text-[#17191d] lg:text-[2rem]"
+                      style={{
+                        display: "-webkit-box",
+                        WebkitLineClamp: 6,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {testimonial.quote}
+                    </p>
+                  </div>
+                  <div className="pt-6 flex items-center gap-3 shrink-0">
+                    <div className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#15171b] text-sm font-semibold text-white">
+                      {testimonial.name
+                        .split(" ")
+                        .slice(0, 2)
+                        .map((part) => part[0]?.toUpperCase() || "")
+                        .join("")}
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-[#15181d]">{testimonial.name}</p>
+                      <p className="text-xs text-[#6a7077]">
+                        {testimonial.role}
+                        {testimonial.company ? `, ${testimonial.company}` : ""}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+
+          <div className="mt-8 space-y-3 text-sm leading-relaxed text-[#585d65]">
+            <p>I partner with startups and product teams on:</p>
+            <ul className="space-y-1">
+              <li>• Dashboard and admin UX</li>
+              <li>• Product redesign and growth flows</li>
+              <li>• Design systems and handoff quality</li>
+            </ul>
           </div>
-          <div className="flex gap-1">
-            <button className="w-6 h-5 bg-[#2c5fdb] hover:bg-[#2050c0] border border-[#1a4db5] text-white text-xs font-bold">_</button>
-            <button className="w-6 h-5 bg-[#2c5fdb] hover:bg-[#2050c0] border border-[#1a4db5] text-white text-xs font-bold">□</button>
-            <button className="w-6 h-5 bg-[#d93831] hover:bg-[#c02820] border border-[#b02018] text-white text-xs font-bold">×</button>
-          </div>
-        </div>
+        </aside>
 
-        <header className="w-full px-6 pt-8 pb-4 border-b-2 border-[#b4b4b4]" style={{ background: 'var(--xp-gray)' }}>
-          <Navigation items={navigationItems} />
-        </header>
-
-        <main className="flex flex-col w-full max-w-4xl px-6 py-8 mx-auto" style={{ background: 'var(--xp-gray)', minHeight: '60vh' }}>
-        <div className="mb-6 p-6 bg-white border-2 border-[#b4b4b4] shadow-sm">
-          <h1 className="font-bold text-[#003da8] text-4xl sm:text-5xl lg:text-6xl leading-tight mb-4" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-            Let's create something meaningful together
-          </h1>
-        </div>
-
-        <div className="space-y-6">
-          <div className="p-6 bg-white border-2 border-[#b4b4b4] shadow-sm">
-            <p className="font-normal text-gray-800 text-base sm:text-lg leading-relaxed" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-            I partner with startups and SaaS teams to design digital products
-            that users love and businesses can build on. Whether you're refining
-            an existing experience or starting from scratch, I bring clarity to
-            complexity and craft experiences that feel effortless.
-            </p>
-          </div>
-
-          <div className="p-6 bg-white border-2 border-[#b4b4b4] shadow-sm">
-            <h2 className="font-bold text-[#003da8] text-2xl sm:text-3xl mb-6 pb-3 border-b border-gray-300" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-              What I do
-            </h2>
-            <div className="space-y-5">
+        <article className="hairline-card w-full min-w-0 rounded-3xl p-6 lg:flex-1 lg:p-8">
+          <form className="grid gap-4" onSubmit={handleSubmit}>
+            <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <h3 className="font-bold text-black text-lg mb-2" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-                  Product Design
-                </h3>
-                <p className="font-normal text-gray-800 text-base leading-relaxed" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-                  End-to-end design for web and mobile applications, from
-                  research and wireframes to high-fidelity prototypes and
-                  developer handoff.
-                </p>
+                <label htmlFor="name" className="mb-2 block text-sm text-[#24282d]">
+                  Full name
+                </label>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  required
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="Your name"
+                  className={inputClassName}
+                />
               </div>
 
               <div>
-                <h3 className="font-bold text-black text-lg mb-2" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-                  UX Audits & Strategy
-                </h3>
-                <p className="font-normal text-gray-800 text-base leading-relaxed" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-                  Identifying friction points in existing products and mapping
-                  strategic improvements that drive adoption and retention.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="font-bold text-black text-lg mb-2" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-                  Design Systems
-                </h3>
-                <p className="font-normal text-gray-800 text-base leading-relaxed" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-                  Building cohesive, scalable design systems that keep teams
-                  aligned and developers efficient.
-                </p>
+                <label htmlFor="company" className="mb-2 block text-sm text-[#24282d]">
+                  Company
+                </label>
+                <input
+                  id="company"
+                  name="company"
+                  type="text"
+                  value={formData.company}
+                  onChange={handleChange}
+                  placeholder="Your company"
+                  className={inputClassName}
+                />
               </div>
             </div>
-          </div>
 
-          <div className="p-6 bg-white border-2 border-[#b4b4b4] shadow-sm">
-            <h2 className="font-bold text-[#003da8] text-2xl sm:text-3xl mb-6 pb-3 border-b border-gray-300" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-              How we can work together
-            </h2>
-            <div className="space-y-5">
-              <div>
-                <h3 className="font-bold text-black text-lg mb-2" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-                  Full-time or Contract
-                </h3>
-                <p className="font-normal text-gray-800 text-base leading-relaxed" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-                  I'm open to full-time roles and contract engagements. Whether
-                  you need someone embedded in your team or focused support for
-                  a specific project, let's talk.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="font-bold text-black text-lg mb-2" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-                  Project-based
-                </h3>
-                <p className="font-normal text-gray-800 text-base leading-relaxed" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-                  Have a defined scope? I work on project basis for redesigns,
-                  MVP launches, and design system builds.
-                </p>
-              </div>
+            <div>
+              <label htmlFor="email" className="mb-2 block text-sm text-[#24282d]">
+                E-mail
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="you@email.com"
+                className={inputClassName}
+              />
             </div>
-          </div>
 
-          <div className="p-6 bg-white border-2 border-[#b4b4b4] shadow-sm">
-            <h2 className="font-bold text-[#003da8] text-2xl sm:text-3xl mb-6 pb-3 border-b border-gray-300" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-              Get in touch
-            </h2>
-            <p className="font-normal text-gray-800 text-base sm:text-lg leading-relaxed mb-8" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-              I'd love to hear about what you're building. Drop me a message and
-              let's explore how I can help bring your vision to life.
-            </p>
+            <div>
+              <label htmlFor="project" className="mb-2 block text-sm text-[#24282d]">
+                How can I help?
+              </label>
+              <textarea
+                id="project"
+                name="project"
+                rows={6}
+                required
+                value={formData.project}
+                onChange={handleChange}
+                placeholder="Tell me about your product and what support you need..."
+                className={`${inputClassName} resize-none`}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="budget" className="mb-2 block text-sm text-[#24282d]">
+                Budget range
+              </label>
+              <select
+                id="budget"
+                name="budget"
+                value={formData.budget}
+                onChange={handleChange}
+                className={inputClassName}
+              >
+                <option value="">Select a range</option>
+                <option value="under-500">Under $500</option>
+                <option value="500-2000">$500 - $2,000</option>
+                <option value="2000-5000">$2,000 - $5,000</option>
+                <option value="5000-10000">$5,000 - $10,000</option>
+                <option value="10000-plus">$10,000+</option>
+                <option value="We don't have a budget in mind">We don't have a budget in mind </option>
+              </select>
+            </div>
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="mt-2 rounded-xl bg-[#15171b] px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-black disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {isSubmitting ? "Sending..." : "Proceed with inquiry"}
+            </button>
 
             {submitStatus === "success" && (
-              <div className="p-4 mb-6 border-2 border-[#2d8c2d] bg-[#d4edda]">
-                <p className="text-green-900 text-sm font-medium" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-                  Thank you for reaching out! I'll get back to you soon.
-                </p>
-              </div>
+              <p className="rounded-xl border border-[#2d7f4b]/20 bg-[#eaf8ef] px-4 py-2 text-sm text-[#1e653b]">
+                Thanks. I&apos;ll get back to you shortly.
+              </p>
             )}
 
             {submitStatus === "error" && (
-              <div className="p-4 mb-6 border-2 border-[#d93831] bg-[#f8d7da]">
-                <p className="text-red-900 text-sm font-medium" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-                  Sorry, something went wrong. Please try again or email me
-                  directly at works@olusworks.xyz
-                </p>
-              </div>
+              <p className="rounded-xl border border-[#bc3b3b]/20 bg-[#fdeeee] px-4 py-2 text-sm text-[#8f2828]">
+                Something went wrong. Please email works@olusworks.xyz directly.
+              </p>
             )}
 
-            <form className="space-y-5" onSubmit={handleSubmit}>
-              <div>
-                <label
-                  htmlFor="name"
-                  className="text-sm text-gray-900 mb-2 block font-medium" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}
-                >
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="xp-input w-full text-base"
-                  placeholder="Your name"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="email"
-                  className="text-sm text-gray-900 mb-2 block font-medium" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}
-                >
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="xp-input w-full text-base"
-                  placeholder="your@email.com"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="company"
-                  className="text-sm text-gray-900 mb-2 block font-medium" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}
-                >
-                  Company (Optional)
-                </label>
-                <input
-                  type="text"
-                  id="company"
-                  name="company"
-                  value={formData.company}
-                  onChange={handleChange}
-                  className="xp-input w-full text-base"
-                  placeholder="Your company"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="project"
-                  className="text-sm text-gray-900 mb-2 block font-medium" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}
-                >
-                  Tell me about your project
-                </label>
-                <textarea
-                  id="project"
-                  name="project"
-                  value={formData.project}
-                  onChange={handleChange}
-                  required
-                  rows={6}
-                  className="xp-input w-full text-base resize-none"
-                  placeholder="Share details about your project, timeline, and what you're looking for..."
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="budget"
-                  className="text-sm text-gray-900 mb-2 block font-medium" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}
-                >
-                  Budget Range (Optional)
-                </label>
-                <select
-                  id="budget"
-                  name="budget"
-                  value={formData.budget}
-                  onChange={handleChange}
-                  className="xp-input w-full text-base"
-                >
-                  <option value="">Select a range</option>
-                  <option value="under-5k">Under $500</option>
-                  <option value="5k-10k">$500 - $2,000</option>
-                  <option value="10k-25k">$2,000 - $5,000</option>
-                  <option value="25k-50k">$5,000 - $10,000</option>
-                  <option value="50k-plus">$10,000+</option>
-                </select>
-              </div>
-
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="xp-button-green text-base px-10 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? "Sending..." : "Send Message"}
-              </button>
-            </form>
-
-            <div className="pt-6 mt-8 border-t-2 border-gray-300">
-              <p className="text-sm text-gray-700 mb-4 font-medium" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-                Or reach out directly:
-              </p>
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                <div>
-                  <a
-                    href="mailto:works@olusworks.xyz"
-                    className="font-medium text-[#0054e3] text-base hover:text-[#003da8] underline"
-                    style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}
-                  >
-                    works@olusworks.xyz
-                  </a>
-                </div>
-                <div>
-                  <a
-                    href="https://www.linkedin.com/in/oluwanifemiosunsanya/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-medium text-[#0054e3] text-base hover:text-[#003da8] underline"
-                    style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}
-                  >
-                    Connect on LinkedIn
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        </main>
-
-        <footer className="xp-taskbar px-4 py-2 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <button className="xp-start-button flex items-center gap-2">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <rect width="20" height="20" fill="transparent"/>
-                <path d="M3 3 L17 10 L3 17 Z" fill="white"/>
-              </svg>
-              start
-            </button>
-          </div>
-          <div className="text-white text-xs font-medium" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-            {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
-          </div>
-        </footer>
-      </div>
-    </div>
+            <p className="text-xs text-[#6c727a]">
+              By submitting, you agree to be contacted about your project inquiry.
+            </p>
+          </form>
+        </article>
+      </section>
+    </PortfolioShell>
   );
 };

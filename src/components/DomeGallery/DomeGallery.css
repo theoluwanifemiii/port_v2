@@ -1,0 +1,202 @@
+/* DomeGallery: 3D dome of tiles with click-to-enlarge overlay. */
+
+body.dg-scroll-lock {
+  overflow: hidden !important;
+  touch-action: none;
+}
+
+.sphere-root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  /* Fallbacks if JS hasn't run yet. */
+  --radius: 600px;
+  --viewer-pad: 24px;
+  --segments-x: 35;
+  --tile-radius: 30px;
+  --enlarge-radius: 30px;
+  --overlay-blur-color: #060010;
+  --image-filter: grayscale(1);
+
+  --unit-angle: calc(360deg / var(--segments-x) / 2);
+  --tile-unit: clamp(22px, calc(var(--radius) / 15), 64px);
+}
+
+.sphere-main {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  user-select: none;
+  cursor: grab;
+  touch-action: none;
+}
+
+.sphere-main:active {
+  cursor: grabbing;
+}
+
+.stage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  perspective: calc(var(--radius) * 2);
+  transform-style: preserve-3d;
+}
+
+.sphere {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-style: preserve-3d;
+  will-change: transform;
+
+  width: calc(var(--tile-unit) * var(--item-size-x, 2));
+  height: calc(var(--tile-unit) * var(--item-size-y, 2));
+
+  --rot-y-delta: 0deg;
+  --rot-x-delta: 0deg;
+
+  --rot-y-base: calc((var(--offset-x) + (var(--item-size-x) - 1) / 2) * var(--unit-angle));
+  --rot-x-base: calc((var(--offset-y) - (var(--item-size-y) - 1) / 2) * var(--unit-angle));
+
+  transform:
+    translate(-50%, -50%)
+    rotateY(calc(var(--rot-y-base) + var(--rot-y-delta)))
+    rotateX(calc(var(--rot-x-base) + var(--rot-x-delta)))
+    translateZ(var(--radius));
+
+  transition: transform 700ms cubic-bezier(0.2, 0.75, 0.2, 1);
+}
+
+.item__image {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: var(--tile-radius);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.12);
+  backface-visibility: hidden;
+  transform: translateZ(2px);
+  transition: transform 220ms ease, filter 220ms ease, opacity 220ms ease;
+}
+
+.item__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: var(--image-filter);
+  transform: scale(1.02);
+}
+
+.item__image:hover {
+  transform: translateZ(2px) scale(1.03);
+}
+
+.item__image:hover img {
+  filter: none;
+}
+
+.item__image:focus-visible {
+  outline: 2px solid rgba(0, 84, 227, 0.65);
+  outline-offset: 4px;
+}
+
+.item__image--reference {
+  pointer-events: none;
+}
+
+.viewer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: grid;
+  place-items: center;
+  z-index: 40;
+}
+
+.dg-ui {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 25;
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(7, 8, 12, 0.66);
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.frame {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(520px, calc(100% - (var(--viewer-pad) * 2)));
+  height: min(720px, calc(100% - (var(--viewer-pad) * 2)));
+  transform: translate(-50%, -50%);
+  border-radius: var(--enlarge-radius);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sphere-root[data-enlarging="true"] .viewer {
+  pointer-events: auto;
+}
+
+.sphere-root[data-enlarging="true"] .scrim {
+  opacity: 1;
+}
+
+.sphere-root[data-enlarging="true"] .frame {
+  opacity: 1;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(16, 18, 20, 0.08);
+  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.38);
+}
+
+.enlarge,
+.enlarge-closing {
+  border-radius: var(--enlarge-radius);
+  overflow: hidden;
+  background: #0b0c10;
+  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.52);
+}
+
+.enlarge {
+  pointer-events: none;
+}
+
+.enlarge img,
+.enlarge-closing img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item {
+    transition: none !important;
+  }
+  .scrim {
+    transition: none !important;
+  }
+}

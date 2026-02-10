@@ -41,7 +41,7 @@ console.log("🚀 App started!");
     <>
       {isLoading && <Preloader onComplete={handlePreloaderComplete} />}
       {showContent && (
-        <PageTransition key={location.pathname}>
+        <PageTransition routeKey={location.pathname}>
           <Routes location={location}>
             <Route path="/" element={<Home />} />
             <Route path="/work" element={<Work />} />

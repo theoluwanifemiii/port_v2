@@ -5,71 +5,85 @@ interface PreloaderProps {
 }
 
 export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
+  const [progress, setProgress] = useState(0);
   const [isExiting, setIsExiting] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsExiting(true);
-      setTimeout(onComplete, 800);
-    }, 4000);
+    let animationFrame = 0;
+    let exitTimer: ReturnType<typeof setTimeout> | null = null;
+    let completeTimer: ReturnType<typeof setTimeout> | null = null;
+    let hasScheduledExit = false;
 
-    return () => clearTimeout(timer);
+    const durationMs = 2600;
+    const startedAt = performance.now();
+
+    const tick = (timestamp: number) => {
+      const elapsed = timestamp - startedAt;
+      const ratio = Math.min(elapsed / durationMs, 1);
+      const nextProgress = Math.round(ratio * 100);
+
+      setProgress((current) => (current === nextProgress ? current : nextProgress));
+
+      if (ratio < 1) {
+        animationFrame = requestAnimationFrame(tick);
+        return;
+      }
+
+      if (!hasScheduledExit) {
+        hasScheduledExit = true;
+        exitTimer = setTimeout(() => {
+          setIsExiting(true);
+          completeTimer = setTimeout(onComplete, 500);
+        }, 250);
+      }
+    };
+
+    animationFrame = requestAnimationFrame(tick);
+
+    return () => {
+      cancelAnimationFrame(animationFrame);
+      if (exitTimer) clearTimeout(exitTimer);
+      if (completeTimer) clearTimeout(completeTimer);
+    };
   }, [onComplete]);
 
   return (
     <div
-      className={`fixed inset-0 z-50 bg-black flex flex-col items-center justify-center transition-all duration-700 ${
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-[#E7E7E2] transition-opacity duration-500 ${
         isExiting ? "opacity-0" : "opacity-100"
       }`}
     >
-      <div className="flex flex-col items-center justify-center">
-        <div className="mb-12 relative">
-          <svg width="200" height="200" viewBox="0 0 200 200" fill="none" className="animate-pulse">
-            <defs>
-              <linearGradient id="flag-red" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#ff0000"/>
-                <stop offset="100%" stopColor="#cc0000"/>
-              </linearGradient>
-              <linearGradient id="flag-green" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#00ff00"/>
-                <stop offset="100%" stopColor="#00cc00"/>
-              </linearGradient>
-              <linearGradient id="flag-blue" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#0000ff"/>
-                <stop offset="100%" stopColor="#0000cc"/>
-              </linearGradient>
-              <linearGradient id="flag-yellow" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#ffff00"/>
-                <stop offset="100%" stopColor="#cccc00"/>
-              </linearGradient>
-            </defs>
-
-            <rect x="40" y="40" width="60" height="60" fill="url(#flag-red)"/>
-            <rect x="100" y="40" width="60" height="60" fill="url(#flag-green)"/>
-            <rect x="40" y="100" width="60" height="60" fill="url(#flag-blue)"/>
-            <rect x="100" y="100" width="60" height="60" fill="url(#flag-yellow)"/>
-          </svg>
-        </div>
-
-        <div className="text-center mb-10">
-          <h1 className="font-bold text-white text-4xl mb-2 tracking-wide" style={{ fontFamily: 'Tahoma, Arial, sans-serif', textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
-            Microsoft<sup style={{ fontSize: '0.6em' }}>®</sup> Windows<sup style={{ fontSize: '0.6em' }}>®</sup> XP
-          </h1>
-          <p className="text-white text-base font-normal" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-            Professional
-          </p>
-        </div>
-
-        <div className="w-72 bg-[#1e4db5] h-4 rounded-sm overflow-hidden border border-[#002d7a] shadow-lg relative">
-          <div className="absolute inset-0 flex">
-            <div className="h-full bg-gradient-to-r from-[#0054e3] to-[#5a7fdc] animate-[windowsXpLoad_2.5s_ease-in-out_infinite]" style={{ width: '33%' }}></div>
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent"></div>
-        </div>
-
-        <p className="mt-10 text-white text-sm tracking-wide" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-          Please wait...
+      <div className="w-full max-w-5xl px-6">
+        <p
+          className="mb-8 text-center text-lg uppercase tracking-[0.05em] text-[#1b1b1b] sm:mb-10 sm:text-2xl"
+          style={{ fontFamily: "Geist, Instrument Sans, sans-serif" }}
+        >
+          PRELOADER
         </p>
+
+        <div className="relative h-[420px] w-full overflow-hidden rounded-[18px] border-[3px] border-[#2f2f2f] bg-transparent sm:h-[500px]">
+          <div
+            className="absolute left-0 top-[34%] h-[2px] bg-[#6f6f6f] transition-[width] duration-150"
+            style={{ width: `${26 + progress * 0.26}%` }}
+          />
+          <div className="absolute left-0 top-[46%] h-[1px] w-[43%] bg-[#a7a7a7]" />
+
+          <div className="absolute bottom-12 right-8 text-right sm:bottom-14 sm:right-10">
+            <div
+              className="text-4xl leading-[0.95] text-[#111214] sm:text-6xl"
+              style={{ fontFamily: "Geist, Instrument Sans, sans-serif", letterSpacing: "-0.04em" }}
+            >
+              <span>LOADING</span>
+              <span className="ml-6">{progress}%</span>
+            </div>
+            <p
+              className="mt-1 text-4xl leading-[0.95] text-[#111214] sm:text-6xl"
+              style={{ fontFamily: "Geist, Instrument Sans, sans-serif", letterSpacing: "-0.04em" }}
+            >
+              PLEASE WAIT...
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
