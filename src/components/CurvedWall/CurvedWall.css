@@ -1,0 +1,217 @@
+/* CurvedWall: cylindrical media wall with click-to-expand overlay. */
+
+body.cw-scroll-lock {
+  overflow: hidden !important;
+  touch-action: none;
+}
+
+.cw-root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  --cw-radius: 700px;
+  --cw-cols: 22;
+  --cw-rows: 4;
+  --cw-tile-w: 180px;
+  --cw-tile-h: 252px;
+  --cw-tile-step-y: 270px;
+  --cw-tile-radius: 16px;
+  --cw-enlarge-radius: 26px;
+  --cw-image-filter: none;
+  --cw-overlay-color: #060010;
+  --cw-bg: #e7e7e2;
+}
+
+.cw-main {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  user-select: none;
+  cursor: grab;
+  touch-action: none;
+}
+
+.cw-main:active {
+  cursor: grabbing;
+}
+
+/* Side fade masks */
+.cw-main::before,
+.cw-main::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 18%;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.cw-main::before {
+  left: 0;
+  background: linear-gradient(to right, var(--cw-bg), transparent);
+}
+
+.cw-main::after {
+  right: 0;
+  background: linear-gradient(to left, var(--cw-bg), transparent);
+}
+
+.cw-stage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  perspective: calc(var(--cw-radius) * 2.4);
+  transform-style: preserve-3d;
+}
+
+.cw-cylinder {
+  position: relative;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.cw-tile {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--cw-tile-w);
+  height: var(--cw-tile-h);
+  transform-style: preserve-3d;
+
+  transform:
+    translate(-50%, -50%)
+    rotateY(var(--cw-col-angle))
+    translateZ(var(--cw-radius))
+    translateY(var(--cw-row-y));
+}
+
+.cw-tile__image {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: var(--cw-tile-radius);
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    0 12px 36px rgba(0, 0, 0, 0.12);
+  backface-visibility: hidden;
+  cursor: pointer;
+  transition: transform 220ms ease, box-shadow 220ms ease;
+}
+
+.cw-tile__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: var(--cw-image-filter);
+  transition: filter 220ms ease, transform 220ms ease;
+  transform: scale(1.02);
+}
+
+.cw-tile__image:hover {
+  transform: scale(1.04);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.12),
+    0 20px 50px rgba(0, 0, 0, 0.18);
+}
+
+.cw-tile__image:hover img {
+  filter: none;
+  transform: scale(1.0);
+}
+
+.cw-tile__image:focus-visible {
+  outline: 2px solid rgba(0, 84, 227, 0.65);
+  outline-offset: 4px;
+}
+
+/* ── UI overlay ─────────────────────────────────────────────────────── */
+.cw-ui {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 25;
+}
+
+/* ── Viewer / enlarge ───────────────────────────────────────────────── */
+.cw-viewer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: grid;
+  place-items: center;
+  z-index: 40;
+}
+
+.cw-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(7, 8, 12, 0.66);
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.cw-frame {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(520px, calc(100% - 56px));
+  height: min(720px, calc(100% - 80px));
+  transform: translate(-50%, -50%);
+  border-radius: var(--cw-enlarge-radius);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cw-root[data-enlarging="true"] .cw-viewer {
+  pointer-events: auto;
+}
+
+.cw-root[data-enlarging="true"] .cw-scrim {
+  opacity: 1;
+}
+
+.cw-root[data-enlarging="true"] .cw-frame {
+  opacity: 1;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(16, 18, 20, 0.08);
+  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.38);
+}
+
+.cw-enlarge,
+.cw-enlarge-closing {
+  border-radius: var(--cw-enlarge-radius);
+  overflow: hidden;
+  background: #0b0c10;
+  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.52);
+}
+
+.cw-enlarge {
+  pointer-events: none;
+}
+
+.cw-enlarge img,
+.cw-enlarge-closing img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cw-tile {
+    transition: none !important;
+  }
+  .cw-scrim {
+    transition: none !important;
+  }
+}

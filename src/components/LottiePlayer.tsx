@@ -51,6 +51,9 @@ export const LottiePlayer: React.FC<LottiePlayerProps> = ({
         animationData={animationData}
         loop={loop}
         autoplay={autoplay}
+        className="h-full w-full"
+        style={{ width: "100%", height: "100%" }}
+        rendererSettings={{ preserveAspectRatio: "xMidYMid slice" }}
       />
     </div>
   );

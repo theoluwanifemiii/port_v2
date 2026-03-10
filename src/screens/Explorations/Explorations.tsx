@@ -1,13 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Navigation } from "../../components/Navigation";
-import { WindowControls } from "../../components/WindowControls";
-
-const navigationItems = [
-  { text: "What have i done", href: "/work", isNative: true },
-  { text: "Who am i ?", href: "/about", isNative: true },
-  { text: "My explorations", href: "/explorations", isNative: true },
-  { text: "Work with me", href: "/work-with-me", isNative: true },
-];
+import { useMemo, useState } from "react";
+import { PortfolioShell } from "../../components/PortfolioShell";
+import CurvedWall from "../../components/CurvedWall/CurvedWall";
 
 const explorationPosters = [
   " Instagram.png",
@@ -96,221 +89,187 @@ const explorationPosters = [
   "welcome .png",
 ];
 
+interface PosterItem {
+  name: string;
+  category: string;
+}
+
+const inferCategory = (name: string) => {
+  const value = name.toLowerCase();
+
+  if (value.includes("img") || value.includes("wa")) return "Photography";
+  if (value.includes("artboard") || value.includes("missions")) return "Series";
+  if (value.includes("work sample") || value.includes("campaign")) return "Campaign";
+  return "Poster";
+};
+
+const posters: PosterItem[] = explorationPosters.map((name) => ({
+  name,
+  category: inferCategory(name),
+}));
+
 const posterSrc = (name: string) => encodeURI(`/My explorations/${name}`);
 
+const readableName = (name: string) =>
+  name
+    .replace(/\.[^/.]+$/, "")
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
 export const Explorations = () => {
-  const [activePoster, setActivePoster] = useState<string | null>(null);
+  const [activeFilter, setActiveFilter] = useState("All");
+  const [query, setQuery] = useState("");
+  const [shuffleSeed, setShuffleSeed] = useState(0);
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setActivePoster(null);
+  const categories = useMemo(
+    () => ["All", ...Array.from(new Set(posters.map((poster) => poster.category)))],
+    []
+  );
+
+  const filtered = useMemo(() => {
+    const normalized = query.trim().toLowerCase();
+
+    return posters.filter((poster) => {
+      const matchesCategory = activeFilter === "All" || poster.category === activeFilter;
+      const matchesQuery =
+        normalized.length === 0 ||
+        poster.name.toLowerCase().includes(normalized) ||
+        readableName(poster.name).toLowerCase().includes(normalized);
+
+      return matchesCategory && matchesQuery;
+    });
+  }, [activeFilter, query]);
+
+  const mulberry32 = (seed: number) => {
+    let t = seed;
+    return () => {
+      t += 0x6d2b79f5;
+      let x = Math.imul(t ^ (t >>> 15), t | 1);
+      x ^= x + Math.imul(x ^ (x >>> 7), x | 61);
+      return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
     };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  };
 
-  const rows = [
-    explorationPosters.slice(0, 24),
-    explorationPosters.slice(24, 48),
-    explorationPosters.slice(48),
-  ].filter((row) => row.length > 0);
+  const wallImages = useMemo(() => {
+    const list = filtered.map((poster) => ({
+      src: posterSrc(poster.name),
+      alt: readableName(poster.name),
+    }));
+
+    if (list.length < 2) return list;
+    const rnd = mulberry32(shuffleSeed || 1);
+    const next = list.slice();
+    for (let i = next.length - 1; i > 0; i--) {
+      const j = Math.floor(rnd() * (i + 1));
+      [next[i], next[j]] = [next[j], next[i]];
+    }
+    return next;
+  }, [filtered, shuffleSeed]);
 
   return (
-    <div className="flex flex-col w-full min-h-screen px-2 sm:px-6 lg:px-12" style={{ background: "#5a7fdc" }}>
-      <div className="xp-window max-w-7xl w-full mx-auto mt-2 sm:mt-8 mb-2 sm:mb-8 min-h-[calc(100vh-1rem)] sm:min-h-[calc(100vh-4rem)]">
-        <WindowControls title="My Explorations - Microsoft Internet Explorer" />
-
-        <header className="w-full px-3 sm:px-6 pt-4 sm:pt-8 pb-3 sm:pb-4 border-b-2 border-[#b4b4b4] hidden sm:block" style={{ background: "var(--xp-gray)" }}>
-          <Navigation items={navigationItems} />
-        </header>
-
-        <main className="w-full px-3 sm:px-6 py-4 sm:py-8 overflow-y-auto" style={{ background: "var(--xp-gray)", maxHeight: "calc(100vh - 8rem)" }}>
-          <style>{`
-            .explore-stage {
-              position: relative;
-              background: rgba(237, 233, 216, 0.8);
-              border: 2px solid #d1c8b3;
-              box-shadow: inset 0 0 0 1px #e2d8c3;
-              overflow: hidden;
-              border-radius: 18px;
-            }
-
-            .explore-stage::before {
-              content: "";
-              position: absolute;
-              inset: 0;
-              background-image: linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
-                                linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
-              background-size: 120px 120px;
-              opacity: 0.5;
-              pointer-events: none;
-            }
-
-            .explore-row {
-              display: flex;
-              width: 100%;
-              overflow: hidden;
-              position: relative;
-              z-index: 1;
-            }
-
-            .explore-track {
-              display: flex;
-              gap: 24px;
-              padding: 20px 0;
-              width: max-content;
-              animation: scroll-left 35s linear infinite;
-            }
-
-            .explore-row.reverse .explore-track {
-              animation: scroll-right 38s linear infinite;
-            }
-
-            .explore-row.fast .explore-track {
-              animation-duration: 26s;
-            }
-
-            .explore-row.slow .explore-track {
-              animation-duration: 46s;
-            }
-
-            .explore-card {
-              width: 180px;
-              height: 240px;
-              border-radius: 16px;
-              overflow: hidden;
-              background: #111827;
-              box-shadow: 0 10px 24px rgba(0,0,0,0.18);
-              transform: translateZ(0);
-              transition: transform 0.3s ease, box-shadow 0.3s ease;
-            }
-
-            @media (min-width: 768px) {
-              .explore-card { width: 210px; height: 280px; }
-            }
-
-            @media (min-width: 1024px) {
-              .explore-card { width: 240px; height: 320px; }
-            }
-
-            .explore-card img {
-              width: 100%;
-              height: 100%;
-              object-fit: cover;
-              display: block;
-            }
-
-            .explore-card:hover {
-              transform: translateY(-6px) scale(1.02);
-              box-shadow: 0 14px 32px rgba(0,0,0,0.25);
-            }
-
-            @keyframes scroll-left {
-              0% { transform: translateX(0); }
-              100% { transform: translateX(-50%); }
-            }
-
-            @keyframes scroll-right {
-              0% { transform: translateX(-50%); }
-              100% { transform: translateX(0); }
-            }
-
-            .explore-overlay {
-              position: fixed;
-              inset: 0;
-              background: rgba(9, 9, 9, 0.85);
-              backdrop-filter: blur(12px);
-              -webkit-backdrop-filter: blur(12px);
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              z-index: 100;
-              padding: 24px;
-            }
-
-            .explore-modal {
-              max-width: 96vw;
-              max-height: 92vh;
-              border-radius: 18px;
-              overflow: hidden;
-              box-shadow: 0 30px 80px rgba(0,0,0,0.25);
-              background: transparent;
-            }
-
-            .explore-modal img {
-              max-width: 96vw;
-              max-height: 92vh;
-              width: auto;
-              height: auto;
-              object-fit: contain;
-              display: block;
-              background: transparent;
-            }
-          `}</style>
-          <div className="max-w-5xl mx-auto">
-            <div className="mb-6 p-6 bg-white border-2 border-[#b4b4b4] shadow-md">
-              <h1 className="font-bold text-[#003da8] text-3xl sm:text-4xl mb-4 flex items-center gap-3" style={{ fontFamily: "Tahoma, Arial, sans-serif" }}>
-                <span className="text-2xl">🖼️</span> My explorations
-              </h1>
-
-              <div className="mb-4 p-3 bg-[#fffacd] border border-[#b4b4b4]">
-                <p className="text-sm text-gray-800" style={{ fontFamily: "Sometype Mono, Courier New, monospace" }}>
-                  🗂️ Loading poster archive…
-                </p>
-              </div>
-
-              <div className="explore-stage">
-                {rows.map((row, index) => (
-                  <div
-                    key={`row-${index}`}
-                    className={`explore-row ${index % 2 === 1 ? "reverse" : ""} ${index % 3 === 0 ? "fast" : index % 3 === 2 ? "slow" : ""}`}
-                  >
-                    <div className="explore-track">
-                      {[...row, ...row].map((poster, posterIndex) => (
-                        <button
-                          key={`${poster}-${posterIndex}`}
-                          type="button"
-                          className="explore-card"
-                          onClick={() => setActivePoster(poster)}
-                        >
-                          <img
-                            src={posterSrc(poster)}
-                            alt={`Poster ${poster}`}
-                            loading="lazy"
-                          />
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
+    <PortfolioShell contentClassName="!max-w-none !px-0 !py-0">
+      <section className="relative h-[calc(100vh-4rem-1px)] w-full overflow-hidden bg-[#E7E7E2]">
+        {filtered.length === 0 ? (
+          <div className="grid h-full w-full place-items-center px-6">
+            <div className="hairline-card w-full max-w-xl rounded-2xl px-6 py-16 text-center">
+              <p className="text-sm text-[#5b6068]">No result found. Try another keyword.</p>
             </div>
           </div>
-        </main>
+        ) : (
+          <>
+            <CurvedWall
+              images={wallImages}
+              cols={22}
+              rows={4}
+              fit={0.55}
+              minRadius={420}
+              maxRadius={1500}
+              bgColor="#E7E7E2"
+              openedImageWidth="min(520px, calc(100vw - 56px))"
+              openedImageHeight="min(720px, calc(100vh - 160px))"
+              imageBorderRadius="16px"
+              openedImageBorderRadius="26px"
+              grayscale={false}
+            />
 
-        <footer className="xp-taskbar px-4 py-2 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <button className="xp-start-button flex items-center gap-2">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <rect width="20" height="20" fill="transparent" />
-                <path d="M3 3 L17 10 L3 17 Z" fill="white" />
-              </svg>
-              start
-            </button>
-          </div>
-          <div className="text-white text-xs font-medium" style={{ fontFamily: "Tahoma, Arial, sans-serif" }}>
-            {new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
-          </div>
-        </footer>
-      </div>
+            {/* Controls — float above the wall, pointer-events isolated */}
+            <div className="pointer-events-none absolute inset-0 z-30 flex flex-col justify-between">
+              {/* Top: search + filters */}
+              <div className="pointer-events-auto mx-auto w-full max-w-[1080px] px-4 pt-5 sm:px-6 sm:pt-7 lg:px-8">
+                <div className="rounded-3xl border border-black/10 bg-[#f8f8f5]/85 p-4 shadow-[0_22px_70px_rgba(0,0,0,0.12)] backdrop-blur-md sm:p-5">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <p className="text-[11px] uppercase tracking-[0.14em] text-[#70747b]">
+                        Explorations
+                      </p>
+                      <p className="mt-1 text-sm text-[#1a1d21]">
+                        {filtered.length} pieces · Drag to explore · Click to expand
+                      </p>
+                    </div>
 
-      {activePoster && (
-        <div className="explore-overlay" onClick={() => setActivePoster(null)}>
-          <div className="explore-modal" onClick={(event) => event.stopPropagation()}>
-            <img src={posterSrc(activePoster)} alt={`Poster ${activePoster}`} />
-          </div>
-        </div>
-      )}
-    </div>
+                    <button
+                      type="button"
+                      onClick={() => setShuffleSeed((seed) => seed + 1)}
+                      className="rounded-full border border-black/15 bg-[#121316] px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-white"
+                    >
+                      Shuffle
+                    </button>
+                  </div>
+
+                  <div className="mt-4 grid gap-3 sm:grid-cols-[1fr_auto]">
+                    <input
+                      type="text"
+                      value={query}
+                      onChange={(event) => setQuery(event.target.value)}
+                      placeholder="Search by title"
+                      className="w-full rounded-full border border-black/15 bg-white/70 px-5 py-3 text-sm text-[#1a1d21] outline-none placeholder:text-[#868c95] focus:border-[#111214] focus:ring-4 focus:ring-black/5"
+                    />
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setQuery("");
+                        setActiveFilter("All");
+                      }}
+                      className="rounded-full border border-black/15 bg-[#f7f7f3] px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#151618]"
+                    >
+                      Reset
+                    </button>
+                  </div>
+
+                  <div className="mt-3 flex gap-2 overflow-x-auto pb-1 no-scrollbar">
+                    {categories.map((category) => {
+                      const active = category === activeFilter;
+                      return (
+                        <button
+                          key={category}
+                          type="button"
+                          onClick={() => setActiveFilter(category)}
+                          className={`shrink-0 whitespace-nowrap rounded-full border px-4 py-1.5 text-xs ${
+                            active
+                              ? "border-[#111214] bg-[#111214] text-white"
+                              : "border-black/15 bg-[#f7f7f3] text-[#5b6068]"
+                          }`}
+                        >
+                          {category}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom: tip */}
+              <div className="mx-auto w-full max-w-[1080px] px-4 pb-7 sm:px-6 lg:px-8">
+                <p className="text-[11px] uppercase tracking-[0.12em] text-[#6e737b]">
+                  Tip: Use ESC to close an opened image
+                </p>
+              </div>
+            </div>
+          </>
+        )}
+      </section>
+    </PortfolioShell>
   );
 };

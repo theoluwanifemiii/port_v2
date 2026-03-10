@@ -1,0 +1,62 @@
+.pl-root {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: #111214;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  opacity: 0;
+  will-change: transform;
+}
+
+.pl-root.pl-visible {
+  opacity: 1;
+}
+
+.pl-inner {
+  width: 100%;
+  padding: 0 7vw;
+}
+
+.pl-name-first,
+.pl-name-last {
+  font-family: "Geist", "Instrument Sans", sans-serif;
+  font-size: clamp(2.8rem, 9vw, 8rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  will-change: transform, opacity;
+}
+
+.pl-name-first {
+  color: #f4f4ef;
+}
+
+.pl-name-last {
+  color: rgba(244, 244, 239, 0.28);
+  margin-top: 0.04em;
+}
+
+.pl-rule {
+  height: 1px;
+  background: rgba(244, 244, 239, 0.1);
+  margin-top: 28px;
+  will-change: transform, opacity;
+}
+
+.pl-role {
+  margin-top: 14px;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(244, 244, 239, 0.28);
+  font-family: "Geist", "Instrument Sans", sans-serif;
+  will-change: transform, opacity;
+}
+
+@media (max-width: 640px) {
+  .pl-inner {
+    padding: 0 8vw;
+  }
+}

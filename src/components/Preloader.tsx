@@ -1,75 +1,83 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import "./Preloader.css";
 
 interface PreloaderProps {
   onComplete: () => void;
 }
 
 export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
-  const [isExiting, setIsExiting] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsExiting(true);
-      setTimeout(onComplete, 800);
-    }, 4000);
+    const root = rootRef.current;
+    if (!root) return;
 
-    return () => clearTimeout(timer);
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReduced) {
+      onComplete();
+      return;
+    }
+
+    const prevHtml = document.documentElement.style.overflow;
+    const prevBody = document.body.style.overflow;
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+
+    const restore = () => {
+      document.documentElement.style.overflow = prevHtml;
+      document.body.style.overflow = prevBody;
+    };
+
+    const first = root.querySelector<HTMLElement>(".pl-name-first");
+    const last  = root.querySelector<HTMLElement>(".pl-name-last");
+    const rule  = root.querySelector<HTMLElement>(".pl-rule");
+    const role  = root.querySelector<HTMLElement>(".pl-role");
+
+    // Set initial states before showing
+    gsap.set([first, last, rule, role], { opacity: 0 });
+    gsap.set([first, last], { y: 32 });
+    gsap.set(rule, { scaleX: 0, transformOrigin: "left" });
+    gsap.set(role, { y: 10 });
+
+    setVisible(true);
+
+    const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
+
+    tl.to(first, { opacity: 1, y: 0, duration: 1.0 });
+    tl.to(last,  { opacity: 1, y: 0, duration: 1.0 }, "-=0.75");
+    tl.to(rule,  { opacity: 1, scaleX: 1, duration: 0.85, ease: "expo.inOut" }, "-=0.5");
+    tl.to(role,  { opacity: 1, y: 0, duration: 0.6 }, "-=0.4");
+
+    // Hold so the full name is readable
+    tl.to({}, { duration: 1.0 });
+
+    // Wipe the panel away top-down with clip-path — no translate, no settling
+    gsap.set(root, { clipPath: "inset(0% 0 0 0)" });
+    tl.to(root, {
+      clipPath: "inset(100% 0 0 0)",
+      duration: 0.7,
+      ease: "power2.in",
+      onComplete() {
+        restore();
+        onComplete();
+      },
+    });
+
+    return () => {
+      tl.kill();
+      restore();
+    };
   }, [onComplete]);
 
   return (
-    <div
-      className={`fixed inset-0 z-50 bg-black flex flex-col items-center justify-center transition-all duration-700 ${
-        isExiting ? "opacity-0" : "opacity-100"
-      }`}
-    >
-      <div className="flex flex-col items-center justify-center">
-        <div className="mb-12 relative">
-          <svg width="200" height="200" viewBox="0 0 200 200" fill="none" className="animate-pulse">
-            <defs>
-              <linearGradient id="flag-red" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#ff0000"/>
-                <stop offset="100%" stopColor="#cc0000"/>
-              </linearGradient>
-              <linearGradient id="flag-green" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#00ff00"/>
-                <stop offset="100%" stopColor="#00cc00"/>
-              </linearGradient>
-              <linearGradient id="flag-blue" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#0000ff"/>
-                <stop offset="100%" stopColor="#0000cc"/>
-              </linearGradient>
-              <linearGradient id="flag-yellow" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#ffff00"/>
-                <stop offset="100%" stopColor="#cccc00"/>
-              </linearGradient>
-            </defs>
-
-            <rect x="40" y="40" width="60" height="60" fill="url(#flag-red)"/>
-            <rect x="100" y="40" width="60" height="60" fill="url(#flag-green)"/>
-            <rect x="40" y="100" width="60" height="60" fill="url(#flag-blue)"/>
-            <rect x="100" y="100" width="60" height="60" fill="url(#flag-yellow)"/>
-          </svg>
-        </div>
-
-        <div className="text-center mb-10">
-          <h1 className="font-bold text-white text-4xl mb-2 tracking-wide" style={{ fontFamily: 'Tahoma, Arial, sans-serif', textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
-            Microsoft<sup style={{ fontSize: '0.6em' }}>®</sup> Windows<sup style={{ fontSize: '0.6em' }}>®</sup> XP
-          </h1>
-          <p className="text-white text-base font-normal" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-            Professional
-          </p>
-        </div>
-
-        <div className="w-72 bg-[#1e4db5] h-4 rounded-sm overflow-hidden border border-[#002d7a] shadow-lg relative">
-          <div className="absolute inset-0 flex">
-            <div className="h-full bg-gradient-to-r from-[#0054e3] to-[#5a7fdc] animate-[windowsXpLoad_2.5s_ease-in-out_infinite]" style={{ width: '33%' }}></div>
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent"></div>
-        </div>
-
-        <p className="mt-10 text-white text-sm tracking-wide" style={{ fontFamily: 'Tahoma, Arial, sans-serif' }}>
-          Please wait...
-        </p>
+    <div ref={rootRef} className={`pl-root ${visible ? "pl-visible" : ""}`}>
+      <div className="pl-inner">
+        <div className="pl-name-first">Oluwanifemi</div>
+        <div className="pl-name-last">Osunsanya</div>
+        <div className="pl-rule" />
+        <p className="pl-role">Product Designer</p>
       </div>
     </div>
   );
