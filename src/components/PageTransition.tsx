@@ -22,9 +22,8 @@ const philosophyQuotes = [
   },
 ];
 
-const wipeDuration = 2.6;
-const wipeStagger = 0.08;
-const wipeTotalDuration = wipeDuration + wipeStagger * (wipeColumns.length - 1);
+const wipeDuration = 0.85;
+const wipeStagger = 0.05;
 
 interface PageTransitionProps {
   children: React.ReactNode;
@@ -66,7 +65,7 @@ export const PageTransition = ({ children, routeKey }: PageTransitionProps) => {
                   exit={{
                     y: "0%",
                     transition: {
-                      duration: 1.7,
+                      duration: 0.85,
                       ease: [0.4, 0, 0.2, 1],
                       delay: columnIndex * wipeStagger,
                     },
@@ -77,16 +76,16 @@ export const PageTransition = ({ children, routeKey }: PageTransitionProps) => {
             <motion.div
               className="pointer-events-none fixed inset-0 z-[70] flex items-center justify-center px-6 text-center"
               key={`quote-${routeKey}`}
-              initial={{ opacity: 0, y: 28 }}
-              animate={{
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0 }}
+              exit={{
                 opacity: [0, 1, 1, 0],
                 y: [28, 8, 8, -28],
-              }}
-              transition={{
-                duration: wipeTotalDuration,
-                delay: 0,
-                ease: [0.22, 1, 0.36, 1],
-                times: [0, 0.15, 0.65, 1],
+                transition: {
+                  duration: 1.7,
+                  ease: [0.22, 1, 0.36, 1],
+                  times: [0, 0.18, 0.72, 1],
+                },
               }}
             >
               <div className="max-w-2xl">
@@ -105,7 +104,7 @@ export const PageTransition = ({ children, routeKey }: PageTransitionProps) => {
           animate={
             shouldReduceMotion
               ? undefined
-              : { opacity: 1, transition: { delay: 1.5 } }
+              : { opacity: 1, transition: { delay: 0.35 } }
           }
           exit={shouldReduceMotion ? undefined : { opacity: 0, transition: { duration: 0.45 } }}
           style={{ width: "100%", height: "100%" }}

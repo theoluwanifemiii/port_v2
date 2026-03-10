@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { PortfolioShell } from "../../components/PortfolioShell";
-import DomeGallery from "../../components/DomeGallery/DomeGallery";
+import CurvedWall from "../../components/CurvedWall/CurvedWall";
 
 const explorationPosters = [
   " Instagram.png",
@@ -151,7 +151,7 @@ export const Explorations = () => {
     };
   };
 
-  const domeImages = useMemo(() => {
+  const wallImages = useMemo(() => {
     const list = filtered.map((poster) => ({
       src: posterSrc(poster.name),
       alt: readableName(poster.name),
@@ -178,19 +178,24 @@ export const Explorations = () => {
           </div>
         ) : (
           <>
-            <DomeGallery
-              images={domeImages}
-              fit={0.7}
-              minRadius={360}
-              maxRadius={1600}
-              padFactor={0.26}
-              overlayBlurColor="#070012"
+            <CurvedWall
+              images={wallImages}
+              cols={22}
+              rows={4}
+              fit={0.55}
+              minRadius={420}
+              maxRadius={1500}
+              bgColor="#E7E7E2"
               openedImageWidth="min(520px, calc(100vw - 56px))"
               openedImageHeight="min(720px, calc(100vh - 160px))"
-              imageBorderRadius="26px"
+              imageBorderRadius="16px"
               openedImageBorderRadius="26px"
               grayscale={false}
-            >
+            />
+
+            {/* Controls — float above the wall, pointer-events isolated */}
+            <div className="pointer-events-none absolute inset-0 z-30 flex flex-col justify-between">
+              {/* Top: search + filters */}
               <div className="pointer-events-auto mx-auto w-full max-w-[1080px] px-4 pt-5 sm:px-6 sm:pt-7 lg:px-8">
                 <div className="rounded-3xl border border-black/10 bg-[#f8f8f5]/85 p-4 shadow-[0_22px_70px_rgba(0,0,0,0.12)] backdrop-blur-md sm:p-5">
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -199,7 +204,7 @@ export const Explorations = () => {
                         Explorations
                       </p>
                       <p className="mt-1 text-sm text-[#1a1d21]">
-                        {filtered.length} pieces · Drag to orbit · Click to expand
+                        {filtered.length} pieces · Drag to explore · Click to expand
                       </p>
                     </div>
 
@@ -255,14 +260,13 @@ export const Explorations = () => {
                 </div>
               </div>
 
-              <div className="pointer-events-none absolute bottom-7 left-0 right-0">
-                <div className="mx-auto w-full max-w-[1080px] px-4 sm:px-6 lg:px-8">
-                  <p className="text-[11px] uppercase tracking-[0.12em] text-[#6e737b]">
-                    Tip: Use ESC to close an opened image
-                  </p>
-                </div>
+              {/* Bottom: tip */}
+              <div className="mx-auto w-full max-w-[1080px] px-4 pb-7 sm:px-6 lg:px-8">
+                <p className="text-[11px] uppercase tracking-[0.12em] text-[#6e737b]">
+                  Tip: Use ESC to close an opened image
+                </p>
               </div>
-            </DomeGallery>
+            </div>
           </>
         )}
       </section>

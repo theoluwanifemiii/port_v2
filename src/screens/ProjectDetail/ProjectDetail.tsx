@@ -14,8 +14,8 @@ export const ProjectDetail = () => {
 
   if (!project) {
     return (
-      <PortfolioShell contentClassName="max-w-[900px]">
-        <div className="hairline-card rounded-2xl px-6 py-16 text-center">
+      <PortfolioShell contentClassName="max-w-[760px]">
+        <div className="py-32 text-center">
           <h1 className="section-title text-4xl text-[#111214]">Project not found</h1>
           <Link to="/work" className="mt-4 inline-block text-sm text-[#2f3339] underline">
             Back to projects
@@ -26,129 +26,123 @@ export const ProjectDetail = () => {
   }
 
   return (
-    <PortfolioShell contentClassName="max-w-[1160px]">
-      <section className="reveal-up">
+    <PortfolioShell contentClassName="max-w-[760px]">
+
+      {/* Back + metadata */}
+      <div className="reveal-up flex items-center justify-between">
         <Link
           to="/work"
           className="text-[11px] uppercase tracking-[0.14em] text-[#6a6f76] no-underline"
         >
-          ← Back to projects
+          ← Back
         </Link>
+        <span className="text-[11px] uppercase tracking-[0.14em] text-[#9a9fa6]">
+          {project.year} — {project.client}
+        </span>
+      </div>
 
-        <div className="mt-6 grid gap-10 lg:grid-cols-[1.25fr_0.75fr]">
-          <div>
-            <p className="text-[11px] uppercase tracking-[0.14em] text-[#70747b]">Case study</p>
-            <h1 className="section-title mt-4 text-6xl leading-[0.98] text-[#111214] sm:text-7xl">
-              {project.title}
-            </h1>
-            <p className="mt-4 max-w-2xl text-base leading-relaxed text-[#4f545c]">
-              {project.subtitle}
-            </p>
-            <p className="mt-5 max-w-2xl text-sm leading-relaxed text-[#6b7078]">
-              {project.summary}
-            </p>
-          </div>
-
-          <div>
-            <p className="text-sm leading-relaxed text-[#4f545c]">{project.context}</p>
-
-            <dl className="mt-8 grid gap-6 border-t border-black/10 pt-6 text-sm">
-              <div>
-                <dt className="text-[11px] uppercase tracking-[0.12em] text-[#7a7f86]">Year</dt>
-                <dd className="mt-1 text-[#15181d]">{project.year}</dd>
-              </div>
-              <div>
-                <dt className="text-[11px] uppercase tracking-[0.12em] text-[#7a7f86]">Client</dt>
-                <dd className="mt-1 text-[#15181d]">{project.client}</dd>
-              </div>
-              {project.website && (
-                <div>
-                  <dt className="text-[11px] uppercase tracking-[0.12em] text-[#7a7f86]">Website</dt>
-                  <dd className="mt-1 break-all text-[#15181d]">{project.website}</dd>
-                </div>
-              )}
-            </dl>
-          </div>
-        </div>
+      {/* Title */}
+      <section className="mt-10 reveal-up">
+        <h1 className="section-title text-5xl leading-[1.04] text-[#111214] sm:text-6xl">
+          {project.title}
+        </h1>
+        <p className="mt-2 text-[11px] uppercase tracking-[0.14em] text-[#9a9fa6]">
+          {project.tags.join(" · ")}
+        </p>
       </section>
 
+      {/* Lead — larger editorial text */}
+      <section className="mt-10 reveal-up reveal-up-delay-1">
+        <p className="text-xl leading-relaxed text-[#2f3339] sm:text-2xl">
+          {project.summary}
+        </p>
+      </section>
+
+      {/* Hero image — full bleed */}
       <section className="mt-12 reveal-up reveal-up-delay-1">
         <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen">
-          <div className="mx-auto w-full max-w-[1200px] px-6 sm:px-10">
-            <div className="h-[70vh] overflow-hidden sm:h-[75vh]">
-              <img
-                src={project.image}
-                alt={`${project.title} interface`}
-                className="h-full w-full object-cover"
-              />
-            </div>
-          </div>
+          <img
+            src={project.image}
+            alt={`${project.title}`}
+            className="h-[72vh] w-full object-cover"
+          />
         </div>
       </section>
 
-      <section className="mt-12 grid gap-8 border-t border-black/10 pt-8 lg:grid-cols-3 reveal-up reveal-up-delay-2">
-        <article>
-          <p className="text-[11px] uppercase tracking-[0.12em] text-[#70747b]">Challenge</p>
-          <p className="mt-3 text-sm leading-relaxed text-[#535860]">{project.challenge}</p>
-        </article>
-
-        <article>
-          <p className="text-[11px] uppercase tracking-[0.12em] text-[#70747b]">Outcome</p>
-          <p className="mt-3 text-sm leading-relaxed text-[#535860]">{project.outcome}</p>
-        </article>
-
-        <article>
-          <p className="text-[11px] uppercase tracking-[0.12em] text-[#70747b]">Focus</p>
-          <div className="mt-3 flex flex-wrap gap-3 text-[10px] uppercase tracking-[0.16em] text-[#7b8087]">
-            {project.tags.map((tag) => (
-              <span key={tag}>{tag}</span>
-            ))}
-          </div>
-        </article>
+      {/* Context — setting the scene */}
+      <section className="mt-20 reveal-up reveal-up-delay-2">
+        <Chapter label="The context" />
+        <p className="mt-5 text-[15px] leading-[1.8] text-[#525760]">{project.context}</p>
       </section>
 
-      <section className="mt-12 grid gap-10 lg:grid-cols-[0.95fr_1.05fr] reveal-up reveal-up-delay-2">
-        <article>
-          <p className="text-[11px] uppercase tracking-[0.14em] text-[#70747b]">Approach</p>
-          <ul className="mt-4 space-y-4">
-            {project.approach.map((item) => (
-              <li key={item} className="flex gap-3 text-sm leading-relaxed text-[#4f545c]">
-                <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[#15181d]" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </article>
-
-        <article>
-          <p className="text-[11px] uppercase tracking-[0.14em] text-[#70747b]">Key results</p>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2">
-            {project.results.map((result) => (
-              <div key={result} className="text-sm leading-relaxed text-[#4f545c]">
-                <p className="border-t border-black/10 pt-3">{result}</p>
-              </div>
-            ))}
-          </div>
-        </article>
+      {/* Challenge — displayed as a callout statement */}
+      <section className="mt-20 reveal-up reveal-up-delay-2">
+        <Chapter label="The challenge" />
+        <p className="mt-6 text-2xl leading-[1.5] text-[#1a1d21] sm:text-3xl">
+          {project.challenge}
+        </p>
       </section>
 
+      {/* Before images — the evidence */}
       {project.challengeImages && project.challengeImages.length > 0 && (
-        <section className="mt-12 reveal-up reveal-up-delay-3">
-          <div className="mb-3 flex items-center justify-between border-y border-black/10 py-2">
-            <p className="text-sm text-[#17191c]">Before snapshots</p>
-            <p className="text-[11px] uppercase tracking-[0.12em] text-[#6a6f76]">Problem surfaces</p>
+        <section className="mt-12 reveal-up reveal-up-delay-2">
+          <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen px-6 sm:px-10">
+            <div className="grid gap-3 sm:grid-cols-2">
+              {project.challengeImages.map((image, i) => (
+                <img
+                  key={image}
+                  src={image}
+                  alt={`Before — ${i + 1}`}
+                  className="w-full object-cover"
+                  style={{ aspectRatio: "4 / 3" }}
+                />
+              ))}
+            </div>
           </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {project.challengeImages.map((image) => (
-              <div key={image} className="overflow-hidden">
-                <img src={image} alt={`${project.title} before`} className="h-full w-full object-cover" />
-              </div>
-            ))}
-          </div>
+          <p className="mt-4 text-center text-[11px] uppercase tracking-[0.14em] text-[#9a9fa6]">
+            Before — problem surfaces
+          </p>
         </section>
       )}
 
-      <section className="mt-14 flex items-center justify-between border-t border-black/10 pt-6 reveal-up reveal-up-delay-3">
+      {/* Approach — each step as a beat in the story */}
+      <section className="mt-20 reveal-up reveal-up-delay-2">
+        <Chapter label="How we approached it" />
+        <ol className="mt-8 space-y-10">
+          {project.approach.map((item, i) => (
+            <li key={item} className="flex gap-6">
+              <span className="mt-0.5 shrink-0 text-[11px] uppercase tracking-[0.14em] text-[#b0b5bb]">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <p className="text-[15px] leading-[1.8] text-[#525760]">{item}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      {/* Outcome — the big moment */}
+      <section className="mt-24 reveal-up reveal-up-delay-2">
+        <Chapter label="What changed" />
+        <p className="mt-6 text-2xl leading-[1.5] text-[#1a1d21] sm:text-3xl">
+          {project.outcome}
+        </p>
+      </section>
+
+      {/* Results — supporting proof */}
+      <section className="mt-14 reveal-up reveal-up-delay-2">
+        <Chapter label="The results" />
+        <ul className="mt-6 space-y-4">
+          {project.results.map((result) => (
+            <li key={result} className="flex gap-4 text-[15px] leading-[1.7] text-[#525760]">
+              <span className="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-[#9a9fa6]" />
+              <span>{result}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Prev / Next */}
+      <section className="mt-24 flex items-center justify-between border-t border-black/[0.07] pt-8 reveal-up reveal-up-delay-3">
         {project.previousProjectId ? (
           <Link
             to={`/work/${project.previousProjectId}`}
@@ -159,7 +153,6 @@ export const ProjectDetail = () => {
         ) : (
           <span />
         )}
-
         {project.nextProjectId ? (
           <Link
             to={`/work/${project.nextProjectId}`}
@@ -171,6 +164,11 @@ export const ProjectDetail = () => {
           <span />
         )}
       </section>
+
     </PortfolioShell>
   );
 };
+
+const Chapter = ({ label }: { label: string }) => (
+  <p className="text-[11px] uppercase tracking-[0.16em] text-[#9a9fa6]">{label}</p>
+);

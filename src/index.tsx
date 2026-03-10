@@ -13,14 +13,15 @@ import { Preloader } from "./components/Preloader";
 import { Fintech } from "./screens/Fintech/Fintech";
 import { PaybleV21 } from "./screens/PaybleV21/PaybleV21";
 import { Explorations } from "./screens/Explorations/Explorations";
+import { DesignPrinciples } from "./screens/DesignPrinciples/DesignPrinciples";
+import { Archive } from "./screens/Archive/Archive";
+import { ArchiveXP } from "./screens/Archive/ArchiveXP";
 
 inject();
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [showContent, setShowContent] = useState(false);
-
-console.log("🚀 App started!");
 
   useEffect(() => {
     const hasSeenPreloader = sessionStorage.getItem("hasSeenPreloader");
@@ -32,8 +33,8 @@ console.log("🚀 App started!");
 
   const handlePreloaderComplete = () => {
     sessionStorage.setItem("hasSeenPreloader", "true");
-    setIsLoading(false);
-    setTimeout(() => setShowContent(true), 100);
+    setShowContent(true);
+    setTimeout(() => setIsLoading(false), 800);
   };
 
   const location = useLocation();
@@ -51,6 +52,9 @@ console.log("🚀 App started!");
             <Route path="/fintech" element={<Fintech />} /> {/* Hidden page */}
             <Route path="/payble-v21" element={<PaybleV21 />} />
             <Route path="/explorations" element={<Explorations />} />
+            <Route path="/design-principles" element={<DesignPrinciples />} />
+            <Route path="/archive" element={<Archive />} />
+            <Route path="/archive/xp" element={<ArchiveXP />} />
             <Route path="*" element={<div style={{padding:'2rem',textAlign:'center'}}><h1>404 - Not Found</h1><p>The page you are looking for does not exist.</p></div>} />
           </Routes>
         </PageTransition>

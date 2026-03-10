@@ -12,6 +12,7 @@ const navItems: NavItem[] = [
   { label: "About", href: "/about" },
   { label: "Explorations", href: "/explorations" },
   { label: "Contact", href: "/work-with-me" },
+  { label: "Archive", href: "/archive" },
 ];
 
 const resumeUrl =
@@ -83,6 +84,7 @@ export const PortfolioTopBar: React.FC = () => {
               { label: "About", ariaLabel: "Learn about me", link: "/about" },
               { label: "Explorations", ariaLabel: "View explorations", link: "/explorations" },
               { label: "Contact", ariaLabel: "Get in touch", link: "/work-with-me" },
+              { label: "Archive", ariaLabel: "View Windows XP archive", link: "/archive" },
             ]}
             socialItems={[{ label: "Resume", link: resumeUrl }]}
             displaySocials

@@ -101,7 +101,7 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
       "Cross-team collaboration improved through a more consistent UI system.",
     ],
     image: "/Project 2.png",
-    challengeImages: ["/Before Dashboard.png", "/Before 3.png", "/Before 2.png", "/Before1.png"],
+    challengeImages: ["/Digtvant Before 1.png", "/Digtvant Before 2.png"],
     tags: ["UX Audit", "Mobile Banking", "Web Platform"],
     client: "Digitvant",
     website: "ibank.digitvant.com",
