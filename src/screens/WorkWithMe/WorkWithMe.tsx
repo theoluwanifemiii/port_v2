@@ -250,8 +250,8 @@ export const WorkWithMe = () => {
                 className={inputClassName}
               >
                 <option value="">Select a range</option>
-                <option value="under-500">Under $500</option>
-                <option value="500-2000">$500 - $2,000</option>
+                <option value="under-500">Under $1,000</option>
+                <option value="500-2000">$1,000 - $2,000</option>
                 <option value="2000-5000">$2,000 - $5,000</option>
                 <option value="5000-10000">$5,000 - $10,000</option>
                 <option value="10000-plus">$10,000+</option>

@@ -43,7 +43,7 @@ export const Home: FC = () => {
       <div className="mx-auto w-full max-w-[960px]">
       <section className="grid gap-8 lg:grid-cols-[1.35fr_0.65fr] reveal-up">
         <div>
-          <p className="text-[11px] uppercase tracking-[0.14em] text-[#70747b]">Hey, I am Olu</p>
+          <p className="text-[11px] uppercase tracking-[0.14em] text-[#70747b]">Product Designer · Lagos, Nigeria</p>
           <h1 className="section-title mt-3 max-w-3xl text-5xl leading-[1.02] text-[#111214] sm:text-6xl">
            I design products by starting with people, not pixels.
           </h1>
@@ -67,7 +67,7 @@ export const Home: FC = () => {
 
         <div className="space-y-4 text-sm leading-relaxed text-[#535860] lg:pt-1">
           <p>
-            Product Designer designing intuitive fintech and B2B experiences.
+            Product Designer based in Lagos, Nigeria — designing intuitive fintech and B2B experiences.
           </p>
           <p>
             Led a 72-hour redesign that resulted in 1,000+ beta user signups. 

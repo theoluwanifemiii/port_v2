@@ -1,7 +1,7 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://olusworks.vercel.app/sitemap.xml
+Sitemap: https://olusworks.xyz/sitemap.xml
 
 # SEO Notes:
 # - This allows all pages to be crawled.
