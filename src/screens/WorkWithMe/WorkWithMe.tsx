@@ -1,9 +1,88 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { PortfolioShell } from "../../components/PortfolioShell";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
+
+// Extend Window type for Calendly
+declare global {
+  interface Window {
+    Calendly?: {
+      initPopupWidget: (opts: { url: string }) => void;
+    };
+  }
+}
+
+// Load Calendly script + CSS once
+function useCalendly() {
+  useEffect(() => {
+    if (!document.getElementById("calendly-css")) {
+      const link = document.createElement("link");
+      link.id = "calendly-css";
+      link.rel = "stylesheet";
+      link.href = "https://assets.calendly.com/assets/external/widget.css";
+      document.head.appendChild(link);
+    }
+    if (!document.getElementById("calendly-js")) {
+      const script = document.createElement("script");
+      script.id = "calendly-js";
+      script.src = "https://assets.calendly.com/assets/external/widget.js";
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  }, []);
+}
+
+const CALENDLY_URL = "https://calendly.com/theoluwanifemi/strategy-call";
+
+function BookingBanner() {
+  useCalendly();
+  const [dismissed, setDismissed] = useState(false);
+
+  const openCalendly = () => {
+    if (window.Calendly) {
+      window.Calendly.initPopupWidget({ url: CALENDLY_URL });
+    } else {
+      window.open(CALENDLY_URL, "_blank");
+    }
+  };
+
+  if (dismissed) return null;
+
+  return (
+    <section className="reveal-up reveal-up-delay-1 mt-10 mb-8">
+      <div className="hairline-card rounded-3xl p-8 lg:p-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-8 relative">
+        <button
+          onClick={() => setDismissed(true)}
+          aria-label="Dismiss"
+          className="absolute top-4 right-4 flex h-7 w-7 items-center justify-center rounded-full text-[#9aa0a8] transition-colors hover:bg-black/5 hover:text-[#111214]"
+        >
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+          </svg>
+        </button>
+        <div>
+          <p className="text-[11px] uppercase tracking-[0.14em] text-[#70747b] mb-3">
+            Free 30-Min Session
+          </p>
+          <h2 className="text-xl sm:text-2xl font-medium text-[#111214] leading-snug max-w-md">
+            Want a second pair of eyes on your product before you fill the form?
+          </h2>
+          <p className="mt-3 text-sm text-[#585d65] max-w-sm leading-relaxed">
+            Book a free strategy call. I'll look at your actual product and tell you exactly what I see — no prep needed.
+          </p>
+        </div>
+        <button
+          onClick={openCalendly}
+          className="shrink-0 rounded-xl bg-[#15171b] px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-black whitespace-nowrap"
+        >
+          Book a free call →
+        </button>
+      </div>
+    </section>
+  );
+}
 
 const inputClassName =
   "w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm text-[#191c20] outline-none transition-all placeholder:text-[#8a9098] focus:border-[#121316] focus:ring-4 focus:ring-black/5";
@@ -108,7 +187,9 @@ export const WorkWithMe = () => {
         </h1>
       </section>
 
-      <section className="mt-8 grid gap-4 overflow-x-hidden reveal-up reveal-up-delay-1 lg:flex lg:items-start">
+      <BookingBanner />
+
+      <section className="mt-2 grid gap-4 overflow-x-hidden reveal-up reveal-up-delay-2 lg:flex lg:items-start">
         <aside className="hairline-card w-full min-w-0 overflow-hidden rounded-3xl p-6 lg:w-[380px] lg:max-w-[380px] lg:flex-shrink-0 lg:basis-[380px] lg:p-8">
           <Swiper
             modules={[Autoplay, Pagination]}
