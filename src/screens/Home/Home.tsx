@@ -70,16 +70,12 @@ export const Home: FC = () => {
             Product Designer based in Lagos, Nigeria — designing intuitive fintech and B2B experiences.
           </p>
           <p>
-            Led a 72-hour redesign that resulted in 1,000+ beta user signups. 
+            Led a 72-hour redesign that resulted in 1,000+ beta user signups.
           </p>
           <p>
-            
             Currently focused on partnering with crypto-focused startups, healthcare platforms, and B2B SaaS products.
-
           </p>
 
-      
-          
           <Link
             to="/work-with-me"
             className="inline-flex items-center rounded-full border border-black/20 bg-[#111214] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-white no-underline"

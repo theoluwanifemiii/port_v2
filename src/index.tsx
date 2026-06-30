@@ -16,6 +16,8 @@ import { Explorations } from "./screens/Explorations/Explorations";
 import { DesignPrinciples } from "./screens/DesignPrinciples/DesignPrinciples";
 import { Archive } from "./screens/Archive/Archive";
 import { ArchiveXP } from "./screens/Archive/ArchiveXP";
+import { Lab } from "./screens/Lab/Lab";
+import { MomentOS } from "./screens/Lab/MomentOS";
 
 inject();
 
@@ -55,6 +57,8 @@ const App = () => {
             <Route path="/design-principles" element={<DesignPrinciples />} />
             <Route path="/archive" element={<Archive />} />
             <Route path="/archive/xp" element={<ArchiveXP />} />
+            <Route path="/lab" element={<Lab />} />
+            <Route path="/lab/momentos" element={<MomentOS />} />
             <Route path="*" element={<div style={{padding:'2rem',textAlign:'center'}}><h1>404 - Not Found</h1><p>The page you are looking for does not exist.</p></div>} />
           </Routes>
         </PageTransition>
