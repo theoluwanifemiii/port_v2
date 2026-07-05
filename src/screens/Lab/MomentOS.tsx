@@ -75,7 +75,7 @@ export const MomentOS: FC = () => {
                   rel="noopener noreferrer"
                   className="text-[#5bb6ff] no-underline hover:underline"
                 >
-                  usemomentos.xyz ↗
+                  usemomentos.xyz 
                 </a>
               </div>
               <p className="mt-1">How a church birthday template became a celebration platform.</p>

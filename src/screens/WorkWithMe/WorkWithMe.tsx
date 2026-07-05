@@ -97,29 +97,43 @@ interface Testimonial {
 const testimonials: Testimonial[] = [
   {
     quote:
-      "I've had the pleasure of working alongside Nifemi. His UX instincts and ability to turn complex product problems into elegant solutions always stood out.",
-    name: "Oluwafemi Oluwatobi",
-    role: "Product Designer",
-    company: "Teckholic",
+      "It was a pleasure working with Oluwanifemi at Motopay. He is a highly skilled professional with strong technical abilities and excellent problem-solving skills. Oluwanifemi consistently delivered high-quality work on our projects and showed remarkable attention to detail. His collaborative nature and positive attitude made him a valuable team member.",
+    name: "Oluwapelumi Adesokan",
+    role: "Fullstack Developer",
+    company: "Sujimoto Group",
   },
   {
     quote:
-      "He brings clarity to complex problems and balances user needs with business goals. He is a strong partner across product and engineering.",
+      "I've had the pleasure of working alongside Nifemi, and he's one of the most talented and collaborative designers I've met. His attention to detail, strong UX instincts, and ability to turn complex problems into elegant solutions consistently impressed me. Beyond his design skills, Nifemi is a great team player, always open to feedback and generous with his insights. He'd be an asset to any design team.",
+    name: "Oluwafemi Oluwatobi",
+    role: "Product Designer",
+    company: "Excel Minds",
+  },
+  {
+    quote:
+      "I had the opportunity to work with Oluwanifemi, and he stood out as a thoughtful and talented product designer. He has a strong sense for clean, user-focused design and consistently brings clarity to complex problems. His ability to balance user needs with business goals makes him a valuable partner in any product team. Beyond his design skills, he's collaborative, receptive to feedback, and always brings positive energy to the team.",
     name: "Timothy Fabiyi",
     role: "Product Manager",
   },
   {
     quote:
-      "Oluwanifemi combines creativity and practical execution. His solutions are thoughtful, implementation-friendly, and focused on real user outcomes.",
-    name: "Oluseyi Adisa",
-    role: "Frontend Engineer",
+      "I had the pleasure of working closely with Oluwanifemi on the Backoffice project at Motopay. He consistently demonstrated exceptional skills as a Product Designer, contributing significantly to both the design and overall user experience of the platform. His ability to translate complex user requirements into clean, functional designs was impressive — and whenever we encountered a bug or design inconsistency, he worked quickly and iteratively to make improvements.",
+    name: "Orji Aso",
+    role: "Snr. Software Test Engineer",
+    company: "Moniepoint",
   },
   {
     quote:
-      "His curiosity, collaboration style, and user-centered mindset consistently elevate projects. I highly recommend him for product teams.",
+      "It's an absolute joy to witness Oluwanifemi's remarkable growth over the years within the design space. His curiosity, user-centered passion, and collaborative spirit have set him on an extraordinary path. His dedication to creating user-centric, delightful experiences and his willingness to learn is truly commendable. I strongly recommend him for your team and on your projects.",
     name: "Aduragbemi Abiola",
-    role: "Product Designer",
-    company: "Interswitch",
+    role: "Founder · Ex Interswitch",
+    company: "Adura Studios",
+  },
+  {
+    quote:
+      "Oluwanifemi possesses a unique blend of creativity, technical expertise, and a deep understanding of user-centric design principles. His ability to transform difficult ideas into visually appealing and user-friendly designs is absolutely admirable. He continuously seeks opportunities to expand his skill set, which greatly contributes to the innovative and fresh approach he brings to each project.",
+    name: "Oluwaseyi Adisa",
+    role: "Software Engineer",
   },
 ];
 
@@ -208,9 +222,9 @@ export const WorkWithMe = () => {
               <SwiperSlide key={`${testimonial.name}-${index}`} className="!h-full">
                 <div className="grid h-full grid-rows-[auto_minmax(0,1fr)_auto] pb-8">
                   <p className="text-4xl text-black/20">“</p>
-                  <div className="mt-2 min-h-0 overflow-hidden max-h-[180px] sm:max-h-[200px] lg:max-h-[220px]">
+                  <div className="mt-2 min-h-0 overflow-hidden">
                     <p
-                      className="break-words text-2xl leading-[1.24] text-[#17191d] lg:text-[2rem]"
+                      className="break-words text-xl leading-[1.3] text-[#17191d] sm:text-2xl lg:text-[2rem]"
                       style={{
                         display: "-webkit-box",
                         WebkitLineClamp: 6,

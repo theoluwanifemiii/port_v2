@@ -71,6 +71,10 @@ export interface CurvedWallProps {
   imageBorderRadius?: string;
   openedImageBorderRadius?: string;
   grayscale?: boolean;
+  /** Continuously rotate the wall. Default false. */
+  autoRotate?: boolean;
+  /** Auto-rotation speed in degrees per second. Default 5. */
+  autoRotateSpeed?: number;
   children?: ReactNode;
 }
 
@@ -92,6 +96,8 @@ export default function CurvedWall({
   imageBorderRadius = "16px",
   openedImageBorderRadius = "26px",
   grayscale = false,
+  autoRotate = false,
+  autoRotateSpeed = 5,
   children,
 }: CurvedWallProps) {
   const rootRef = useRef<HTMLDivElement | null>(null);
@@ -112,6 +118,10 @@ export default function CurvedWall({
   const openingRef = useRef(false);
   const openStartedAtRef = useRef(0);
   const lastDragEndAt = useRef(0);
+
+  const autoRotateRAF = useRef<number | null>(null);
+  const autoRotateLastTime = useRef<number | null>(null);
+  const hoveringRef = useRef(false);
 
   const scrollLockedRef = useRef(false);
   const lockScroll = useCallback(() => {
@@ -494,6 +504,32 @@ export default function CurvedWall({
     [openItem]
   );
 
+  // ── Auto-rotate ──────────────────────────────────────────────────────
+  useEffect(() => {
+    if (!autoRotate) return;
+
+    const step = (t: number) => {
+      const busy = draggingRef.current || !!focusedElRef.current || !!inertiaRAF.current || hoveringRef.current;
+      if (!busy) {
+        if (autoRotateLastTime.current !== null) {
+          const dt = t - autoRotateLastTime.current;
+          const nextY = wrapAngleSigned(rotYRef.current + (autoRotateSpeed * dt) / 1000);
+          rotYRef.current = nextY;
+          applyCylinderTransform(nextY);
+        }
+        autoRotateLastTime.current = t;
+      } else {
+        autoRotateLastTime.current = null;
+      }
+      autoRotateRAF.current = requestAnimationFrame(step);
+    };
+
+    autoRotateRAF.current = requestAnimationFrame(step);
+    return () => {
+      if (autoRotateRAF.current) cancelAnimationFrame(autoRotateRAF.current);
+    };
+  }, [autoRotate, autoRotateSpeed]);
+
   useEffect(() => () => { document.body.classList.remove("cw-scroll-lock"); }, []);
 
   const rootStyle = useMemo(
@@ -511,7 +547,12 @@ export default function CurvedWall({
 
   return (
     <div ref={rootRef} className="cw-root" style={rootStyle}>
-      <main ref={mainRef} className="cw-main">
+      <main
+        ref={mainRef}
+        className="cw-main"
+        onPointerEnter={() => { hoveringRef.current = true; }}
+        onPointerLeave={() => { hoveringRef.current = false; autoRotateLastTime.current = null; }}
+      >
         <div className="cw-stage">
           <div ref={cylinderRef} className="cw-cylinder">
             {items.map((item, i) => {
