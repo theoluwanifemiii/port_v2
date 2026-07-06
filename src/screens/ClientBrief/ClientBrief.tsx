@@ -19,95 +19,206 @@ interface Question {
 
 const questionsByType: Record<ProjectType, Question[]> = {
   "Website Design": [
+    // ── Context ──────────────────────────────────────────────────────────────
     {
-      id: "website_type",
-      label: "What type of website do you need?",
-      type: "select",
-      options: [
-        "Portfolio / Personal Brand",
-        "Landing Page",
-        "E-commerce",
-        "Corporate / Company Site",
-        "Blog / Content Site",
-        "Marketplace",
-        "Other",
-      ],
-    },
-    {
-      id: "website_goal",
-      label: "What is the primary goal of the website?",
-      hint: "What should it make happen, attract clients, sell products, build credibility?",
+      id: "business_description",
+      label: "Tell me about your business in one paragraph.",
+      hint: "What you do, who you serve, and how long you've been doing it.",
       type: "textarea",
-      placeholder: "e.g. We want people to discover our services and book a call with us.",
+      placeholder:
+        "e.g. We're a 3-year-old Lagos-based accounting firm serving SMEs. We handle bookkeeping, tax filing, and payroll for 40+ clients.",
     },
     {
-      id: "target_audience",
-      label: "Who is your target audience?",
-      hint: "Who is this website for? Be as specific as possible.",
+      id: "why_now",
+      label: "Why are you building this website now?",
+      hint: "Something changed — what was it?",
       type: "textarea",
-      placeholder: "e.g. Nigerian SME owners aged 28–45 looking for accounting software.",
+      placeholder:
+        "e.g. We just rebranded. We keep losing leads to competitors. Investors want somewhere to send people. Our current site was built in 2019 and looks it.",
     },
     {
-      id: "branding",
-      label: "Do you have existing branding?",
-      type: "select",
-      options: [
-        "Yes, full brand (logo, colors, fonts, guidelines)",
-        "Yes, partial (logo only or rough color palette)",
-        "No, starting from scratch",
-      ],
-    },
-    {
-      id: "pages",
-      label: "What pages or sections do you need?",
+      id: "problem",
+      label: "What problem are you hoping this website solves?",
+      hint: "Not the goal — the problem. What's broken or missing right now?",
       type: "textarea",
-      placeholder: "e.g. Home, About, Services, Pricing, Blog, Contact, FAQ...",
+      placeholder:
+        "e.g. We keep explaining the same thing over and over. Our competitors look more credible. We're not getting enough inquiries. People can't find us online.",
+    },
+    // ── Success & visitors ───────────────────────────────────────────────────
+    {
+      id: "success",
+      label: "Imagine we're talking 6 months after launch. What would make you say the project was successful?",
+      hint: "Be specific — what numbers, behaviours, or outcomes would matter?",
+      type: "textarea",
+      placeholder:
+        "e.g. 3× more enquiries per month. Better-qualified leads. Investors take us seriously. Our team is proud to share the link.",
+    },
+    {
+      id: "single_action",
+      label: "When someone lands on your website, what is the ONE thing you want them to do?",
+      hint: "One action only — the whole site should pull people toward this.",
+      type: "textarea",
+      placeholder:
+        "e.g. Book a demo. Contact sales. Donate. Download the app. Sign up. Apply. Watch the video.",
+    },
+    {
+      id: "discovery",
+      label: "How do customers currently find you?",
+      hint: "Be honest — every answer changes what the homepage needs to do.",
+      type: "textarea",
+      placeholder:
+        "e.g. Mostly referrals and WhatsApp. Some Instagram. A few people find us on Google but not many.",
+    },
+    // ── Positioning ──────────────────────────────────────────────────────────
+    {
+      id: "competitors",
+      label: "Who are your main competitors?",
+      hint: "Names, links, or descriptions — whoever your customers would consider instead of you.",
+      type: "textarea",
+      placeholder:
+        "e.g. Cowrywise, PiggyVest, and a few local accounting firms. We also lose deals to Excel spreadsheets.",
+    },
+    {
+      id: "differentiator",
+      label: "If someone visited your website and a competitor's, why should they choose you?",
+      hint: "Not what you do — why you specifically. What makes the difference?",
+      type: "textarea",
+      placeholder:
+        "e.g. We respond within 2 hours. We've worked with over 100 SMEs. We're the only firm that also handles payroll in-house.",
+    },
+    {
+      id: "frustration",
+      label: "What frustrates you most about your current website — or if you don't have one, how customers currently discover your business?",
+      type: "textarea",
+      placeholder:
+        "e.g. It looks unprofessional. The copy is vague. Nobody can find it on Google. We're directing people to our Instagram which isn't designed for this.",
+    },
+    // ── Content & structure ──────────────────────────────────────────────────
+    {
+      id: "visitor_info",
+      label: "What information does a visitor absolutely need before they'll contact you?",
+      hint: "Think like your customer — what questions do they need answered first?",
+      type: "textarea",
+      placeholder:
+        "e.g. What we do, proof that we've done it before, pricing range, how to get started, and that we're based in Lagos.",
     },
     {
       id: "references",
-      label: "Share any websites you love or want to take inspiration from",
-      hint: "Links or names work, also mention what specifically you like about them.",
+      label: "Share websites you find compelling — and what specifically you like about them.",
+      hint: "'I like Apple' tells me nothing. 'I like how Apple simplifies complex technology' tells me everything.",
       type: "textarea",
-      placeholder: "e.g. stripe.com, clean layout, clear CTAs. notion.so, product-forward.",
+      placeholder:
+        "e.g. stripe.com — the copy treats you like an intelligent adult. paystack.com — clean, builds trust fast. Not the look, I want that feeling.",
     },
     {
-      id: "cms",
-      label: "Do you need to update content yourself after launch?",
-      type: "select",
-      options: ["Yes", "No", "Not sure"],
+      id: "existing_assets",
+      label: "What existing assets do you already have?",
+      hint: "Be honest — clients almost always think they have more than they do.",
+      type: "textarea",
+      placeholder:
+        "e.g. Logo (yes). Brand colours (roughly). Photography (no, need a shoot). Copy (some). Testimonials (3 written ones). Case studies (no).",
+    },
+    {
+      id: "technical_needs",
+      label: "What technical features do you need?",
+      hint: "Check all that apply and add anything else.",
+      type: "textarea",
+      placeholder:
+        "e.g. CMS so we can update blog posts. Contact form. Booking system. Payment integration. Multi-language. SEO setup.",
+    },
+    // ── Project ──────────────────────────────────────────────────────────────
+    {
+      id: "decision_maker",
+      label: "Who will have final say on approving this project?",
+      hint: "I need to know who I'm ultimately designing for — and who can say no.",
+      type: "textarea",
+      placeholder:
+        "e.g. Me (founder). Me and my business partner. Our marketing manager. Our board has to sign off.",
     },
     {
       id: "development",
       label: "Are you looking for design only, or design + development?",
       type: "select",
       options: [
-        "Design only, I have a developer",
+        "Design only — I have a developer",
         "Design + Development",
         "Not sure yet",
       ],
     },
+    {
+      id: "future",
+      label: "Where do you see the business in 2–3 years?",
+      hint: "I'm designing something that needs to grow with you — not just work today.",
+      type: "textarea",
+      placeholder:
+        "e.g. We plan to expand to 3 cities and double the team. We want to launch a SaaS product alongside the service.",
+    },
+    {
+      id: "north_star",
+      label: "If we could only get one thing absolutely right on this website, what should it be?",
+      hint: "Your answer becomes the North Star for every decision we make.",
+      type: "textarea",
+      placeholder:
+        "e.g. That it builds trust immediately. That people understand what we do in 5 seconds. That it actually converts visitors into leads.",
+    },
   ],
 
   "Operation Dashboard": [
+    // ── Context ──────────────────────────────────────────────────────────────
+    {
+      id: "business_context",
+      label: "Describe the problem you're trying to solve in one paragraph.",
+      hint: "Not the solution — the problem. What's happening right now that isn't working?",
+      type: "textarea",
+      placeholder:
+        "e.g. Our ops team manages 200+ daily transactions across 3 spreadsheets. There's no single view of what's pending, what's failed, or who handled what. Mistakes happen weekly.",
+    },
+    {
+      id: "why_now",
+      label: "Why are you solving this now?",
+      hint: "Something triggered this — what was it?",
+      type: "textarea",
+      placeholder:
+        "e.g. We just hired 5 new ops agents. We had a critical error last month that cost us. We're scaling and the current system won't survive it.",
+    },
+    {
+      id: "success",
+      label: "What does success look like for your team 3 months after this is live?",
+      hint: "Specific outcomes — time saved, errors reduced, decisions made faster.",
+      type: "textarea",
+      placeholder:
+        "e.g. Managers can see everything without asking agents. Approvals take minutes not hours. We stop using the spreadsheet entirely.",
+    },
+    {
+      id: "frustration",
+      label: "What frustrates your team most about how they currently work?",
+      hint: "The real pain — not the polished version.",
+      type: "textarea",
+      placeholder:
+        "e.g. Too many tabs. Data lives in 4 different places. Managers have to chase agents for updates. Reports take hours to compile manually.",
+    },
+    // ── Users & data ─────────────────────────────────────────────────────────
     {
       id: "team",
-      label: "What team or department will use this dashboard?",
-      type: "text",
-      placeholder: "e.g. Operations team, Finance, Customer Support...",
+      label: "What team or department will use this, and what do they do daily?",
+      type: "textarea",
+      placeholder:
+        "e.g. Our ops team of 8 agents processes loan disbursements. Two managers approve and oversee. Finance team checks end-of-day reports.",
     },
     {
       id: "metrics",
-      label: "What data or metrics need to be visible?",
-      hint: "Think about what numbers, statuses, or summaries your team checks most.",
+      label: "What data or decisions does this dashboard need to support?",
+      hint: "What questions should someone be able to answer in 10 seconds by looking at it?",
       type: "textarea",
       placeholder:
-        "e.g. Total transactions today, pending approvals, agent performance, error rates...",
+        "e.g. How many transactions are pending right now? Which agents have the most failed cases this week? What's the approval rate today vs. yesterday?",
     },
     {
       id: "actions",
-      label: "What key actions should users be able to take from the dashboard?",
+      label: "What key actions should users be able to take — not just see?",
       type: "textarea",
-      placeholder: "e.g. Approve transactions, assign tickets, export reports, flag issues...",
+      placeholder:
+        "e.g. Approve or reject transactions. Reassign cases. Export daily reports. Flag items for review. Add notes to a record.",
     },
     {
       id: "user_count",
@@ -117,71 +228,124 @@ const questionsByType: Record<ProjectType, Question[]> = {
     },
     {
       id: "integrations",
-      label: "Are there any existing systems or tools this needs to connect with?",
-      hint: "Any databases, APIs, third-party tools, or internal platforms.",
-      type: "textarea",
-      placeholder: "e.g. Our internal PostgreSQL database, Salesforce, a custom REST API...",
-    },
-    {
-      id: "current_problem",
-      label: "What's broken or missing in how you currently manage this?",
-      hint: "I want to understand what pain this is solving.",
+      label: "What systems, tools, or data sources does this need to connect with?",
       type: "textarea",
       placeholder:
-        "e.g. We currently use spreadsheets and it's too slow. There's no single view of what's happening.",
+        "e.g. Our PostgreSQL database, a third-party KYC API, Slack for notifications, Google Sheets as a stopgap.",
     },
     {
       id: "permissions",
-      label: "Do different users need different access levels or views?",
+      label: "Do different users need different views or access levels?",
       type: "select",
       options: [
-        "Yes, different roles need to see different things",
-        "No, everyone sees the same",
+        "Yes — different roles need to see different things",
+        "No — everyone sees the same",
         "Not sure yet",
       ],
+    },
+    // ── Project ──────────────────────────────────────────────────────────────
+    {
+      id: "decision_maker",
+      label: "Who will approve this project?",
+      type: "textarea",
+      placeholder: "e.g. Me (Head of Ops). Me and the CTO. The board needs to sign off on the budget.",
+    },
+    {
+      id: "future",
+      label: "Where does the business expect to be in 2 years — will team size or data volume change significantly?",
+      hint: "I want to design something that doesn't need rebuilding when you grow.",
+      type: "textarea",
+      placeholder:
+        "e.g. We expect to 5× our transaction volume and expand to 3 new markets. The ops team will probably double.",
+    },
+    {
+      id: "north_star",
+      label: "If this dashboard could only do one thing exceptionally well, what should it be?",
+      type: "textarea",
+      placeholder:
+        "e.g. Give managers a real-time view of what needs attention without them having to ask. Make approvals faster. Eliminate the need for the morning status call.",
     },
   ],
 
   "Mobile App Design": [
+    // ── Context ──────────────────────────────────────────────────────────────
+    {
+      id: "business_description",
+      label: "Describe your app in one paragraph — what it does and who it's for.",
+      type: "textarea",
+      placeholder:
+        "e.g. A mobile app for Nigerian freelancers to invoice clients, track payments, and manage their income tax — all in one place.",
+    },
+    {
+      id: "why_now",
+      label: "Why are you building this now?",
+      hint: "Something changed — what was it?",
+      type: "textarea",
+      placeholder:
+        "e.g. We just raised a pre-seed. A competitor launched but got it wrong. We've been validating manually and it's time to build. The market just opened up.",
+    },
+    {
+      id: "problem",
+      label: "What problem does this app solve that isn't being solved well today?",
+      hint: "What's the gap? Why does this need to exist?",
+      type: "textarea",
+      placeholder:
+        "e.g. Freelancers use WhatsApp to chase payments and Excel to track income. Nothing is built for the informal way Nigerians actually work.",
+    },
+    {
+      id: "current_behaviour",
+      label: "How do your target users currently solve this problem without your app?",
+      hint: "Understanding the workaround tells me what the app is really competing with.",
+      type: "textarea",
+      placeholder:
+        "e.g. They use Excel, Google Sheets, WhatsApp Business, or just memory. Some use Wave or QuickBooks but find them too complex.",
+    },
+    // ── Users & success ──────────────────────────────────────────────────────
+    {
+      id: "target_users",
+      label: "Who are your target users, and what does their day look like?",
+      hint: "The more specific, the better the design decisions.",
+      type: "textarea",
+      placeholder:
+        "e.g. Freelance designers and developers in Lagos aged 22–35. They work from cafés, use their phones more than laptops, and get paid via bank transfer or Paystack.",
+    },
+    {
+      id: "core_action",
+      label: "What is the single most important thing a user must be able to do in this app?",
+      hint: "The one job the app exists to do — everything else is secondary.",
+      type: "textarea",
+      placeholder:
+        "e.g. Send a professional invoice in under 60 seconds. Track whether a client has paid. Get a reminder when a payment is overdue.",
+    },
+    {
+      id: "success",
+      label: "What does success look like 6 months after launch?",
+      hint: "Specific numbers or behaviours — not 'users love it'.",
+      type: "textarea",
+      placeholder:
+        "e.g. 5,000 active users. Average of 3 invoices sent per user per month. 40% of users return weekly. App Store rating above 4.2.",
+    },
+    // ── Positioning ──────────────────────────────────────────────────────────
+    {
+      id: "competitors",
+      label: "Who are your competitors — direct and indirect?",
+      type: "textarea",
+      placeholder:
+        "e.g. Wave, QuickBooks, FreshBooks (too complex). Excel and WhatsApp (the real competition). A few local apps that never got traction.",
+    },
+    {
+      id: "differentiator",
+      label: "Why would someone choose your app over what they're using today?",
+      type: "textarea",
+      placeholder:
+        "e.g. It's built for how Nigerians actually get paid. It's simpler. It sends payment reminders automatically. It works offline.",
+    },
+    // ── Technical ────────────────────────────────────────────────────────────
     {
       id: "platform",
       label: "What platform are you targeting?",
       type: "select",
       options: ["iOS only", "Android only", "Both iOS and Android"],
-    },
-    {
-      id: "core_action",
-      label: "What is the core thing users will do in this app?",
-      hint: "The single most important job the app exists to do.",
-      type: "textarea",
-      placeholder:
-        "e.g. Book and manage home services. Send and receive money. Track daily habits.",
-    },
-    {
-      id: "target_users",
-      label: "Who are your target users?",
-      hint: "Age, lifestyle, context, how and where will they use the app?",
-      type: "textarea",
-      placeholder:
-        "e.g. Young professionals in Lagos who use fintech apps daily and expect speed.",
-    },
-    {
-      id: "branding",
-      label: "Do you have existing branding?",
-      type: "select",
-      options: [
-        "Yes full brand (logo, colors, fonts, guidelines)",
-        "Yes  partial (logo only or rough colors)",
-        "No  starting from scratch",
-      ],
-    },
-    {
-      id: "problem",
-      label: "What problem does this app solve that isn't being solved well today?",
-      hint: "What's the gap or frustration that led you here?",
-      type: "textarea",
-      placeholder:
-        "e.g. Existing solutions are too complex. People still use WhatsApp for this because nothing purpose-built exists.",
     },
     {
       id: "backend",
@@ -195,41 +359,93 @@ const questionsByType: Record<ProjectType, Question[]> = {
       ],
     },
     {
+      id: "branding",
+      label: "Do you have existing branding?",
+      type: "select",
+      options: [
+        "Yes — full brand (logo, colors, fonts, guidelines)",
+        "Yes — partial (logo only or rough colors)",
+        "No — starting from scratch",
+      ],
+    },
+    {
       id: "references",
-      label: "Any apps you admire or want to take design cues from?",
-      hint: "App names or links, and what specifically you like about them.",
+      label: "Any apps you admire — and what specifically you like about them.",
+      hint: "Not 'I like Monzo'. Tell me what Monzo does that you want this app to feel like.",
       type: "textarea",
       placeholder:
-        "e.g. Monzo, clear and calm. Cowrywise, great onboarding. Apple Reminders, simple.",
+        "e.g. Monzo — feels calm and in control. Cowrywise — onboarding is smooth, doesn't overwhelm. Paystack — every interaction feels considered.",
+    },
+    // ── Project ──────────────────────────────────────────────────────────────
+    {
+      id: "decision_maker",
+      label: "Who will approve this project?",
+      type: "textarea",
+      placeholder:
+        "e.g. Me (founder). Me and my co-founder. We have an investor who'll want to review the design direction.",
+    },
+    {
+      id: "north_star",
+      label: "If this app could only get one thing absolutely right, what should it be?",
+      type: "textarea",
+      placeholder:
+        "e.g. That it feels fast and effortless. That first-time users don't need instructions. That it makes freelancers feel more professional.",
     },
   ],
 
   Other: [
     {
       id: "description",
-      label: "Describe your project in a few sentences",
-      type: "textarea",
-      placeholder: "What are you building, redesigning, or trying to improve?",
-    },
-    {
-      id: "problem",
-      label: "What problem are you solving?",
-      hint: "What's broken, slow, confusing, or missing right now?",
+      label: "Describe the problem or opportunity in one paragraph.",
+      hint: "Not what you want to build — the problem that needs solving.",
       type: "textarea",
       placeholder:
-        "e.g. Our current process requires too many steps. Users keep dropping off before completing X.",
+        "e.g. Our customer onboarding takes 4 days and requires 3 people. Competitors do it in under an hour. We're losing deals because of it.",
     },
     {
-      id: "users",
-      label: "Who are your users?",
+      id: "why_now",
+      label: "Why are you tackling this now?",
       type: "textarea",
-      placeholder: "Who will use what you're building, and in what context?",
+      placeholder:
+        "e.g. We just hired a new ops lead. We lost a major client over it. We finally have budget. We're preparing for a Series A.",
+    },
+    {
+      id: "success",
+      label: "What does success look like — specifically?",
+      hint: "Numbers, behaviours, or outcomes. Not feelings.",
+      type: "textarea",
+      placeholder:
+        "e.g. Onboarding time drops from 4 days to same-day. NPS improves by 20 points. The ops team stops manually chasing documents.",
+    },
+    {
+      id: "users_pain",
+      label: "Who are the users, and what's frustrating them today?",
+      type: "textarea",
+      placeholder:
+        "e.g. New customers who feel the process is slow and confusing. Internal ops agents who spend 60% of their time on data entry that should be automated.",
+    },
+    {
+      id: "decision_maker",
+      label: "Who will approve this project?",
+      type: "textarea",
+      placeholder: "e.g. Me. Me and my co-founder. The CTO needs to sign off on technical direction.",
     },
     {
       id: "existing_materials",
-      label: "Do you have any existing designs or brand materials?",
+      label: "Do you have any existing designs, brand materials, or documentation?",
       type: "select",
-      options: ["Yes, full brand", "Yes, some materials", "No, nothing yet"],
+      options: [
+        "Yes — full brand and existing designs",
+        "Yes — some materials",
+        "No — starting from scratch",
+      ],
+    },
+    {
+      id: "north_star",
+      label: "If we could only get one thing absolutely right, what should it be?",
+      type: "textarea",
+      placeholder:
+        "e.g. That it actually gets adopted by the team. That it eliminates the manual step that causes the most delays. That it scales without needing a rebuild.",
     },
   ],
 };
@@ -244,7 +460,7 @@ const sharedEndQuestions: Question[] = [
       "Within 2 weeks",
       "1–2 months",
       "2–3 months",
-      "Flexible, no hard deadline",
+      "Flexible — no hard deadline",
     ],
   },
   {
@@ -262,10 +478,10 @@ const sharedEndQuestions: Question[] = [
   },
   {
     id: "additional",
-    label: "Anything else I should know?",
-    hint: "Constraints, context, important stakeholders, previous attempts — anything relevant.",
+    label: "Anything else that would help me understand this better?",
+    hint: "Previous attempts, internal politics, constraints, things that have already been decided — anything that would change how I think about this.",
     type: "textarea",
-    placeholder: "Optional but often the most useful part.",
+    placeholder: "Optional — but usually the most useful part of the whole brief.",
     required: false,
   },
 ];
