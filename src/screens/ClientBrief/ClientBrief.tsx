@@ -9,7 +9,7 @@ interface Question {
   id: string;
   label: string;
   hint?: string;
-  type: "text" | "textarea" | "select";
+  type: "text" | "textarea" | "select" | "checkbox";
   options?: string[];
   placeholder?: string;
   required?: boolean;
@@ -31,7 +31,7 @@ const questionsByType: Record<ProjectType, Question[]> = {
     {
       id: "why_now",
       label: "Why are you building this website now?",
-      hint: "Something changed — what was it?",
+      hint: "Something changed. What was it?",
       type: "textarea",
       placeholder:
         "e.g. We just rebranded. We keep losing leads to competitors. Investors want somewhere to send people. Our current site was built in 2019 and looks it.",
@@ -39,7 +39,7 @@ const questionsByType: Record<ProjectType, Question[]> = {
     {
       id: "problem",
       label: "What problem are you hoping this website solves?",
-      hint: "Not the goal — the problem. What's broken or missing right now?",
+      hint: "Not the goal, the problem. What's broken or missing right now?",
       type: "textarea",
       placeholder:
         "e.g. We keep explaining the same thing over and over. Our competitors look more credible. We're not getting enough inquiries. People can't find us online.",
@@ -48,7 +48,7 @@ const questionsByType: Record<ProjectType, Question[]> = {
     {
       id: "success",
       label: "Imagine we're talking 6 months after launch. What would make you say the project was successful?",
-      hint: "Be specific — what numbers, behaviours, or outcomes would matter?",
+      hint: "Be specific. What numbers, behaviours, or outcomes would matter?",
       type: "textarea",
       placeholder:
         "e.g. 3× more enquiries per month. Better-qualified leads. Investors take us seriously. Our team is proud to share the link.",
@@ -56,7 +56,7 @@ const questionsByType: Record<ProjectType, Question[]> = {
     {
       id: "single_action",
       label: "When someone lands on your website, what is the ONE thing you want them to do?",
-      hint: "One action only — the whole site should pull people toward this.",
+      hint: "One action only. The whole site should pull people toward this.",
       type: "textarea",
       placeholder:
         "e.g. Book a demo. Contact sales. Donate. Download the app. Sign up. Apply. Watch the video.",
@@ -64,7 +64,7 @@ const questionsByType: Record<ProjectType, Question[]> = {
     {
       id: "discovery",
       label: "How do customers currently find you?",
-      hint: "Be honest — every answer changes what the homepage needs to do.",
+      hint: "Be honest. Every answer changes what the homepage needs to do.",
       type: "textarea",
       placeholder:
         "e.g. Mostly referrals and WhatsApp. Some Instagram. A few people find us on Google but not many.",
@@ -73,7 +73,7 @@ const questionsByType: Record<ProjectType, Question[]> = {
     {
       id: "competitors",
       label: "Who are your main competitors?",
-      hint: "Names, links, or descriptions — whoever your customers would consider instead of you.",
+      hint: "Names, links, or descriptions. Whoever your customers would consider instead of you.",
       type: "textarea",
       placeholder:
         "e.g. Cowrywise, PiggyVest, and a few local accounting firms. We also lose deals to Excel spreadsheets.",
@@ -81,14 +81,14 @@ const questionsByType: Record<ProjectType, Question[]> = {
     {
       id: "differentiator",
       label: "If someone visited your website and a competitor's, why should they choose you?",
-      hint: "Not what you do — why you specifically. What makes the difference?",
+      hint: "Not what you do, but why you specifically. What makes the difference?",
       type: "textarea",
       placeholder:
         "e.g. We respond within 2 hours. We've worked with over 100 SMEs. We're the only firm that also handles payroll in-house.",
     },
     {
       id: "frustration",
-      label: "What frustrates you most about your current website — or if you don't have one, how customers currently discover your business?",
+      label: "What frustrates you most about your current website? If you don't have one, how do customers currently discover your business?",
       type: "textarea",
       placeholder:
         "e.g. It looks unprofessional. The copy is vague. Nobody can find it on Google. We're directing people to our Instagram which isn't designed for this.",
@@ -97,40 +97,61 @@ const questionsByType: Record<ProjectType, Question[]> = {
     {
       id: "visitor_info",
       label: "What information does a visitor absolutely need before they'll contact you?",
-      hint: "Think like your customer — what questions do they need answered first?",
+      hint: "Think like your customer. What questions do they need answered first?",
       type: "textarea",
       placeholder:
         "e.g. What we do, proof that we've done it before, pricing range, how to get started, and that we're based in Lagos.",
     },
     {
       id: "references",
-      label: "Share websites you find compelling — and what specifically you like about them.",
+      label: "Share websites you find compelling, and what specifically you like about them.",
       hint: "'I like Apple' tells me nothing. 'I like how Apple simplifies complex technology' tells me everything.",
       type: "textarea",
       placeholder:
-        "e.g. stripe.com — the copy treats you like an intelligent adult. paystack.com — clean, builds trust fast. Not the look, I want that feeling.",
+        "e.g. stripe.com: the copy treats you like an intelligent adult. paystack.com: clean, builds trust fast. Not the look, I want that feeling.",
     },
     {
       id: "existing_assets",
       label: "What existing assets do you already have?",
-      hint: "Be honest — clients almost always think they have more than they do.",
-      type: "textarea",
-      placeholder:
-        "e.g. Logo (yes). Brand colours (roughly). Photography (no, need a shoot). Copy (some). Testimonials (3 written ones). Case studies (no).",
+      hint: "Be honest. Clients almost always think they have more than they do.",
+      type: "checkbox",
+      options: [
+        "Logo",
+        "Brand colours",
+        "Brand fonts / guidelines",
+        "Photography",
+        "Written copy",
+        "Testimonials",
+        "Case studies",
+        "Team photos",
+        "Videos",
+      ],
     },
     {
       id: "technical_needs",
       label: "What technical features do you need?",
-      hint: "Check all that apply and add anything else.",
-      type: "textarea",
-      placeholder:
-        "e.g. CMS so we can update blog posts. Contact form. Booking system. Payment integration. Multi-language. SEO setup.",
+      hint: "Check all that apply.",
+      type: "checkbox",
+      options: [
+        "CMS (content management)",
+        "Blog",
+        "Booking system",
+        "Payment integration",
+        "User authentication",
+        "Search",
+        "Contact form",
+        "Analytics / tracking",
+        "Multi-language",
+        "SEO setup",
+        "Dashboard / portal",
+        "Custom integrations / API",
+      ],
     },
     // ── Project ──────────────────────────────────────────────────────────────
     {
       id: "decision_maker",
       label: "Who will have final say on approving this project?",
-      hint: "I need to know who I'm ultimately designing for — and who can say no.",
+      hint: "I need to know who I'm ultimately designing for, and who can say no.",
       type: "textarea",
       placeholder:
         "e.g. Me (founder). Me and my business partner. Our marketing manager. Our board has to sign off.",
@@ -140,7 +161,7 @@ const questionsByType: Record<ProjectType, Question[]> = {
       label: "Are you looking for design only, or design + development?",
       type: "select",
       options: [
-        "Design only — I have a developer",
+        "Design only (I have a developer)",
         "Design + Development",
         "Not sure yet",
       ],
@@ -148,7 +169,7 @@ const questionsByType: Record<ProjectType, Question[]> = {
     {
       id: "future",
       label: "Where do you see the business in 2–3 years?",
-      hint: "I'm designing something that needs to grow with you — not just work today.",
+      hint: "I'm designing something that needs to grow with you, not just work today.",
       type: "textarea",
       placeholder:
         "e.g. We plan to expand to 3 cities and double the team. We want to launch a SaaS product alongside the service.",
@@ -168,7 +189,7 @@ const questionsByType: Record<ProjectType, Question[]> = {
     {
       id: "business_context",
       label: "Describe the problem you're trying to solve in one paragraph.",
-      hint: "Not the solution — the problem. What's happening right now that isn't working?",
+      hint: "Not the solution, the problem. What's happening right now that isn't working?",
       type: "textarea",
       placeholder:
         "e.g. Our ops team manages 200+ daily transactions across 3 spreadsheets. There's no single view of what's pending, what's failed, or who handled what. Mistakes happen weekly.",
@@ -176,7 +197,7 @@ const questionsByType: Record<ProjectType, Question[]> = {
     {
       id: "why_now",
       label: "Why are you solving this now?",
-      hint: "Something triggered this — what was it?",
+      hint: "Something triggered this. What was it?",
       type: "textarea",
       placeholder:
         "e.g. We just hired 5 new ops agents. We had a critical error last month that cost us. We're scaling and the current system won't survive it.",
@@ -184,7 +205,7 @@ const questionsByType: Record<ProjectType, Question[]> = {
     {
       id: "success",
       label: "What does success look like for your team 3 months after this is live?",
-      hint: "Specific outcomes — time saved, errors reduced, decisions made faster.",
+      hint: "Specific outcomes: time saved, errors reduced, decisions made faster.",
       type: "textarea",
       placeholder:
         "e.g. Managers can see everything without asking agents. Approvals take minutes not hours. We stop using the spreadsheet entirely.",
@@ -192,7 +213,7 @@ const questionsByType: Record<ProjectType, Question[]> = {
     {
       id: "frustration",
       label: "What frustrates your team most about how they currently work?",
-      hint: "The real pain — not the polished version.",
+      hint: "The real pain, not the polished version.",
       type: "textarea",
       placeholder:
         "e.g. Too many tabs. Data lives in 4 different places. Managers have to chase agents for updates. Reports take hours to compile manually.",
@@ -215,7 +236,7 @@ const questionsByType: Record<ProjectType, Question[]> = {
     },
     {
       id: "actions",
-      label: "What key actions should users be able to take — not just see?",
+      label: "What key actions should users be able to take, not just see?",
       type: "textarea",
       placeholder:
         "e.g. Approve or reject transactions. Reassign cases. Export daily reports. Flag items for review. Add notes to a record.",
@@ -238,8 +259,8 @@ const questionsByType: Record<ProjectType, Question[]> = {
       label: "Do different users need different views or access levels?",
       type: "select",
       options: [
-        "Yes — different roles need to see different things",
-        "No — everyone sees the same",
+        "Yes, different roles see different things",
+        "No, everyone sees the same",
         "Not sure yet",
       ],
     },
@@ -252,7 +273,7 @@ const questionsByType: Record<ProjectType, Question[]> = {
     },
     {
       id: "future",
-      label: "Where does the business expect to be in 2 years — will team size or data volume change significantly?",
+      label: "Where does the business expect to be in 2 years? Will team size or data volume change significantly?",
       hint: "I want to design something that doesn't need rebuilding when you grow.",
       type: "textarea",
       placeholder:
@@ -271,15 +292,15 @@ const questionsByType: Record<ProjectType, Question[]> = {
     // ── Context ──────────────────────────────────────────────────────────────
     {
       id: "business_description",
-      label: "Describe your app in one paragraph — what it does and who it's for.",
+      label: "Describe your app in one paragraph: what it does and who it's for.",
       type: "textarea",
       placeholder:
-        "e.g. A mobile app for Nigerian freelancers to invoice clients, track payments, and manage their income tax — all in one place.",
+        "e.g. A mobile app for Nigerian freelancers to invoice clients, track payments, and manage their income tax, all in one place.",
     },
     {
       id: "why_now",
       label: "Why are you building this now?",
-      hint: "Something changed — what was it?",
+      hint: "Something changed what was it?",
       type: "textarea",
       placeholder:
         "e.g. We just raised a pre-seed. A competitor launched but got it wrong. We've been validating manually and it's time to build. The market just opened up.",
@@ -312,7 +333,7 @@ const questionsByType: Record<ProjectType, Question[]> = {
     {
       id: "core_action",
       label: "What is the single most important thing a user must be able to do in this app?",
-      hint: "The one job the app exists to do — everything else is secondary.",
+      hint: "The one job the app exists to do. Everything else is secondary.",
       type: "textarea",
       placeholder:
         "e.g. Send a professional invoice in under 60 seconds. Track whether a client has paid. Get a reminder when a payment is overdue.",
@@ -320,7 +341,7 @@ const questionsByType: Record<ProjectType, Question[]> = {
     {
       id: "success",
       label: "What does success look like 6 months after launch?",
-      hint: "Specific numbers or behaviours — not 'users love it'.",
+      hint: "Specific numbers or behaviours, not 'users love it'.",
       type: "textarea",
       placeholder:
         "e.g. 5,000 active users. Average of 3 invoices sent per user per month. 40% of users return weekly. App Store rating above 4.2.",
@@ -328,7 +349,7 @@ const questionsByType: Record<ProjectType, Question[]> = {
     // ── Positioning ──────────────────────────────────────────────────────────
     {
       id: "competitors",
-      label: "Who are your competitors — direct and indirect?",
+      label: "Who are your competitors, both direct and indirect?",
       type: "textarea",
       placeholder:
         "e.g. Wave, QuickBooks, FreshBooks (too complex). Excel and WhatsApp (the real competition). A few local apps that never got traction.",
@@ -352,9 +373,9 @@ const questionsByType: Record<ProjectType, Question[]> = {
       label: "Do you already have a backend or API?",
       type: "select",
       options: [
-        "Yes — fully built",
-        "Yes — partially built",
-        "No — not yet",
+        "Yes, fully built",
+        "Yes, partially built",
+        "No, not yet",
         "Not sure",
       ],
     },
@@ -363,18 +384,18 @@ const questionsByType: Record<ProjectType, Question[]> = {
       label: "Do you have existing branding?",
       type: "select",
       options: [
-        "Yes — full brand (logo, colors, fonts, guidelines)",
-        "Yes — partial (logo only or rough colors)",
-        "No — starting from scratch",
+        "Yes, full brand (logo, colors, fonts, guidelines)",
+        "Yes, partial (logo only or rough colors)",
+        "No, starting from scratch",
       ],
     },
     {
       id: "references",
-      label: "Any apps you admire — and what specifically you like about them.",
+      label: "Any apps you admire, and what specifically you like about them.",
       hint: "Not 'I like Monzo'. Tell me what Monzo does that you want this app to feel like.",
       type: "textarea",
       placeholder:
-        "e.g. Monzo — feels calm and in control. Cowrywise — onboarding is smooth, doesn't overwhelm. Paystack — every interaction feels considered.",
+        "e.g. Monzo: feels calm and in control. Cowrywise: onboarding is smooth, doesn't overwhelm. Paystack: every interaction feels considered.",
     },
     // ── Project ──────────────────────────────────────────────────────────────
     {
@@ -397,7 +418,7 @@ const questionsByType: Record<ProjectType, Question[]> = {
     {
       id: "description",
       label: "Describe the problem or opportunity in one paragraph.",
-      hint: "Not what you want to build — the problem that needs solving.",
+      hint: "Not what you want to build, the problem that needs solving.",
       type: "textarea",
       placeholder:
         "e.g. Our customer onboarding takes 4 days and requires 3 people. Competitors do it in under an hour. We're losing deals because of it.",
@@ -411,7 +432,7 @@ const questionsByType: Record<ProjectType, Question[]> = {
     },
     {
       id: "success",
-      label: "What does success look like — specifically?",
+      label: "What does success look like, specifically?",
       hint: "Numbers, behaviours, or outcomes. Not feelings.",
       type: "textarea",
       placeholder:
@@ -435,9 +456,9 @@ const questionsByType: Record<ProjectType, Question[]> = {
       label: "Do you have any existing designs, brand materials, or documentation?",
       type: "select",
       options: [
-        "Yes — full brand and existing designs",
-        "Yes — some materials",
-        "No — starting from scratch",
+        "Yes, full brand and existing designs",
+        "Yes, some materials",
+        "No, starting from scratch",
       ],
     },
     {
@@ -460,7 +481,7 @@ const sharedEndQuestions: Question[] = [
       "Within 2 weeks",
       "1–2 months",
       "2–3 months",
-      "Flexible — no hard deadline",
+      "Flexible, no hard deadline",
     ],
   },
   {
@@ -479,9 +500,9 @@ const sharedEndQuestions: Question[] = [
   {
     id: "additional",
     label: "Anything else that would help me understand this better?",
-    hint: "Previous attempts, internal politics, constraints, things that have already been decided — anything that would change how I think about this.",
+    hint: "Previous attempts, internal politics, constraints, things that have already been decided. Anything that would change how I think about this.",
     type: "textarea",
-    placeholder: "Optional — but usually the most useful part of the whole brief.",
+    placeholder: "Optional but usually the most useful part of the whole brief.",
     required: false,
   },
 ];
@@ -511,6 +532,14 @@ export const ClientBrief = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     setAnswers({ ...answers, [e.target.name]: e.target.value });
+  };
+
+  const toggleCheckbox = (id: string, option: string) => {
+    const current = answers[id] ? answers[id].split(", ") : [];
+    const next = current.includes(option)
+      ? current.filter((v) => v !== option)
+      : [...current, option];
+    setAnswers({ ...answers, [id]: next.join(", ") });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -667,7 +696,7 @@ export const ClientBrief = () => {
           {projectType && (
             <section className="rounded-2xl border border-black/8 bg-white p-6 space-y-6">
               <p className="text-[11px] uppercase tracking-[0.12em] text-[#9a9fa6]">
-                {projectType} — tell me more
+                {projectType} tell me more
               </p>
 
               {activeQuestions.map((q, i) => (
@@ -719,6 +748,31 @@ export const ClientBrief = () => {
                       placeholder={q.placeholder}
                       className={inputBase}
                     />
+                  )}
+
+                  {q.type === "checkbox" && (
+                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                      {q.options?.map((opt) => {
+                        const selected = (answers[q.id] ?? "")
+                          .split(", ")
+                          .filter(Boolean)
+                          .includes(opt);
+                        return (
+                          <button
+                            key={opt}
+                            type="button"
+                            onClick={() => toggleCheckbox(q.id, opt)}
+                            className={`rounded-xl border px-3 py-2.5 text-left text-sm transition-all ${
+                              selected
+                                ? "border-[#111214] bg-[#111214] text-white"
+                                : "border-black/10 bg-white text-[#24282d] hover:border-black/30"
+                            }`}
+                          >
+                            {opt}
+                          </button>
+                        );
+                      })}
+                    </div>
                   )}
                 </div>
               ))}
