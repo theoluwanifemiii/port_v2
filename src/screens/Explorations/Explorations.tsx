@@ -132,8 +132,6 @@ export const Explorations = () => (
         minRadius={420}
         maxRadius={1500}
         bgColor="#E7E7E2"
-        openedImageWidth="min(520px, calc(100vw - 56px))"
-        openedImageHeight="min(720px, calc(100vh - 160px))"
         imageBorderRadius="16px"
         openedImageBorderRadius="26px"
         grayscale={false}

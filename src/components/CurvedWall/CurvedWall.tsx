@@ -121,7 +121,8 @@ export default function CurvedWall({
 
   const autoRotateRAF = useRef<number | null>(null);
   const autoRotateLastTime = useRef<number | null>(null);
-  const hoveringRef = useRef(false);
+  const openedNaturalSizeRef = useRef<{ w: number; h: number } | null>(null);
+  const currentOpenIndexRef = useRef(-1);
 
   const scrollLockedRef = useRef(false);
   const lockScroll = useCallback(() => {
@@ -188,6 +189,12 @@ export default function CurvedWall({
           document.body.removeChild(tmp);
           enlargedOverlay.style.left = `${frameR.left - mainR.left + (frameR.width - tmpRect.width) / 2}px`;
           enlargedOverlay.style.top = `${frameR.top - mainR.top + (frameR.height - tmpRect.height) / 2}px`;
+        } else if (openedNaturalSizeRef.current) {
+          const { w, h } = openedNaturalSizeRef.current;
+          enlargedOverlay.style.left = `${frameR.left - mainR.left + (frameR.width - w) / 2}px`;
+          enlargedOverlay.style.top = `${frameR.top - mainR.top + (frameR.height - h) / 2}px`;
+          enlargedOverlay.style.width = `${w}px`;
+          enlargedOverlay.style.height = `${h}px`;
         } else {
           enlargedOverlay.style.left = `${frameR.left - mainR.left}px`;
           enlargedOverlay.style.top = `${frameR.top - mainR.top}px`;
@@ -360,6 +367,7 @@ export default function CurvedWall({
       const cleanup = () => {
         animDiv.remove();
         originalTilePositionRef.current = null;
+        openedNaturalSizeRef.current = null;
         el.style.visibility = "";
         el.style.opacity = "0";
         el.style.zIndex = "0";
@@ -425,6 +433,9 @@ export default function CurvedWall({
         height: tileR.height,
       };
 
+      const tileImages = Array.from(mainRef.current?.querySelectorAll(".cw-tile__image") ?? []);
+      currentOpenIndexRef.current = tileImages.indexOf(el);
+
       const overlay = document.createElement("div");
       overlay.className = "cw-enlarge";
       overlay.style.cssText = `position:absolute;left:${frameR.left - mainR.left}px;top:${frameR.top - mainR.top}px;width:${frameR.width}px;height:${frameR.height}px;opacity:0;z-index:30;will-change:transform,opacity;transform-origin:top left;transition:transform ${enlargeTransitionMs}ms ease,opacity ${enlargeTransitionMs}ms ease;`;
@@ -446,32 +457,136 @@ export default function CurvedWall({
         rootRef.current?.setAttribute("data-enlarging", "true");
       }, 16);
 
+      // Determine the final display size: explicit props → natural image size → frame size
+      const tileImg = el.querySelector("img") as HTMLImageElement | null;
+      const natW = tileImg?.naturalWidth ?? 0;
+      const natH = tileImg?.naturalHeight ?? 0;
+
+      let finalW: number;
+      let finalH: number;
+
       if (openedImageWidth || openedImageHeight) {
-        const onFirstEnd = (ev: TransitionEvent) => {
-          if (ev.propertyName !== "transform") return;
-          overlay.removeEventListener("transitionend", onFirstEnd);
-          const prevTrans = overlay.style.transition;
-          overlay.style.transition = "none";
-          overlay.style.width = openedImageWidth || `${frameR.width}px`;
-          overlay.style.height = openedImageHeight || `${frameR.height}px`;
-          const newRect = overlay.getBoundingClientRect();
-          overlay.style.width = `${frameR.width}px`;
-          overlay.style.height = `${frameR.height}px`;
-          void overlay.offsetWidth;
-          overlay.style.transition = `left ${enlargeTransitionMs}ms ease,top ${enlargeTransitionMs}ms ease,width ${enlargeTransitionMs}ms ease,height ${enlargeTransitionMs}ms ease`;
-          requestAnimationFrame(() => {
-            overlay.style.left = `${frameR.left - mainR.left + (frameR.width - newRect.width) / 2}px`;
-            overlay.style.top = `${frameR.top - mainR.top + (frameR.height - newRect.height) / 2}px`;
-            overlay.style.width = openedImageWidth || `${frameR.width}px`;
-            overlay.style.height = openedImageHeight || `${frameR.height}px`;
-          });
-          overlay.addEventListener("transitionend", () => { overlay.style.transition = prevTrans; }, { once: true });
-        };
-        overlay.addEventListener("transitionend", onFirstEnd);
+        // Use explicit CSS string sizes via a temp element measurement
+        const tmp = document.createElement("div");
+        tmp.style.cssText = `position:absolute;width:${openedImageWidth || `${frameR.width}px`};height:${openedImageHeight || `${frameR.height}px`};visibility:hidden;`;
+        document.body.appendChild(tmp);
+        const r = tmp.getBoundingClientRect();
+        document.body.removeChild(tmp);
+        finalW = r.width;
+        finalH = r.height;
+      } else if (natW > 0 && natH > 0) {
+        const maxW = window.innerWidth - 56;
+        const maxH = window.innerHeight - 80;
+        const scale = Math.min(maxW / natW, maxH / natH, 1);
+        finalW = Math.round(natW * scale);
+        finalH = Math.round(natH * scale);
+      } else {
+        finalW = frameR.width;
+        finalH = frameR.height;
       }
+
+      openedNaturalSizeRef.current = { w: finalW, h: finalH };
+
+      const onFirstEnd = (ev: TransitionEvent) => {
+        if (ev.propertyName !== "transform") return;
+        overlay.removeEventListener("transitionend", onFirstEnd);
+        const prevTrans = overlay.style.transition;
+        overlay.style.transition = `left ${enlargeTransitionMs}ms ease,top ${enlargeTransitionMs}ms ease,width ${enlargeTransitionMs}ms ease,height ${enlargeTransitionMs}ms ease`;
+        requestAnimationFrame(() => {
+          overlay.style.left = `${frameR.left - mainR.left + (frameR.width - finalW) / 2}px`;
+          overlay.style.top = `${frameR.top - mainR.top + (frameR.height - finalH) / 2}px`;
+          overlay.style.width = `${finalW}px`;
+          overlay.style.height = `${finalH}px`;
+        });
+        overlay.addEventListener("transitionend", () => { overlay.style.transition = prevTrans; }, { once: true });
+      };
+      overlay.addEventListener("transitionend", onFirstEnd);
     },
     [enlargeTransitionMs, lockScroll, openedImageWidth, openedImageHeight, unlockScroll]
   );
+
+  // ── Navigate between images while overlay is open ───────────────────
+  const navigateOpen = useCallback(
+    (dir: 1 | -1) => {
+      const currentEl = focusedElRef.current;
+      if (!currentEl || currentOpenIndexRef.current < 0) return;
+
+      const tileImages = Array.from(
+        mainRef.current?.querySelectorAll(".cw-tile__image") ?? []
+      ) as HTMLElement[];
+      if (tileImages.length <= 1) return;
+
+      const currentSrc = (currentEl.querySelector("img") as HTMLImageElement | null)?.src ?? "";
+      let nextIdx = currentOpenIndexRef.current;
+      for (let step = 1; step <= tileImages.length; step++) {
+        const candidate = ((currentOpenIndexRef.current + dir * step) + tileImages.length) % tileImages.length;
+        const src = (tileImages[candidate].querySelector("img") as HTMLImageElement | null)?.src ?? "";
+        if (src && src !== currentSrc) { nextIdx = candidate; break; }
+      }
+      if (nextIdx === currentOpenIndexRef.current) return;
+
+      const nextEl = tileImages[nextIdx];
+      const overlay = viewerRef.current?.querySelector(".cw-enlarge") as HTMLElement | null;
+      const mainR = mainRef.current?.getBoundingClientRect();
+      const frameR = frameRef.current?.getBoundingClientRect();
+      if (!overlay || !mainR || !frameR) return;
+
+      // Swap tile visibility
+      currentEl.style.visibility = "";
+      focusedElRef.current = nextEl;
+      currentOpenIndexRef.current = nextIdx;
+      nextEl.style.visibility = "hidden";
+      const nextR = nextEl.getBoundingClientRect();
+      originalTilePositionRef.current = { left: nextR.left, top: nextR.top, width: nextR.width, height: nextR.height };
+
+      // Compute natural size for new image
+      const nextImg = nextEl.querySelector("img") as HTMLImageElement | null;
+      const rawSrc = nextImg?.src ?? "";
+      const natW = nextImg?.naturalWidth ?? 0;
+      const natH = nextImg?.naturalHeight ?? 0;
+      let finalW: number, finalH: number;
+      if (natW > 0 && natH > 0) {
+        const s = Math.min((window.innerWidth - 56) / natW, (window.innerHeight - 80) / natH, 1);
+        finalW = Math.round(natW * s);
+        finalH = Math.round(natH * s);
+      } else {
+        finalW = frameR.width; finalH = frameR.height;
+      }
+      openedNaturalSizeRef.current = { w: finalW, h: finalH };
+
+      // Cross-fade image
+      const overlayImg = overlay.querySelector("img") as HTMLImageElement | null;
+      if (overlayImg) {
+        overlayImg.style.transition = "opacity 150ms ease";
+        overlayImg.style.opacity = "0";
+        setTimeout(() => { overlayImg.src = rawSrc; overlayImg.style.opacity = "1"; }, 150);
+      }
+
+      // Animate overlay to new size
+      overlay.style.transition = `left 280ms ease, top 280ms ease, width 280ms ease, height 280ms ease`;
+      requestAnimationFrame(() => {
+        overlay.style.left = `${frameR.left - mainR.left + (frameR.width - finalW) / 2}px`;
+        overlay.style.top  = `${frameR.top  - mainR.top  + (frameR.height - finalH) / 2}px`;
+        overlay.style.width  = `${finalW}px`;
+        overlay.style.height = `${finalH}px`;
+      });
+      overlay.addEventListener("transitionend", () => {
+        overlay.style.transition = `transform ${enlargeTransitionMs}ms ease, opacity ${enlargeTransitionMs}ms ease`;
+      }, { once: true });
+    },
+    [enlargeTransitionMs]
+  );
+
+  // Keyboard: ESC already in scrim effect; add ← → here
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (!focusedElRef.current) return;
+      if (e.key === "ArrowLeft")  navigateOpen(-1);
+      if (e.key === "ArrowRight") navigateOpen(1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [navigateOpen]);
 
   const onTileClick = useCallback(
     (e: { currentTarget: HTMLElement }) => {
@@ -509,7 +624,7 @@ export default function CurvedWall({
     if (!autoRotate) return;
 
     const step = (t: number) => {
-      const busy = draggingRef.current || !!focusedElRef.current || !!inertiaRAF.current || hoveringRef.current;
+      const busy = draggingRef.current || !!focusedElRef.current || !!inertiaRAF.current;
       if (!busy) {
         if (autoRotateLastTime.current !== null) {
           const dt = t - autoRotateLastTime.current;
@@ -547,12 +662,7 @@ export default function CurvedWall({
 
   return (
     <div ref={rootRef} className="cw-root" style={rootStyle}>
-      <main
-        ref={mainRef}
-        className="cw-main"
-        onPointerEnter={() => { hoveringRef.current = true; }}
-        onPointerLeave={() => { hoveringRef.current = false; autoRotateLastTime.current = null; }}
-      >
+      <main ref={mainRef} className="cw-main">
         <div className="cw-stage">
           <div ref={cylinderRef} className="cw-cylinder">
             {items.map((item, i) => {
@@ -597,6 +707,26 @@ export default function CurvedWall({
         <div className="cw-viewer" ref={viewerRef}>
           <div ref={scrimRef} className="cw-scrim" />
           <div ref={frameRef} className="cw-frame" />
+          <button
+            type="button"
+            aria-label="Previous image"
+            className="cw-nav cw-nav--prev"
+            onClick={(e) => { e.stopPropagation(); navigateOpen(-1); }}
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+          <button
+            type="button"
+            aria-label="Next image"
+            className="cw-nav cw-nav--next"
+            onClick={(e) => { e.stopPropagation(); navigateOpen(1); }}
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
         </div>
       </main>
     </div>
