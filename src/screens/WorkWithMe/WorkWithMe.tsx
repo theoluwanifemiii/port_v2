@@ -155,7 +155,7 @@ export const WorkWithMe = () => {
 
     try {
       const response = await fetch(
-        "https://uwcrhwvsogxdyzxyuhtr.supabase.co/functions/v1/send-contact-email",
+        `${import.meta.env.VITE_CONVEX_SITE_URL}/send-email`,
         {
           method: "POST",
           headers: {
