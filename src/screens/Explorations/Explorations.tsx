@@ -126,7 +126,7 @@ export const Explorations = () => (
     <section className="relative h-[calc(100vh-4rem-1px)] w-full overflow-hidden bg-[#E7E7E2]">
       <CurvedWall
         images={wallImages}
-        cols={22}
+        cols={21}
         rows={4}
         fit={0.55}
         minRadius={420}

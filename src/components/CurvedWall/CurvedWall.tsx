@@ -27,27 +27,14 @@ function buildWallItems(pool: CurvedWallImage[], cols: number, rows: number): Wa
     typeof img === "string" ? { src: img, alt: "" } : { src: img.src || "", alt: img.alt || "" }
   );
 
-  // Avoid placing the same image in adjacent cells
-  const total = cols * rows;
-  const filled = normalized.slice();
-  while (filled.length < total) filled.push(...normalized);
-
-  for (let i = 1; i < total; i++) {
-    if (filled[i].src === filled[i - 1].src) {
-      for (let j = i + 1; j < total; j++) {
-        if (filled[j].src !== filled[i].src) {
-          [filled[i], filled[j]] = [filled[j], filled[i]];
-          break;
-        }
-      }
-    }
-  }
+  // Never exceed pool length — no duplicates
+  const total = Math.min(cols * rows, normalized.length);
 
   return Array.from({ length: total }, (_, i) => ({
     col: i % cols,
     row: Math.floor(i / cols),
-    src: filled[i]?.src ?? "",
-    alt: filled[i]?.alt ?? "",
+    src: normalized[i]?.src ?? "",
+    alt: normalized[i]?.alt ?? "",
   }));
 }
 
@@ -475,8 +462,8 @@ export default function CurvedWall({
         finalW = r.width;
         finalH = r.height;
       } else if (natW > 0 && natH > 0) {
-        const maxW = window.innerWidth - 56;
-        const maxH = window.innerHeight - 80;
+        const maxW = window.innerWidth * 0.70;
+        const maxH = window.innerHeight * 0.78;
         const scale = Math.min(maxW / natW, maxH / natH, 1);
         finalW = Math.round(natW * scale);
         finalH = Math.round(natH * scale);
@@ -546,7 +533,7 @@ export default function CurvedWall({
       const natH = nextImg?.naturalHeight ?? 0;
       let finalW: number, finalH: number;
       if (natW > 0 && natH > 0) {
-        const s = Math.min((window.innerWidth - 56) / natW, (window.innerHeight - 80) / natH, 1);
+        const s = Math.min((window.innerWidth * 0.70) / natW, (window.innerHeight * 0.78) / natH, 1);
         finalW = Math.round(natW * s);
         finalH = Math.round(natH * s);
       } else {
