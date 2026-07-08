@@ -545,7 +545,7 @@ export const ClientBrief = () => {
     () => loadDraft()?.answers ?? {}
   );
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
-  const [draftRestored] = useState(() => Boolean(loadDraft()));
+  const [draftRestored, setDraftRestored] = useState(() => Boolean(loadDraft()));
 
   useEffect(() => {
     try {
@@ -620,6 +620,7 @@ export const ClientBrief = () => {
     setProjectType("");
     setBasicInfo({ name: "", email: "", company: "" });
     setAnswers({});
+    setDraftRestored(false);
   };
 
   if (status === "success") {
