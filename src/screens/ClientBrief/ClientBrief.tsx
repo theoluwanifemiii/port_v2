@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -512,13 +512,51 @@ const sharedEndQuestions: Question[] = [
 const inputBase =
   "w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm text-[#191c20] outline-none transition-all placeholder:text-[#9aa0a8] focus:border-[#121316] focus:ring-4 focus:ring-black/5";
 
+// ─── Draft persistence ────────────────────────────────────────────────────────
+// Saved to the visitor's own device so a reload or coming back later doesn't lose their answers.
+
+const DRAFT_KEY = "client-brief-draft";
+
+interface Draft {
+  projectType: ProjectType | "";
+  basicInfo: { name: string; email: string; company: string };
+  answers: Record<string, string>;
+}
+
+function loadDraft(): Draft | null {
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    return raw ? (JSON.parse(raw) as Draft) : null;
+  } catch {
+    return null;
+  }
+}
+
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export const ClientBrief = () => {
-  const [projectType, setProjectType] = useState<ProjectType | "">("");
-  const [basicInfo, setBasicInfo] = useState({ name: "", email: "", company: "" });
-  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [projectType, setProjectType] = useState<ProjectType | "">(
+    () => loadDraft()?.projectType ?? ""
+  );
+  const [basicInfo, setBasicInfo] = useState(
+    () => loadDraft()?.basicInfo ?? { name: "", email: "", company: "" }
+  );
+  const [answers, setAnswers] = useState<Record<string, string>>(
+    () => loadDraft()?.answers ?? {}
+  );
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [draftRestored, setDraftRestored] = useState(() => Boolean(loadDraft()));
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(
+        DRAFT_KEY,
+        JSON.stringify({ projectType, basicInfo, answers })
+      );
+    } catch {
+      // localStorage unavailable (private browsing, quota, etc.) — nothing to do
+    }
+  }, [projectType, basicInfo, answers]);
 
   const activeQuestions = projectType
     ? [...questionsByType[projectType], ...sharedEndQuestions]
@@ -570,10 +608,19 @@ export const ClientBrief = () => {
       );
 
       if (!res.ok) throw new Error("Send failed");
+      localStorage.removeItem(DRAFT_KEY);
       setStatus("success");
     } catch {
       setStatus("error");
     }
+  };
+
+  const clearDraft = () => {
+    localStorage.removeItem(DRAFT_KEY);
+    setProjectType("");
+    setBasicInfo({ name: "", email: "", company: "" });
+    setAnswers({});
+    setDraftRestored(false);
   };
 
   if (status === "success") {
@@ -617,6 +664,18 @@ export const ClientBrief = () => {
           <p className="mt-2 text-sm leading-relaxed text-[#5c6370]">
             Fill this out before our first call. The more detail you give, the more useful our time together will be.
           </p>
+          {draftRestored && status === "idle" && (
+            <p className="mt-4 flex items-center justify-between rounded-xl border border-black/10 bg-white px-4 py-2.5 text-xs text-[#5c6370]">
+              <span>Picked up where you left off. Your answers are saved on this device as you go.</span>
+              <button
+                type="button"
+                onClick={clearDraft}
+                className="ml-3 shrink-0 whitespace-nowrap text-[#9a9fa6] underline hover:text-[#111214]"
+              >
+                Start over
+              </button>
+            </p>
+          )}
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">
@@ -792,7 +851,7 @@ export const ClientBrief = () => {
 
               {status === "error" && (
                 <p className="rounded-xl border border-[#bc3b3b]/20 bg-[#fdeeee] px-4 py-2.5 text-sm text-[#8f2828]">
-                  Something went wrong. Email your brief directly to{" "}
+                  Something went wrong. Your answers are saved on this device, so you can try again anytime, or email your brief directly to{" "}
                   <a href="mailto:Olu@olusworks.xyz" className="underline">
                     Olu@olusworks.xyz
                   </a>

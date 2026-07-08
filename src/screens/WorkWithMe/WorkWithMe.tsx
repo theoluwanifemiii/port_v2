@@ -137,16 +137,51 @@ const testimonials: Testimonial[] = [
   },
 ];
 
+// ─── Draft persistence ────────────────────────────────────────────────────────
+// Saved to the visitor's own device so a reload or coming back later doesn't lose their answers.
+
+const CONTACT_DRAFT_KEY = "work-with-me-draft";
+
+interface ContactFormData {
+  name: string;
+  email: string;
+  company: string;
+  project: string;
+  budget: string;
+}
+
+function loadContactDraft(): ContactFormData | null {
+  try {
+    const raw = localStorage.getItem(CONTACT_DRAFT_KEY);
+    return raw ? (JSON.parse(raw) as ContactFormData) : null;
+  } catch {
+    return null;
+  }
+}
+
+const emptyContactForm: ContactFormData = {
+  name: "",
+  email: "",
+  company: "",
+  project: "",
+  budget: "",
+};
+
 export const WorkWithMe = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    company: "",
-    project: "",
-    budget: "",
-  });
+  const [formData, setFormData] = useState<ContactFormData>(
+    () => loadContactDraft() ?? emptyContactForm
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+  const [draftRestored, setDraftRestored] = useState(() => Boolean(loadContactDraft()));
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(CONTACT_DRAFT_KEY, JSON.stringify(formData));
+    } catch {
+      // localStorage unavailable (private browsing, quota, etc.) — nothing to do
+    }
+  }, [formData]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -170,14 +205,9 @@ export const WorkWithMe = () => {
         throw new Error(data.error || "Failed to send email");
       }
 
+      localStorage.removeItem(CONTACT_DRAFT_KEY);
       setSubmitStatus("success");
-      setFormData({
-        name: "",
-        email: "",
-        company: "",
-        project: "",
-        budget: "",
-      });
+      setFormData(emptyContactForm);
     } catch (error) {
       console.error("Error sending email:", error);
       setSubmitStatus("error");
@@ -267,6 +297,22 @@ export const WorkWithMe = () => {
         </aside>
 
         <article className="hairline-card w-full min-w-0 rounded-3xl p-6 lg:flex-1 lg:p-8">
+          {draftRestored && submitStatus === "idle" && (
+            <p className="mb-4 flex items-center justify-between rounded-xl border border-black/10 bg-white px-4 py-2.5 text-xs text-[#5c6370]">
+              <span>Picked up where you left off. Your answers are saved on this device as you go.</span>
+              <button
+                type="button"
+                onClick={() => {
+                  localStorage.removeItem(CONTACT_DRAFT_KEY);
+                  setFormData(emptyContactForm);
+                  setDraftRestored(false);
+                }}
+                className="ml-3 shrink-0 whitespace-nowrap text-[#9a9fa6] underline hover:text-[#111214]"
+              >
+                Start over
+              </button>
+            </p>
+          )}
           <form className="grid gap-4" onSubmit={handleSubmit}>
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
