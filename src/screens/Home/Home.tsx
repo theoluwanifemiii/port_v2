@@ -2,6 +2,7 @@ import { FC, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { LottiePlayer } from "../../components/LottiePlayer";
 import { PortfolioShell } from "../../components/PortfolioShell";
+import { useAvailability } from "../../hooks/useAvailability";
 
 const showcaseAnimations = [
   { title: "Vital Swap", path: "/Vitalswap.json", href: "/work/vital-swap" },
@@ -13,6 +14,7 @@ export const Home: FC = () => {
   const [activeAnimationIndex, setActiveAnimationIndex] = useState(0);
   const [isShowcaseHovered, setIsShowcaseHovered] = useState(false);
   const [isProjectHovered, setIsProjectHovered] = useState(false);
+  const availability = useAvailability();
   const cursorLabelRef = useRef<HTMLSpanElement | null>(null);
   const activeAnimation = showcaseAnimations[activeAnimationIndex];
 
@@ -78,9 +80,24 @@ export const Home: FC = () => {
 
           <Link
             to="/work-with-me"
-            className="inline-flex items-center rounded-full border border-black/20 bg-[#111214] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-white no-underline"
+            className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] no-underline transition-colors ${
+              availability.isFull
+                ? "border-black/10 bg-[#f4f4f0] text-[#6a7077]"
+                : "border-black/20 bg-[#111214] text-white"
+            }`}
           >
-            Available for projects
+            <span
+              className={`inline-block h-1.5 w-1.5 rounded-full ${
+                availability.status === "full"
+                  ? "bg-[#9a9fa6]"
+                  : availability.status === "limited"
+                  ? "bg-amber-400"
+                  : availability.status === "loading"
+                  ? "bg-[#9a9fa6]"
+                  : "bg-emerald-400"
+              }`}
+            />
+            {availability.status === "loading" ? "Available for projects" : availability.label}
           </Link>
         </div>
       </section>

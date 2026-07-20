@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useAvailability } from "../../hooks/useAvailability";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -535,6 +536,7 @@ function loadDraft(): Draft | null {
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export const ClientBrief = () => {
+  const availability = useAvailability();
   const [projectType, setProjectType] = useState<ProjectType | "">(
     () => loadDraft()?.projectType ?? ""
   );
@@ -658,9 +660,33 @@ export const ClientBrief = () => {
           <Link to="/" className="text-xs text-[#9a9fa6] hover:text-[#111214] transition-colors">
             olusworks.xyz
           </Link>
-          <h1 className="mt-6 text-3xl font-medium tracking-[-0.02em] text-[#111214] sm:text-4xl">
-            Client Brief
-          </h1>
+          <div className="mt-6 flex items-center gap-3">
+            <h1 className="text-3xl font-medium tracking-[-0.02em] text-[#111214] sm:text-4xl">
+              Client Brief
+            </h1>
+            {availability.status !== "loading" && (
+              <span
+                className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.1em] ${
+                  availability.isFull
+                    ? "border-black/10 bg-[#f4f4f0] text-[#6a7077]"
+                    : availability.status === "limited"
+                    ? "border-amber-200 bg-amber-50 text-amber-700"
+                    : "border-emerald-200 bg-emerald-50 text-emerald-700"
+                }`}
+              >
+                <span
+                  className={`inline-block h-1.5 w-1.5 rounded-full ${
+                    availability.isFull
+                      ? "bg-[#9a9fa6]"
+                      : availability.status === "limited"
+                      ? "bg-amber-400"
+                      : "bg-emerald-400"
+                  }`}
+                />
+                {availability.label}
+              </span>
+            )}
+          </div>
           <p className="mt-2 text-sm leading-relaxed text-[#5c6370]">
             Fill this out before our first call. The more detail you give, the more useful our time together will be.
           </p>

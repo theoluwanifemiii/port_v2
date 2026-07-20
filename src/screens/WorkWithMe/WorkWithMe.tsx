@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { PortfolioShell } from "../../components/PortfolioShell";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
+import { useAvailability } from "../../hooks/useAvailability";
 import "swiper/css";
 import "swiper/css/pagination";
 
@@ -168,6 +169,7 @@ const emptyContactForm: ContactFormData = {
 };
 
 export const WorkWithMe = () => {
+  const availability = useAvailability();
   const [formData, setFormData] = useState<ContactFormData>(
     () => loadContactDraft() ?? emptyContactForm
   );
@@ -225,7 +227,31 @@ export const WorkWithMe = () => {
   return (
     <PortfolioShell contentClassName="max-w-[980px]">
       <section className="reveal-up">
-        <p className="text-[11px] uppercase tracking-[0.14em] text-[#70747b]">Contact</p>
+        <div className="flex items-center gap-3">
+          <p className="text-[11px] uppercase tracking-[0.14em] text-[#70747b]">Contact</p>
+          {availability.status !== "loading" && (
+            <span
+              className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.1em] ${
+                availability.isFull
+                  ? "border-black/10 bg-[#f4f4f0] text-[#6a7077]"
+                  : availability.status === "limited"
+                  ? "border-amber-200 bg-amber-50 text-amber-700"
+                  : "border-emerald-200 bg-emerald-50 text-emerald-700"
+              }`}
+            >
+              <span
+                className={`inline-block h-1.5 w-1.5 rounded-full ${
+                  availability.isFull
+                    ? "bg-[#9a9fa6]"
+                    : availability.status === "limited"
+                    ? "bg-amber-400"
+                    : "bg-emerald-400"
+                }`}
+              />
+              {availability.label}
+            </span>
+          )}
+        </div>
         <h1 className="section-title mt-3 text-5xl leading-[1.04] text-[#111214] sm:text-6xl">
           Let&apos;s design something users genuinely enjoy using.
         </h1>

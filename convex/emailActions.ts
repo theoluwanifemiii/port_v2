@@ -1,4 +1,5 @@
 import { httpAction } from "./_generated/server";
+import { internal } from "./_generated/api";
 
 function safe(s: string) {
   return s.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br/>");
@@ -255,7 +256,7 @@ const cors = {
 
 // ─── HTTP Action ──────────────────────────────────────────────────────────────
 
-export const sendEmail = httpAction(async (_ctx, request) => {
+export const sendEmail = httpAction(async (ctx, request) => {
   if (request.method === "OPTIONS") {
     return new Response(null, { status: 204, headers: cors });
   }
@@ -303,6 +304,13 @@ export const sendEmail = httpAction(async (_ctx, request) => {
         });
       } catch (e) {
         console.error("Client copy failed:", e);
+      }
+
+      // Decrement available project slots
+      try {
+        await ctx.runMutation(internal.slots.decrement, {});
+      } catch (e) {
+        console.error("Slot decrement failed:", e);
       }
     } else {
       if (!project) {

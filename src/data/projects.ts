@@ -16,14 +16,20 @@ export interface ProjectCaseStudy {
   year: string;
   summary: string;
   context: string;
+  costOfProblem?: string;
   challenge: string;
   approach: string[];
   outcome: string;
+  outcomeParagraphs?: string[];
   results: string[];
   image: string;
   challengeImages?: string[];
+  galleryImages?: string[];
   tags: string[];
   client: string;
+  role?: string;
+  roleDescription?: string;
+  responsibilities?: string[];
   website?: string;
   nextProjectId?: string;
   previousProjectId?: string;
@@ -33,7 +39,7 @@ export const portfolioProjects: PortfolioProject[] = [
   {
     id: "digitvant-pay",
     title: "Digitvant Pay",
-    subtitle: "Mobile and internet banking redesign focused on clarity and trust.",
+    subtitle: "Redesigning a digital banking experience by reducing onboarding friction and building a scalable design foundation.",
     year: "2025",
     image: "/Project 2.png",
     tags: ["Fintech", "UX Audit", "Design System"],
@@ -80,30 +86,53 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
   "digitvant-pay": {
     id: "digitvant-pay",
     title: "Digitvant Pay",
-    subtitle: "Mobile & Internet Banking Redesign",
+    subtitle: "Mobile Banking · Internet Banking · Internal Operations",
     year: "2025",
     summary:
-      "Digitvant Pay needed a cleaner, more coherent experience for core banking actions like transfer, bill payment, and savings.",
+      "Redesigning a digital banking experience by reducing onboarding friction, simplifying everyday banking, and creating a scalable design foundation.",
     context:
-      "The product already had useful features, but users struggled with cluttered screens and inconsistent UI patterns. Developers also faced avoidable implementation friction.",
+      "Digitvant Pay was preparing to launch its digital banking platform, but the customer experience created friction long before users could experience any value. The onboarding flow required users to complete BVN and NIN verification before receiving a bank account. While this satisfied compliance requirements, it introduced unnecessary friction at the very first interaction with the product. Beyond onboarding, the banking experience itself had become difficult to navigate. Core activities such as transfers, bill payments, savings, and account management competed equally for attention, making the interface feel crowded and overwhelming. The platform also lacked a unified design language. Components were inconsistent across web and mobile, increasing engineering effort and making the product harder to scale.",
+    costOfProblem:
+      "The onboarding experience delayed user activation. Instead of giving users an immediate reason to stay, the product asked them to complete lengthy verification before they could experience any tangible value. Every additional verification step increased the likelihood of abandonment before activation. The inconsistent interface also increased cognitive load, making everyday banking tasks more difficult than necessary while creating unnecessary implementation complexity for engineering. As Digitvant Pay prepared for growth, these issues threatened both user adoption and the team's ability to ship consistently across products.",
     challenge:
-      "Create a trusted, action-first banking interface that simplifies high-frequency user journeys without rebuilding backend logic.",
+      "How can users experience the value of Digitvant Pay before completing full identity verification while remaining compliant with financial regulations?",
     approach: [
-      "Ran a UX audit to isolate friction in transfer, bill payment, and savings flows.",
-      "Rebuilt screen hierarchy and navigation to make primary actions obvious.",
-      "Defined cleaner reusable components so design and implementation stayed aligned.",
+      "Audited the existing customer journeys across both mobile and internet banking, reviewing onboarding, transfers, bill payments, savings, account management, navigation patterns, and visual hierarchy, to identify where users experienced unnecessary friction and where the interface failed to guide attention effectively.",
+      "Reframed onboarding from a compliance problem to an activation problem. Mapped high-frequency customer journeys to understand which actions deserved greater visual priority, and identified how users could experience the value of Digitvant Pay before completing full identity verification.",
+      "Standardised reusable UI components and interaction patterns to create consistency across both mobile and web platforms. Also designed an internal customer support dashboard to enable operational teams to manage customer requests more efficiently.",
     ],
     outcome:
-      "A sharper interface with clearer journeys, stronger trust signals, and smoother handoff for engineering.",
-    results: [
-      "Beta crossed 1,000 users with positive usability feedback.",
-      "Platform scaled to 10,000+ active users as adoption improved.",
-      "Cross-team collaboration improved through a more consistent UI system.",
+      "The redesign introduced a progressive onboarding experience that reduced activation friction without compromising compliance.",
+    outcomeParagraphs: [
+      "Instead of requiring complete KYC before account creation, users could register using only their email address and phone number. Immediately after registration, every user received a bank account number and gained access to the dashboard.",
+      "Financial transactions remained disabled until BVN and NIN verification were completed, with clear messaging explaining the verification status throughout the experience.",
+      "Across the broader banking experience, I restructured navigation, simplified screen layouts, improved information hierarchy, and prioritised high-frequency actions such as transfers, savings, and bill payments. The redesign was supported by a reusable design system that improved consistency between design and engineering implementation.",
     ],
-    image: "/Project 2.png",
+    results: [
+      "Complete redesign of the mobile banking and internet banking platforms.",
+      "Progressive KYC onboarding that reduced activation friction while maintaining compliance.",
+      "Creation of a reusable design system and component library for engineering.",
+      "Design of an internal customer support dashboard to improve operational workflows.",
+      "Platform growth from over 1,000 beta users to more than 10,000 active users.",
+      "Digitvant Pay was recognised as the Fintech Disruptor of the Year 2025, reflecting the company's momentum and market impact.",
+    ],
+    image: "/Digit 2.png",
     challengeImages: ["/Digtvant Before 1.png", "/Digtvant Before 2.png"],
-    tags: ["UX Audit", "Mobile Banking", "Web Platform"],
+    galleryImages: ["/Ditgit3.png", "/Digit 4.png", "/Digit 5.png", "/Digit 6.png"],
+    tags: ["Mobile Banking", "Internet Banking", "Design System"],
     client: "Digitvant",
+    role: "Product Designer",
+    roleDescription:
+      "I led the redesign of Digitvant Pay's customer banking experience across mobile and web while creating a shared design language that engineering could scale.",
+    responsibilities: [
+      "Product strategy",
+      "UX research",
+      "User flows",
+      "UI design",
+      "Design system",
+      "Engineering collaboration",
+      "Internal operations tooling",
+    ],
     website: "ibank.digitvant.com",
     nextProjectId: "motobills",
     previousProjectId: "vital-swap",
@@ -112,7 +141,7 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
     id: "vital-swap",
     title: "Vital Swap",
     subtitle: "Back Office for Smooth Operations",
-    year: "2024",
+    year: "2025",
     summary:
       "Vital Swap required a unified back office experience for three user types: administrators, agents, and merchants.",
     context:

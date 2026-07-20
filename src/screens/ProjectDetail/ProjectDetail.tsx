@@ -37,18 +37,30 @@ export const ProjectDetail = () => {
           ← Back
         </Link>
         <span className="text-[11px] uppercase tracking-[0.14em] text-[#9a9fa6]">
-          {project.year} — {project.client}
+          {project.year} — {project.client}{project.role ? ` — ${project.role}` : ""}
         </span>
       </div>
 
       {/* Title */}
-      <section className="mt-10 reveal-up">
-        <h1 className="section-title text-5xl leading-[1.04] text-[#111214] sm:text-6xl">
-          {project.title}
-        </h1>
-        <p className="mt-2 text-[11px] uppercase tracking-[0.14em] text-[#9a9fa6]">
-          {project.tags.join(" · ")}
-        </p>
+      <section className="mt-10 reveal-up flex items-center justify-between gap-6">
+        <div>
+          <h1 className="section-title text-5xl leading-[1.04] text-[#111214] sm:text-6xl">
+            {project.title}
+          </h1>
+          <p className="mt-2 text-[11px] uppercase tracking-[0.14em] text-[#9a9fa6]">
+            {project.tags.join(" · ")}
+          </p>
+        </div>
+        {project.website && (
+          <a
+            href={`https://${project.website}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="shrink-0 rounded-full border border-black/10 bg-white px-5 py-2.5 text-sm font-medium text-[#111214] no-underline transition-colors hover:bg-[#111214] hover:text-white"
+          >
+            View project
+          </a>
+        )}
       </section>
 
       {/* Lead — larger editorial text */}
@@ -64,18 +76,48 @@ export const ProjectDetail = () => {
           <img
             src={project.image}
             alt={`${project.title}`}
-            className="h-[72vh] w-full object-cover"
+            className="w-full object-cover aspect-[1728/1029]"
           />
         </div>
       </section>
 
-      {/* Context — setting the scene */}
+      {/* My Role */}
+      {(project.roleDescription || project.responsibilities) && (
+        <section className="mt-20 reveal-up reveal-up-delay-2">
+          <Chapter label="My Role" />
+          {project.roleDescription && (
+            <p className="mt-5 text-[15px] leading-[1.8] text-[#525760]">{project.roleDescription}</p>
+          )}
+          {project.responsibilities && project.responsibilities.length > 0 && (
+            <ul className="mt-5 flex flex-wrap gap-2">
+              {project.responsibilities.map((r) => (
+                <li
+                  key={r}
+                  className="rounded-full border border-black/10 px-3.5 py-1.5 text-[13px] text-[#525760]"
+                >
+                  {r}
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      )}
+
+      {/* Context — The Problem */}
       <section className="mt-20 reveal-up reveal-up-delay-2">
-        <Chapter label="The context" />
+        <Chapter label="The Problem" />
         <p className="mt-5 text-[15px] leading-[1.8] text-[#525760]">{project.context}</p>
       </section>
 
-      {/* Challenge — displayed as a callout statement */}
+      {/* Cost of the Problem */}
+      {project.costOfProblem && (
+        <section className="mt-16 reveal-up reveal-up-delay-2">
+          <Chapter label="The Cost of the Problem" />
+          <p className="mt-5 text-[15px] leading-[1.8] text-[#525760]">{project.costOfProblem}</p>
+        </section>
+      )}
+
+      {/* Challenge — key question callout */}
       <section className="mt-20 reveal-up reveal-up-delay-2">
         <Chapter label="The challenge" />
         <p className="mt-6 text-2xl leading-[1.5] text-[#1a1d21] sm:text-3xl">
@@ -107,7 +149,7 @@ export const ProjectDetail = () => {
 
       {/* Approach — each step as a beat in the story */}
       <section className="mt-20 reveal-up reveal-up-delay-2">
-        <Chapter label="How we approached it" />
+        <Chapter label="Design Process" />
         <ol className="mt-8 space-y-10">
           {project.approach.map((item, i) => (
             <li key={item} className="flex gap-6">
@@ -122,15 +164,43 @@ export const ProjectDetail = () => {
 
       {/* Outcome — the big moment */}
       <section className="mt-24 reveal-up reveal-up-delay-2">
-        <Chapter label="What changed" />
+        <Chapter label="The Solution" />
         <p className="mt-6 text-2xl leading-[1.5] text-[#1a1d21] sm:text-3xl">
           {project.outcome}
         </p>
+        {project.outcomeParagraphs && project.outcomeParagraphs.length > 0 && (
+          <div className="mt-8 space-y-4">
+            {project.outcomeParagraphs.map((para, i) => (
+              <p key={i} className="text-[15px] leading-[1.8] text-[#525760]">{para}</p>
+            ))}
+          </div>
+        )}
       </section>
+
+      {/* Gallery scroll strip */}
+      {project.galleryImages && project.galleryImages.length > 0 && (
+        <section className="mt-14 reveal-up reveal-up-delay-2">
+          <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen overflow-hidden">
+            <div
+              className="flex gap-4 w-max animate-marquee hover:[animation-play-state:paused]"
+              style={{ animationDuration: `${project.galleryImages.length * 6}s` }}
+            >
+              {[...project.galleryImages, ...project.galleryImages].map((img, i) => (
+                <img
+                  key={i}
+                  src={img}
+                  alt={`Gallery ${(i % project.galleryImages!.length) + 1}`}
+                  className="h-[420px] w-auto flex-shrink-0 object-cover rounded-2xl"
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Results — supporting proof */}
       <section className="mt-14 reveal-up reveal-up-delay-2">
-        <Chapter label="The results" />
+        <Chapter label="Impact" />
         <ul className="mt-6 space-y-4">
           {project.results.map((result) => (
             <li key={result} className="flex gap-4 text-[15px] leading-[1.7] text-[#525760]">
