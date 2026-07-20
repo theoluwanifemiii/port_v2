@@ -65,10 +65,21 @@ export const ProjectDetail = () => {
 
       {/* Lead — larger editorial text */}
       <section className="mt-10 reveal-up reveal-up-delay-1">
-        <p className="text-xl leading-relaxed text-[#2f3339] sm:text-2xl">
+        <p className="text-[17px] leading-[1.75] text-[#525760]">
           {project.summary}
         </p>
       </section>
+
+      {/* Pull quote — unforgettable sentence */}
+      {project.pullQuote && (
+        <section className="mt-10 reveal-up reveal-up-delay-1">
+          <blockquote className="border-l-2 border-[#111214] pl-6">
+            <p className="text-lg leading-relaxed text-[#9a9fa6] italic sm:text-xl">
+              "{project.pullQuote}"
+            </p>
+          </blockquote>
+        </section>
+      )}
 
       {/* Hero image — full bleed */}
       <section className="mt-12 reveal-up reveal-up-delay-1">
@@ -125,6 +136,7 @@ export const ProjectDetail = () => {
         </p>
       </section>
 
+
       {/* Before images — the evidence */}
       {project.challengeImages && project.challengeImages.length > 0 && (
         <section className="mt-12 reveal-up reveal-up-delay-2">
@@ -141,9 +153,6 @@ export const ProjectDetail = () => {
               ))}
             </div>
           </div>
-          <p className="mt-4 text-center text-[11px] uppercase tracking-[0.14em] text-[#9a9fa6]">
-            Before — problem surfaces
-          </p>
         </section>
       )}
 
@@ -161,6 +170,7 @@ export const ProjectDetail = () => {
           ))}
         </ol>
       </section>
+
 
       {/* Outcome — the big moment */}
       <section className="mt-24 reveal-up reveal-up-delay-2">
@@ -210,6 +220,14 @@ export const ProjectDetail = () => {
           ))}
         </ul>
       </section>
+
+      {/* Key Takeaway */}
+      {project.keyTakeaway && (
+        <section className="mt-14 reveal-up reveal-up-delay-2">
+          <Chapter label="Key Takeaway" />
+          <p className="mt-5 text-[15px] leading-[1.8] text-[#525760]">{project.keyTakeaway}</p>
+        </section>
+      )}
 
       {/* Prev / Next */}
       <section className="mt-24 flex items-center justify-between border-t border-black/[0.07] pt-8 reveal-up reveal-up-delay-3">
