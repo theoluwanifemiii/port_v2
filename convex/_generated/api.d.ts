@@ -10,6 +10,7 @@
 
 import type * as emailActions from "../emailActions.js";
 import type * as http from "../http.js";
+import type * as slots from "../slots.js";
 
 import type {
   ApiFromModules,
@@ -20,6 +21,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   emailActions: typeof emailActions;
   http: typeof http;
+  slots: typeof slots;
 }>;
 
 /**
