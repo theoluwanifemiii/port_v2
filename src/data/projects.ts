@@ -148,7 +148,7 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
       "Compliance and usability don't have to compete. By separating account creation from transaction eligibility, we reduced activation friction without compromising regulatory requirements — proving that the right product constraint can become a design advantage.",
     image: "/Digit 2.png",
     challengeImages: ["/Digtvant Before 1.png", "/Digtvant Before 2.png"],
-    galleryImages: ["/Ditgit3.png", "/Digit 4.png", "/Digit 5.png", "/Digit 6.png"],
+    galleryImages: ["/Ditgit3.png", "/Digit 4.png", "/Digit 5.png", "/Digit 6.png", "/Digit 7.png"],
     tags: ["Mobile Banking", "Internet Banking", "Design System"],
     client: "Digitvant",
     role: "Product Designer",
