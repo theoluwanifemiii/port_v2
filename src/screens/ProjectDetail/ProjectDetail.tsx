@@ -86,14 +86,15 @@ export const ProjectDetail = () => {
       <section className="mt-12 reveal-up reveal-up-delay-1">
         <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen">
           {project.heroImages && project.heroImages.length >= 2 ? (
-            <div className="grid grid-cols-2 gap-2 px-2">
+            <div className="grid sm:grid-cols-2" style={{ height: "520px" }}>
               {project.heroImages.slice(0, 2).map((src, i) => (
-                <img
-                  key={i}
-                  src={src}
-                  alt={`${project.title} ${i + 1}`}
-                  className="w-full object-cover aspect-[4/3]"
-                />
+                <div key={i} className={`overflow-hidden${i === 1 ? " hidden sm:block" : ""}`}>
+                  <img
+                    src={src}
+                    alt={`${project.title} ${i + 1}`}
+                    className={`w-full h-full object-cover ${i === 1 ? "object-top" : "object-center"}`}
+                  />
+                </div>
               ))}
             </div>
           ) : (
@@ -169,31 +170,6 @@ export const ProjectDetail = () => {
         </section>
       )}
 
-      {/* Architecture diagram */}
-      {project.architectureDiagram && (
-        <section className="mt-28 reveal-up reveal-up-delay-2">
-          <Chapter label="System Architecture" />
-          <div className="mt-8 flex flex-col items-center">
-            <div className="rounded-xl border border-[#111214] bg-[#111214] px-6 py-2.5 text-[13px] font-semibold text-white">
-              {project.architectureDiagram.root}
-            </div>
-            <div className="h-6 w-px bg-black/15" />
-            <div className="relative w-full">
-              <div className="absolute left-[50%] right-0 top-0 h-px -translate-x-1/2 bg-black/10" style={{ width: "80%" }} />
-              <div className="flex flex-wrap justify-center gap-x-0 gap-y-0">
-                {project.architectureDiagram.branches.map((branch) => (
-                  <div key={branch} className="flex flex-col items-center px-3">
-                    <div className="h-6 w-px bg-black/10" />
-                    <div className="rounded-full border border-black/10 px-3.5 py-1.5 text-[12px] text-[#525760] whitespace-nowrap">
-                      {branch}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* Design Process */}
       <section className="mt-28 reveal-up reveal-up-delay-2">

@@ -82,150 +82,67 @@ export const MomentOS: FC = () => {
               <p className="mt-4">Role: {role.join(" · ")}</p>
               <p className="mt-1">Duration: 2026 · Ongoing</p>
 
-              <p className="mt-8 text-[#27c93f]">$ cat origin-story.md</p>
-
+              <p className="mt-8 text-[#27c93f]">$ cat origin.md</p>
               <p className="mt-4">
-                At the beginning of the year, our church held its annual media retreat. As one of
-                the in-house product designers, we were discussing what this year's birthday
-                templates should look like. Like every year, someone on the media team would have
-                to remember whose birthday it was, update the design, export it, and make sure it
-                got posted on time. As we talked, I found myself asking a simple question that
-                refused to leave my mind:
+                At our church's annual media retreat, we were planning this year's birthday
+                templates — the same routine as always: someone remembers the date, updates the
+                design, exports it, posts it on time.
               </p>
               <Quote>Why are we still doing this manually?</Quote>
               <p className="mt-4">
-                That question stayed with me long after the retreat ended. The more I thought
-                about it, the more I realized this wasn't just a church problem — it felt like
-                something much bigger. So I reached out to a few friends who work in Human
-                Resources to understand how birthdays were handled in their organizations. The
-                answers were surprisingly similar. Companies that weren't using enterprise HR
-                software relied on spreadsheets, Google Calendar reminders, or simply expected
-                someone in HR to remember. Sometimes they did. Sometimes they didn't. It wasn't
-                that organizations didn't care about their employees — remembering people had
-                quietly become another manual responsibility.
+                I asked friends in HR how their companies handled it. Same story everywhere:
+                spreadsheets, calendar reminders, or someone expected to just remember.
+                Remembering people had quietly become manual labour. So I built the first version
+                of MomentOS — it remembered birthdays, generated personalised messages, and
+                delivered them automatically.
               </p>
-              <p className="mt-4">That insight became the foundation of MomentOS.</p>
-              <p className="mt-4">
-                The first version of the product was simple. It automatically remembered
-                birthdays, generated personalized messages, and delivered them without requiring
-                someone to remember every date. The goal wasn't just to automate email delivery —
-                it was to remove the operational burden of remembering people so that celebrations
-                could happen consistently.
-              </p>
-              <p className="mt-4">
-                A few weeks after building the first version, I realized I had made a mistake.
-              </p>
+
+              <p className="mt-8 text-[#27c93f]">$ cat pivot.md</p>
+              <p className="mt-4">A few weeks in, I realised I had made a mistake.</p>
               <Quote>I wasn't solving a birthday problem. I was solving a celebration problem.</Quote>
               <p className="mt-4">
-                Birthdays are only one of many moments that matter. People celebrate wedding
-                anniversaries, employee work anniversaries, graduations, promotions, customer
-                milestones, volunteer appreciation, baby dedications, and countless other personal
-                moments. The more I looked at it, the more obvious it became that birthdays were
-                simply the entry point into a much larger opportunity.
-              </p>
-              <p className="mt-4">
-                That realization completely changed the direction of the product. MomentOS
-                stopped being a birthday automation platform and became a celebration automation
-                platform. Instead of being limited to one recurring event, it became a system
-                capable of helping people and organizations celebrate any meaningful occasion
-                automatically.
-              </p>
-              <p className="mt-4">
-                As the product evolved, another assumption changed. Initially, I believed
-                businesses would be the primary users — after all, the idea came from
-                conversations with HR professionals. But the more I reflected on it, the more I
-                realized that celebration isn't a business problem. It's a human one.
-              </p>
-              <p className="mt-4">
-                A founder wants to appreciate employees. A church wants to celebrate its members.
-                A husband doesn't want to forget his wedding anniversary. A daughter wants to make
-                sure her siblings remember their mother's birthday. Friends want to celebrate
-                someone's graduation. Families want to make people feel seen.
+                Anniversaries, work milestones, graduations, dedications — birthdays were just the
+                entry point. And the users weren't only businesses. A founder appreciating
+                employees. A church celebrating its members. A husband who won't forget his
+                anniversary again.
               </p>
               <Quote>The common thread wasn't business. It was relationships.</Quote>
               <p className="mt-4">
-                That insight broadened the vision considerably. MomentOS became something anyone
-                could use if they genuinely cared about the people around them.
+                Delivery followed the same logic: email first, then SMS, with WhatsApp next —
+                reach people where they already communicate.
               </p>
-              <p className="mt-4">
-                The delivery experience evolved alongside the vision. Email was the obvious
-                starting point, but it quickly became clear that people communicate differently.
-                Some people rarely open their inbox, while others respond almost instantly to text
-                messages. Many important conversations happen on WhatsApp. Rather than forcing
-                users into a single communication channel, we expanded the platform to support
-                multiple delivery methods, starting with email and SMS while laying the foundation
-                for WhatsApp integration. The objective was never simply to send messages. It was
-                to reach people where they already communicate.
-              </p>
-              <p className="mt-4">
-                While building the platform, I kept returning to one question:
-              </p>
+
+              <p className="mt-8 text-[#27c93f]">$ cat decisions.md</p>
               <Quote>What is a celebration without a gift?</Quote>
               <p className="mt-4">
-                That question led us into the next phase of product discovery. Our first instinct
-                was to build a gifting marketplace where recipients could request items and
-                MomentOS would purchase and deliver them. The idea sounded exciting until we
-                started thinking through the operational realities. How would we handle changing
-                market prices? How would we guarantee product quality? What happens when someone
-                requests something from a local vendor that doesn't have an online store? We
-                quickly realized that we weren't trying to build another e-commerce company.
-              </p>
-              <p className="mt-4">
-                Instead, we stepped back and asked what problem we were really trying to solve.
-                The answer wasn't purchasing products. It was making it easier for people to give
-                meaningful gifts.
-              </p>
-              <p className="mt-4">
-                The solution we landed on was much simpler. Recipients create wishlists containing
-                products they genuinely want, ideally linked directly to trusted online stores.
-                Friends contribute toward those gifts instead of guessing what to buy. Once enough
-                money has been contributed, the recipient redeems the gift themselves. By keeping
-                MomentOS in the payment and celebration layer instead of the logistics layer, we
-                significantly reduced operational complexity while creating a better experience
-                for everyone involved.
-              </p>
-              <p className="mt-4">
-                That discovery process reinforced something I've learned repeatedly while building
-                MomentOS.
+                Our first instinct was a gifting marketplace: recipients request items, we buy and
+                deliver them. Then the operational reality — changing prices, quality guarantees,
+                vendors with no online store. We weren't building an e-commerce company. The real
+                problem was making meaningful gifts easier: recipients build wishlists, friends
+                contribute, the recipient redeems. MomentOS stays in the celebration and payment
+                layer — never logistics.
               </p>
               <Quote>
                 The hardest product decisions rarely involve interface design. They involve
                 deciding what not to build.
               </Quote>
+
+              <p className="mt-8 text-[#27c93f]">$ cat roadmap.md</p>
               <p className="mt-4">
-                Today, MomentOS continues to evolve beyond automation. One of the ideas I'm most
-                excited about is Birthday Wrapped, inspired by Spotify Wrapped. Every year, people
-                receive birthday wishes from friends, family, colleagues, and communities, but
-                those moments disappear almost immediately. What if we could preserve them?
+                Next: <strong className="text-white">Birthday Wrapped</strong> — a
+                Spotify-Wrapped-style recap of your celebration. Who celebrated you, the messages,
+                the gifts, the people who show up year after year. A birthday that becomes a
+                memory instead of a disappearing notification.
               </p>
-              <p className="mt-4">
-                Imagine opening MomentOS after your birthday and seeing a beautifully designed
-                recap of your celebration. Who celebrated you. The messages you received. The
-                gifts friends contributed. The people who consistently showed up for you year
-                after year. Instead of becoming another notification that disappears, your
-                birthday becomes a memory worth revisiting and sharing.
-              </p>
-              <p className="mt-4">
-                At its core, MomentOS has never really been about birthdays, emails, or
-                automation.
-              </p>
+
+              <p className="mt-8 text-[#27c93f]">$ cat why.md</p>
               <Quote>It's about making sure people don't feel invisible.</Quote>
               <p className="mt-4">
-                Life gets busy. Meetings pile up. Families grow. Responsibilities increase. People
-                forget important dates, not because they don't care, but because life demands
-                their attention elsewhere. Technology has become incredibly good at helping us
-                communicate faster, yet it has done surprisingly little to help us remain
-                intentional with the people we love. I believe technology should strengthen
-                relationships, not replace them.
-              </p>
-              <p className="mt-4">
-                If MomentOS can help one employee feel appreciated, one spouse avoid forgetting an
-                anniversary, one church consistently celebrate its members, or one friend remind
-                another that they matter, then we've built something far more valuable than an
-                automation platform.
+                People forget dates not because they don't care, but because life is loud. If
+                MomentOS helps one employee feel appreciated or one friend remind another that
+                they matter, we've built something more valuable than automation.
               </p>
               <Quote>We've built a product that helps people feel seen.</Quote>
-              <p className="mt-4">And to me, that's a problem worth solving.</p>
 
               <p className="mt-8 text-[#27c93f]">$ cat role.md</p>
               <p className="mt-1">

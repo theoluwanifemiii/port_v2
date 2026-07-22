@@ -30,6 +30,13 @@ export interface ProjectCaseStudy {
   statCards?: { value: string; label: string }[];
   modules?: { iconName: string; name: string; description: string }[];
   architectureDiagram?: { root: string; branches: string[] };
+  architectureImage?: string;
+  portalArchitecture?: {
+    name: string;
+    color: string;
+    description: string;
+    modules: { name: string; viewOnly?: boolean; items: string[] }[];
+  }[];
   image: string;
   heroImage?: string;
   heroImages?: string[];
@@ -276,10 +283,55 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
       { iconName: "Headphones", name: "Customer Support", description: "Customer records, order history, and support tickets unified in one workspace for faster resolution." },
       { iconName: "Settings", name: "System Configuration", description: "Roles, permissions, notifications, integrations, commissions, exports, and platform-wide settings." },
     ],
-    architectureDiagram: {
-      root: "Admin Portal",
-      branches: ["Products", "Inventory", "Orders", "Riders", "Finance", "Sales", "Support", "Notifications", "Settings"],
-    },
+    portalArchitecture: [
+      {
+        name: "Full Admin Portal",
+        color: "#1E3A8A",
+        description: "Complete control — all 12 modules including governance",
+        modules: [
+          { name: "Dashboard", items: ["Overview metrics & charts", "Notification panel"] },
+          { name: "User Management", items: ["User directory", "Add user", "Single user profile & stats"] },
+          { name: "Product Management", items: ["Product catalog", "Add / edit product", "Unpublished products", "Delete product"] },
+          { name: "Order Management", items: ["Order list & detail", "Assign rider", "Mark in transit", "Reassign / delete order"] },
+          { name: "Inventory Management", items: ["Stock overview", "Stock transfer", "Reorder recommendations", "Stock alerts", "Approval modals", "Audit log"] },
+          { name: "Finance Management", items: ["Finance overview", "Request refund", "Refund approval", "Rejected refund"] },
+          { name: "Notification Management", items: ["Template library", "Create template", "Template detail", "Campaigns", "Quick send"] },
+          { name: "Marketing & Engagement", items: ["Banners", "Promo codes", "FAQ management"] },
+          { name: "Rider Management", items: ["Rider directory", "View rider", "Onboarding pipeline", "Review application", "Rider chat"] },
+          { name: "Customer Support", items: ["Ticket queue", "View ticket"] },
+          { name: "Team & Performance", items: ["Team members", "Assign target", "Withdrawal requests", "Leaderboard", "Export data"] },
+          { name: "System Config", items: ["Account settings", "Control & permissions (RBAC)", "Notification settings", "Integration settings", "Data & backup", "Commission structure"] },
+        ],
+      },
+      {
+        name: "Operations Portal",
+        color: "#059669",
+        description: "Day-to-day execution — scoped module set",
+        modules: [
+          { name: "Dashboard", items: ["Overview & notifications"] },
+          { name: "User Management", items: ["User directory", "Single user profile"] },
+          { name: "Product Management", viewOnly: true, items: ["Catalog browsing only"] },
+          { name: "Order Management", items: ["Order list & detail", "Order actions & modals"] },
+          { name: "Inventory Management", items: ["Stock transfer", "Reorder recommendations", "Stock alerts", "Audit log"] },
+          { name: "Customer Support", items: ["Ticket queue", "View ticket"] },
+          { name: "My Targets", items: ["View target", "Submit request"] },
+        ],
+      },
+      {
+        name: "Team Lead Portal",
+        color: "#7C3AED",
+        description: "Ops scope + team & performance management",
+        modules: [
+          { name: "Dashboard", items: ["Team overview"] },
+          { name: "User Management", items: ["User directory", "Single user profile"] },
+          { name: "Product Management", viewOnly: true, items: ["Catalog browsing only"] },
+          { name: "Order Management", items: ["Order list & detail", "Order actions & modals"] },
+          { name: "Inventory Management", items: ["Stock transfer", "Reorder recommendations", "Stock alerts", "Audit log"] },
+          { name: "Customer Support", items: ["Ticket queue", "View ticket"] },
+          { name: "Team Management", items: ["Team members", "Assign target", "Withdrawal requests", "Leaderboard", "Export data"] },
+        ],
+      },
+    ],
     timeline: ["Research", "Information Architecture", "Role Permissions", "Design System", "11 Modules", "Developer Handoff"],
     results: [
       "11 operational modules spanning the complete business lifecycle.",

@@ -97,6 +97,16 @@
   animation: gentleDrift 12s ease-in-out infinite;
 }
 
+.term-line {
+  opacity: 0;
+  animation: riseIn 0.3s cubic-bezier(0.2, 0.6, 0.2, 1) forwards;
+}
+
+.term-output {
+  opacity: 0;
+  animation: riseIn 0.45s cubic-bezier(0.2, 0.6, 0.2, 1) 0.18s forwards;
+}
+
 .portfolio-shell {
   background: #E7E7E2;
 }
@@ -125,6 +135,8 @@
   .reveal-up-delay-1,
   .reveal-up-delay-2,
   .reveal-up-delay-3,
+  .term-line,
+  .term-output,
   .drift {
     animation: none !important;
     opacity: 1 !important;
