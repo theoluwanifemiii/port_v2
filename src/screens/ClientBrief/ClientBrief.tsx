@@ -657,7 +657,7 @@ export const ClientBrief = () => {
 
         {/* Header */}
         <div className="mb-10">
-          <Link to="/" className="text-xs text-[#9a9fa6] hover:text-[#111214] transition-colors">
+          <Link to="/" className="text-xs text-[#767b83] hover:text-[#111214] transition-colors">
             olusworks.xyz
           </Link>
           <div className="mt-6 flex items-center gap-3">
@@ -696,7 +696,7 @@ export const ClientBrief = () => {
               <button
                 type="button"
                 onClick={clearDraft}
-                className="ml-3 shrink-0 whitespace-nowrap text-[#9a9fa6] underline hover:text-[#111214]"
+                className="ml-3 shrink-0 whitespace-nowrap text-[#767b83] underline hover:text-[#111214]"
               >
                 Start over
               </button>
@@ -708,7 +708,7 @@ export const ClientBrief = () => {
 
           {/* Basic info */}
           <section className="rounded-2xl border border-black/8 bg-white p-6 space-y-5">
-            <p className="text-[11px] uppercase tracking-[0.12em] text-[#9a9fa6]">About you</p>
+            <p className="text-[11px] uppercase tracking-[0.12em] text-[#767b83]">About you</p>
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
@@ -739,7 +739,7 @@ export const ClientBrief = () => {
 
             <div>
               <label className="mb-1.5 block text-sm font-medium text-[#24282d]">
-                Company <span className="font-normal text-[#9a9fa6]">(optional)</span>
+                Company <span className="font-normal text-[#767b83]">(optional)</span>
               </label>
               <input
                 name="company"
@@ -754,7 +754,7 @@ export const ClientBrief = () => {
 
           {/* Project type */}
           <section className="rounded-2xl border border-black/8 bg-white p-6 space-y-4">
-            <p className="text-[11px] uppercase tracking-[0.12em] text-[#9a9fa6]">Project type</p>
+            <p className="text-[11px] uppercase tracking-[0.12em] text-[#767b83]">Project type</p>
             <div>
               <label className="mb-1.5 block text-sm font-medium text-[#24282d]">
                 What are you looking to build or improve?
@@ -780,7 +780,7 @@ export const ClientBrief = () => {
           {/* Dynamic questions */}
           {projectType && (
             <section className="rounded-2xl border border-black/8 bg-white p-6 space-y-6">
-              <p className="text-[11px] uppercase tracking-[0.12em] text-[#9a9fa6]">
+              <p className="text-[11px] uppercase tracking-[0.12em] text-[#767b83]">
                 {projectType} tell me more
               </p>
 
@@ -789,7 +789,7 @@ export const ClientBrief = () => {
                   <label className="mb-1 block text-sm font-medium text-[#24282d]">
                     {i + 1}. {q.label}
                     {q.required === false && (
-                      <span className="ml-1.5 font-normal text-[#9a9fa6]">(optional)</span>
+                      <span className="ml-1.5 font-normal text-[#767b83]">(optional)</span>
                     )}
                   </label>
                   {q.hint && (
@@ -885,7 +885,7 @@ export const ClientBrief = () => {
                 </p>
               )}
 
-              <p className="text-center text-xs text-[#9a9fa6]">
+              <p className="text-center text-xs text-[#767b83]">
                 Your answers are sent to Olu@olusworks.xyz. A copy goes to your inbox.
               </p>
             </div>

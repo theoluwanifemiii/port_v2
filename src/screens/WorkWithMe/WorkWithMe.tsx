@@ -333,7 +333,7 @@ export const WorkWithMe = () => {
                   setFormData(emptyContactForm);
                   setDraftRestored(false);
                 }}
-                className="ml-3 shrink-0 whitespace-nowrap text-[#9a9fa6] underline hover:text-[#111214]"
+                className="ml-3 shrink-0 whitespace-nowrap text-[#767b83] underline hover:text-[#111214]"
               >
                 Start over
               </button>

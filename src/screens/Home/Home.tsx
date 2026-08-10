@@ -80,7 +80,7 @@ export const Home: FC = () => {
 
           <Link
             to="/work-with-me"
-            className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] no-underline transition-colors ${
+            className={`press-scale inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] no-underline transition-colors ${
               availability.isFull
                 ? "border-black/10 bg-[#f4f4f0] text-[#6a7077]"
                 : "border-black/20 bg-[#111214] text-white"

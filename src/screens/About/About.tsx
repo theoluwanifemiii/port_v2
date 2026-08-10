@@ -98,7 +98,7 @@ export const About = () => {
           <p className="text-[11px] uppercase tracking-[0.14em] text-[#70747b]">About</p>
           <Link
             to="/work-with-me"
-            className="inline-flex items-center gap-1.5 rounded-full border border-black/15 px-4 py-1.5 text-[11px] uppercase tracking-[0.1em] text-[#151618] no-underline transition-colors hover:bg-[#111214] hover:text-white"
+            className="press-scale inline-flex items-center gap-1.5 rounded-full border border-black/15 px-4 py-1.5 text-[11px] uppercase tracking-[0.1em] text-[#151618] no-underline transition-colors hover:bg-[#111214] hover:text-white"
           >
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />
             Available
@@ -174,12 +174,12 @@ export const About = () => {
 
         <div className="space-y-8 pt-0.5">
           <div>
-            <p className="text-[10px] uppercase tracking-[0.14em] text-[#9a9fa6]">Experience</p>
+            <p className="text-[10px] uppercase tracking-[0.14em] text-[#767b83]">Experience</p>
             <p className="mt-0.5 text-sm text-[#1a1d22]">4+ years</p>
           </div>
 
           <div>
-            <p className="text-[10px] uppercase tracking-[0.14em] text-[#9a9fa6]">Capabilities</p>
+            <p className="text-[10px] uppercase tracking-[0.14em] text-[#767b83]">Capabilities</p>
             <div className="mt-2 flex flex-wrap gap-1.5">
               {capabilities.map((cap) => (
                 <span
@@ -193,11 +193,11 @@ export const About = () => {
           </div>
 
           <div>
-            <p className="text-[10px] uppercase tracking-[0.14em] text-[#9a9fa6]">Building Stack</p>
+            <p className="text-[10px] uppercase tracking-[0.14em] text-[#767b83]">Building Stack</p>
             <dl className="mt-2 space-y-3">
               {buildingStack.map(({ category, items }) => (
                 <div key={category}>
-                  <dt className="text-[10px] uppercase tracking-[0.1em] text-[#b0b4ba]">{category}</dt>
+                  <dt className="text-[10px] uppercase tracking-[0.1em] text-[#7d828a]">{category}</dt>
                   <dd className="mt-0.5 text-[12px] leading-relaxed text-[#3a3d44]">{items}</dd>
                 </div>
               ))}
@@ -230,7 +230,7 @@ export const About = () => {
 
           {/* Counter | Arrows | Attribution */}
           <div className="mt-5 flex items-center justify-between gap-4">
-            <p className="shrink-0 text-[11px] uppercase tracking-[0.14em] text-[#9a9fa6]">
+            <p className="shrink-0 text-[11px] uppercase tracking-[0.14em] text-[#767b83]">
               {activeIndex + 1} / {testimonials.length}
             </p>
 
@@ -257,7 +257,7 @@ export const About = () => {
               style={{ animation: "fadeUp 0.45s ease forwards" }}
             >
               <p className="text-sm font-medium text-[#111214]">{t.name}</p>
-              <p className="mt-0.5 text-[11px] uppercase tracking-[0.1em] text-[#9a9fa6]">
+              <p className="mt-0.5 text-[11px] uppercase tracking-[0.1em] text-[#767b83]">
                 {t.role}
                 {t.company ? ` · ${t.company}` : ""}
               </p>

@@ -6,6 +6,7 @@ interface SoundEffects {
   playMinimize: () => void;
   playMaximize: () => void;
   playError: () => void;
+  playKeystroke: () => void;
 }
 
 export const useSoundEffects = (enabled: boolean = true): SoundEffects => {
@@ -24,6 +25,13 @@ export const useSoundEffects = (enabled: boolean = true): SoundEffects => {
     if (!enabled || !audioContextRef.current) return;
 
     const ctx = audioContextRef.current;
+    // Browsers create AudioContext in a "suspended" state until a user
+    // gesture unlocks it. The context is constructed in an effect (not
+    // itself a gesture), so without this the very first sound after
+    // mount can silently no-op. Resuming is safe to call every time.
+    if (ctx.state === "suspended") {
+      void ctx.resume();
+    }
     const oscillator = ctx.createOscillator();
     const gainNode = ctx.createGain();
 
@@ -65,11 +73,19 @@ export const useSoundEffects = (enabled: boolean = true): SoundEffects => {
     playTone(200, 0.2);
   }, [playTone]);
 
+  // Deliberately quieter and shorter than playClick, with a touch of pitch
+  // variance — this fires once per typed character, so it needs to sit in
+  // the background rather than announce itself.
+  const playKeystroke = useCallback(() => {
+    playTone(1150 + Math.random() * 200, 0.02, 0.025);
+  }, [playTone]);
+
   return {
     playStartup,
     playClick,
     playMinimize,
     playMaximize,
     playError,
+    playKeystroke,
   };
 };

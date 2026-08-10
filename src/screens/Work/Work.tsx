@@ -1,15 +1,25 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 import { PortfolioShell } from "../../components/PortfolioShell";
+import { MagneticHover } from "../../components/MagneticHover";
 import { portfolioProjects } from "../../data/projects";
 
 export const Work = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [imagePos, setImagePos] = useState({ x: 0, y: 0 });
   const sectionRef = useRef<HTMLDivElement>(null);
 
+  // Preview position is driven by motion values + a spring, not React state.
+  // Position updates never touch the render cycle, and `translate3d` is a
+  // compositor-only property — no layout, no lag between cursor and card.
+  const previewX = useMotionValue(0);
+  const previewY = useMotionValue(0);
+  const springX = useSpring(previewX, { stiffness: 300, damping: 30, mass: 0.4 });
+  const springY = useSpring(previewY, { stiffness: 300, damping: 30, mass: 0.4 });
+
   const handleMouseMove = (e: React.MouseEvent) => {
-    setImagePos({ x: e.clientX, y: e.clientY });
+    previewX.set(e.clientX + 28);
+    previewY.set(e.clientY - 130);
   };
 
   return (
@@ -38,7 +48,7 @@ export const Work = () => {
               onMouseLeave={() => setHoveredIndex(null)}
             >
               <div className="flex items-start gap-8">
-                <span className="mt-1 text-[11px] uppercase tracking-[0.14em] text-[#9a9fa6]">
+                <span className="mt-1 text-[11px] uppercase tracking-[0.14em] text-[#767b83]">
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <div>
@@ -55,7 +65,7 @@ export const Work = () => {
                     <span key={tag}>{tag}</span>
                   ))}
                 </div>
-                <span className="text-[11px] uppercase tracking-[0.14em] text-[#9a9fa6]">
+                <span className="text-[11px] uppercase tracking-[0.14em] text-[#767b83]">
                   {project.year}
                 </span>
               </div>
@@ -69,7 +79,7 @@ export const Work = () => {
                 to={`/work/${project.projectId}`}
                 className="block no-underline"
               >
-                {content}
+                <MagneticHover strength={0.05}>{content}</MagneticHover>
               </Link>
             );
           }
@@ -83,26 +93,26 @@ export const Work = () => {
                 rel="noopener noreferrer"
                 className="block no-underline"
               >
-                {content}
+                <MagneticHover strength={0.05}>{content}</MagneticHover>
               </a>
             );
           }
 
           return (
             <div key={project.id} className="block">
-              {content}
+              <MagneticHover strength={0.05}>{content}</MagneticHover>
             </div>
           );
         })}
         <div className="border-t border-black/10" />
       </section>
 
-      {/* Floating image preview on hover */}
-      <div
-        className="pointer-events-none fixed z-50 h-[260px] w-[380px] overflow-hidden transition-opacity duration-200"
+      {/* Floating image preview on hover — tracks the cursor via spring, never React state */}
+      <motion.div
+        className="pointer-events-none fixed left-0 top-0 z-50 h-[260px] w-[380px] overflow-hidden will-change-transform transition-opacity duration-200"
         style={{
-          left: imagePos.x + 28,
-          top: imagePos.y - 130,
+          x: springX,
+          y: springY,
           opacity: hoveredIndex !== null && portfolioProjects[hoveredIndex]?.image ? 1 : 0,
         }}
       >
@@ -113,7 +123,7 @@ export const Work = () => {
             className="h-full w-full object-cover"
           />
         )}
-      </div>
+      </motion.div>
     </PortfolioShell>
   );
 };

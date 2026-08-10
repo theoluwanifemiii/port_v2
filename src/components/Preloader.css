@@ -8,6 +8,7 @@
   justify-content: flex-start;
   opacity: 0;
   will-change: transform;
+  cursor: pointer;
 }
 
 .pl-root.pl-visible {

@@ -37,7 +37,9 @@ const App = () => {
   const handlePreloaderComplete = () => {
     sessionStorage.setItem("hasSeenPreloader", "true");
     setShowContent(true);
-    setTimeout(() => setIsLoading(false), 800);
+    // Unmount immediately — the panel has already clipped itself away, and
+    // holding it in the tree only delays the first real interaction.
+    setIsLoading(false);
   };
 
   const location = useLocation();

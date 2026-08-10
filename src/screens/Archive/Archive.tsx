@@ -54,7 +54,7 @@ export const Archive = () => (
             className="group flex items-center justify-between border-t border-black/10 py-8 transition-opacity duration-300"
           >
             <div className="flex items-start gap-8">
-              <span className="mt-1 shrink-0 text-[11px] uppercase tracking-[0.14em] text-[#9a9fa6]">
+              <span className="mt-1 shrink-0 text-[11px] uppercase tracking-[0.14em] text-[#767b83]">
                 {String(index + 1).padStart(2, "0")}
               </span>
               <div>
@@ -68,10 +68,10 @@ export const Archive = () => (
             </div>
 
             <div className="hidden shrink-0 flex-col items-end gap-1 sm:flex">
-              <span className="text-[11px] uppercase tracking-[0.14em] text-[#9a9fa6]">
+              <span className="text-[11px] uppercase tracking-[0.14em] text-[#767b83]">
                 {item.category}
               </span>
-              <span className="text-[11px] uppercase tracking-[0.14em] text-[#9a9fa6]">
+              <span className="text-[11px] uppercase tracking-[0.14em] text-[#767b83]">
                 {item.year}
               </span>
             </div>

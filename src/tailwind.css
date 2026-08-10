@@ -24,6 +24,58 @@
     cursor: text;
   }
 
+  /* ──────────────────────────────────────────────────────────────────
+     Press + focus feedback.
+
+     Feedback fires on pointer-down, not on release, and it is the same
+     on touch as on mouse — hover states alone leave phone users with no
+     acknowledgement at all until navigation completes.
+
+     .xp-* controls are excluded: they carry their own bevel press
+     treatment and a second transform would fight it.
+     ────────────────────────────────────────────────────────────────── */
+
+  a, button, [role="button"], input[type="submit"], input[type="button"] {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  a:not(.xp-button):not(.xp-start-button):not(.xp-button-green),
+  button:not(.xp-button):not(.xp-start-button):not(.xp-button-green),
+  [role="button"]:not(.xp-button):not(.xp-start-button):not(.xp-button-green) {
+    transition: opacity 100ms cubic-bezier(0.2, 0, 0, 1),
+                transform 100ms cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  /* Universal, layout-safe: works on full-bleed nav cells and rows too. */
+  a:not(.xp-button):not(.xp-start-button):not(.xp-button-green):active,
+  button:not(.xp-button):not(.xp-start-button):not(.xp-button-green):active,
+  [role="button"]:not(.xp-button):not(.xp-start-button):not(.xp-button-green):active {
+    opacity: 0.72;
+  }
+
+  /* Scale only where the element reads as a discrete control. */
+  button:not(.xp-button):not(.xp-start-button):not(.xp-button-green):active,
+  [role="button"]:not(.xp-button):not(.xp-start-button):not(.xp-button-green):active,
+  .press-scale:active {
+    transform: scale(0.97);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--surface-ink);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a:active, button:active, [role="button"]:active, .press-scale:active {
+    transform: none !important;
+  }
+}
+
+@layer base {
+
   :root {
     --surface: #E7E7E2;
     --surface-card: #f7f7f3;
@@ -105,6 +157,63 @@
 .term-output {
   opacity: 0;
   animation: riseIn 0.45s cubic-bezier(0.2, 0.6, 0.2, 1) 0.18s forwards;
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   Terminal / Lab environment (/lab, /lab/momentos)
+   ────────────────────────────────────────────────────────────────── */
+
+.workspace-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.workspace-spotlight {
+  background: radial-gradient(
+    600px circle at var(--spot-x, 50%) var(--spot-y, 20%),
+    rgba(255, 255, 255, 0.055),
+    transparent 60%
+  );
+}
+
+.workspace-vignette {
+  background: radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.6) 100%);
+}
+
+.crt-scanlines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.035) 0px,
+    rgba(255, 255, 255, 0.035) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
+}
+
+@keyframes crtFlicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.94; }
+  94% { opacity: 1; }
+  97% { opacity: 0.97; }
+  98% { opacity: 1; }
+}
+
+.crt-flicker {
+  animation: crtFlicker 7s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crt-flicker {
+    animation: none !important;
+  }
 }
 
 .portfolio-shell {

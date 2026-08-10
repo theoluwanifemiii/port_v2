@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { PortfolioShell } from "../../components/PortfolioShell";
+import { Reveal } from "../../components/Reveal";
 import { projectCaseStudies, portfolioProjects } from "../../data/projects";
 
 const getProjectTitle = (projectId?: string) => {
@@ -30,25 +31,25 @@ export const ProjectDetail = () => {
     <PortfolioShell contentClassName="max-w-[760px]">
 
       {/* Back + metadata */}
-      <div className="reveal-up flex items-center justify-between">
+      <div className="flex items-center justify-between">
         <Link
           to="/work"
           className="text-[11px] uppercase tracking-[0.14em] text-[#6a6f76] no-underline"
         >
           ← Back
         </Link>
-        <span className="text-[11px] uppercase tracking-[0.14em] text-[#9a9fa6]">
+        <span className="text-[11px] uppercase tracking-[0.14em] text-[#767b83]">
           {project.year} — {project.client}{project.role ? ` — ${project.role}` : ""}
         </span>
       </div>
 
       {/* Title */}
-      <section className="mt-10 reveal-up flex items-center justify-between gap-6">
+      <Reveal as="section" className="mt-10 flex items-center justify-between gap-6">
         <div>
           <h1 className="section-title text-5xl leading-[1.04] text-[#111214] sm:text-6xl">
             {project.title}
           </h1>
-          <p className="mt-2 text-[11px] uppercase tracking-[0.14em] text-[#9a9fa6]">
+          <p className="mt-2 text-[11px] uppercase tracking-[0.14em] text-[#767b83]">
             {project.tags.join(" · ")}
           </p>
         </div>
@@ -57,33 +58,33 @@ export const ProjectDetail = () => {
             href={`https://${project.website}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="shrink-0 rounded-full border border-black/10 bg-white px-5 py-2.5 text-sm font-medium text-[#111214] no-underline transition-colors hover:bg-[#111214] hover:text-white"
+            className="press-scale shrink-0 rounded-full border border-black/10 bg-white px-5 py-2.5 text-sm font-medium text-[#111214] no-underline transition-colors hover:bg-[#111214] hover:text-white"
           >
             View project
           </a>
         )}
-      </section>
+      </Reveal>
 
       {/* Lead */}
-      <section className="mt-10 reveal-up reveal-up-delay-1">
+      <Reveal as="section" className="mt-10">
         <p className="text-[17px] leading-[1.75] text-[#525760]">
           {project.summary}
         </p>
-      </section>
+      </Reveal>
 
       {/* Pull quote */}
       {project.pullQuote && (
-        <section className="mt-10 reveal-up reveal-up-delay-1">
+        <Reveal as="section" className="mt-10">
           <blockquote className="border-l-2 border-[#111214] pl-6">
-            <p className="text-lg leading-relaxed text-[#9a9fa6] italic sm:text-xl">
+            <p className="text-lg leading-relaxed text-[#767b83] italic sm:text-xl">
               "{project.pullQuote}"
             </p>
           </blockquote>
-        </section>
+        </Reveal>
       )}
 
       {/* Hero image */}
-      <section className="mt-12 reveal-up reveal-up-delay-1">
+      <Reveal as="section" className="mt-12">
         <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen">
           {project.heroImages && project.heroImages.length >= 2 ? (
             <div className="grid sm:grid-cols-2" style={{ height: "520px" }}>
@@ -105,11 +106,11 @@ export const ProjectDetail = () => {
             />
           )}
         </div>
-      </section>
+      </Reveal>
 
       {/* My Role */}
       {(project.roleDescription || project.responsibilities) && (
-        <section className="mt-28 reveal-up reveal-up-delay-2">
+        <Reveal as="section" className="mt-28">
           <Chapter label="My Role" />
           {project.roleDescription && (
             <p className="mt-5 text-[15px] leading-[1.8] text-[#525760]">{project.roleDescription}</p>
@@ -126,34 +127,34 @@ export const ProjectDetail = () => {
               ))}
             </ul>
           )}
-        </section>
+        </Reveal>
       )}
 
       {/* The Problem */}
-      <section className="mt-28 reveal-up reveal-up-delay-2">
+      <Reveal as="section" className="mt-28">
         <Chapter label="The Problem" />
         <p className="mt-5 text-[15px] leading-[1.8] text-[#525760]">{project.context}</p>
-      </section>
+      </Reveal>
 
       {/* Cost of the Problem */}
       {project.costOfProblem && (
-        <section className="mt-24 reveal-up reveal-up-delay-2">
+        <Reveal as="section" className="mt-24">
           <Chapter label="The Cost of the Problem" />
           <p className="mt-5 text-[15px] leading-[1.8] text-[#525760]">{project.costOfProblem}</p>
-        </section>
+        </Reveal>
       )}
 
       {/* The Challenge */}
-      <section className="mt-28 reveal-up reveal-up-delay-2">
+      <Reveal as="section" className="mt-28">
         <Chapter label="The Challenge" />
         <p className="mt-6 text-2xl leading-[1.5] text-[#1a1d21] sm:text-3xl">
           {project.challenge}
         </p>
-      </section>
+      </Reveal>
 
       {/* Before images */}
       {project.challengeImages && project.challengeImages.length > 0 && (
-        <section className="mt-12 reveal-up reveal-up-delay-2">
+        <Reveal as="section" className="mt-12">
           <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen px-6 sm:px-10">
             <div className="grid gap-3 sm:grid-cols-2">
               {project.challengeImages.map((image, i) => (
@@ -167,28 +168,28 @@ export const ProjectDetail = () => {
               ))}
             </div>
           </div>
-        </section>
+        </Reveal>
       )}
 
 
       {/* Design Process */}
-      <section className="mt-28 reveal-up reveal-up-delay-2">
+      <Reveal as="section" className="mt-28">
         <Chapter label="Design Process" />
         <ol className="mt-8 space-y-10">
           {project.approach.map((item, i) => (
             <li key={item} className="flex gap-6">
-              <span className="mt-0.5 shrink-0 text-[11px] uppercase tracking-[0.14em] text-[#b0b5bb]">
+              <span className="mt-0.5 shrink-0 text-[11px] uppercase tracking-[0.14em] text-[#7d828a]">
                 {String(i + 1).padStart(2, "0")}
               </span>
               <p className="text-[15px] leading-[1.8] text-[#525760]">{item}</p>
             </li>
           ))}
         </ol>
-      </section>
+      </Reveal>
 
       {/* Timeline */}
       {project.timeline && project.timeline.length > 0 && (
-        <section className="mt-16 reveal-up reveal-up-delay-2">
+        <Reveal as="section" className="mt-16">
           <Chapter label="How We Got Here" />
           <div className="mt-6 flex flex-wrap items-center gap-2">
             {project.timeline.map((step, i) => (
@@ -202,11 +203,11 @@ export const ProjectDetail = () => {
               </React.Fragment>
             ))}
           </div>
-        </section>
+        </Reveal>
       )}
 
       {/* The Solution */}
-      <section className="mt-32 reveal-up reveal-up-delay-2">
+      <Reveal as="section" className="mt-32">
         <Chapter label={project.solutionLabel ?? "The Solution"} />
         <p className="mt-6 text-2xl leading-[1.5] text-[#1a1d21] sm:text-3xl">
           {project.outcome}
@@ -219,11 +220,11 @@ export const ProjectDetail = () => {
           </div>
         )}
 
-      </section>
+      </Reveal>
 
       {/* Gallery scroll strip */}
       {project.galleryImages && project.galleryImages.length > 0 && (
-        <section className="mt-14 reveal-up reveal-up-delay-2">
+        <Reveal as="section" className="mt-14">
           <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen overflow-hidden">
             <div
               className="flex gap-4 w-max animate-marquee hover:[animation-play-state:paused]"
@@ -239,11 +240,11 @@ export const ProjectDetail = () => {
               ))}
             </div>
           </div>
-        </section>
+        </Reveal>
       )}
 
       {/* Impact */}
-      <section className="mt-20 reveal-up reveal-up-delay-2">
+      <Reveal as="section" className="mt-20">
         <Chapter label="Impact" />
 
         <ul className="mt-8 space-y-4">
@@ -254,18 +255,21 @@ export const ProjectDetail = () => {
             </li>
           ))}
         </ul>
-      </section>
+      </Reveal>
 
       {/* Key Takeaway */}
       {project.keyTakeaway && (
-        <section className="mt-20 reveal-up reveal-up-delay-2">
+        <Reveal as="section" className="mt-20">
           <Chapter label="Key Takeaway" />
           <p className="mt-5 text-[15px] leading-[1.8] text-[#525760]">{project.keyTakeaway}</p>
-        </section>
+        </Reveal>
       )}
 
       {/* Prev / Next */}
-      <section className="mt-28 flex items-center justify-between border-t border-black/[0.07] pt-8 reveal-up reveal-up-delay-3">
+      <Reveal
+        as="section"
+        className="mt-28 flex items-center justify-between border-t border-black/[0.07] pt-8"
+      >
         {project.previousProjectId ? (
           <Link
             to={`/work/${project.previousProjectId}`}
@@ -286,12 +290,12 @@ export const ProjectDetail = () => {
         ) : (
           <span />
         )}
-      </section>
+      </Reveal>
 
     </PortfolioShell>
   );
 };
 
 const Chapter = ({ label }: { label: string }) => (
-  <p className="text-[11px] uppercase tracking-[0.16em] text-[#9a9fa6]">{label}</p>
+  <p className="text-[11px] uppercase tracking-[0.16em] text-[#767b83]">{label}</p>
 );

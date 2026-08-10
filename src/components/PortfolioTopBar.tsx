@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import StaggeredMenu from "./StaggeredMenu";
+import { useAvailability } from "../hooks/useAvailability";
 
 interface NavItem {
   label: string;
@@ -18,18 +19,58 @@ const navItems: NavItem[] = [
 const resumeUrl =
   "https://drive.google.com/file/d/1ECIrky5LKSqD7UoULMbYi7zt35m3VXe9/view?usp=sharing";
 
-const nowLabel = () =>
+const formatNow = () =>
   new Date().toLocaleTimeString("en-US", {
     hour: "numeric",
     minute: "2-digit",
   });
 
+/** A clock that only renders once shows a time that is wrong all session. */
+const useClock = () => {
+  const [now, setNow] = React.useState(formatNow);
+
+  React.useEffect(() => {
+    // Align the first tick to the top of the next minute, then tick per minute.
+    let interval: number | undefined;
+    const align = window.setTimeout(() => {
+      setNow(formatNow());
+      interval = window.setInterval(() => setNow(formatNow()), 60_000);
+    }, (60 - new Date().getSeconds()) * 1000);
+
+    return () => {
+      window.clearTimeout(align);
+      if (interval) window.clearInterval(interval);
+    };
+  }, []);
+
+  return now;
+};
+
 export const PortfolioTopBar: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const now = useClock();
+  const availability = useAvailability();
 
   const isItemActive = (href: string) =>
     location.pathname === href || location.pathname.startsWith(`${href}/`);
+
+  // Single source of truth — the header and the home hero must never disagree.
+  const statusDotClass =
+    availability.status === "full"
+      ? "bg-[#9a9fa6]"
+      : availability.status === "limited"
+      ? "bg-amber-400"
+      : availability.status === "loading"
+      ? "bg-[#c2c6cb]"
+      : "bg-[#3FBE00]";
+
+  const statusLabel =
+    availability.status === "loading"
+      ? "Available For Hire"
+      : availability.isFull
+      ? "Fully booked"
+      : "Available For Hire";
 
   return (
     <header className="sticky top-0 z-40 border-b border-black/10 bg-[#efefeb]/90 backdrop-blur-sm">
@@ -70,8 +111,8 @@ export const PortfolioTopBar: React.FC = () => {
           </button>
 
           <div className="hidden h-16 items-center gap-2 border-r border-black/10 px-7 md:flex">
-            <span className="h-2 w-2 shrink-0 rounded-full bg-[#3FBE00]" />
-            <span className="whitespace-nowrap text-sm text-[#1e2023]">Available For Hire</span>
+            <span className={`h-2 w-2 shrink-0 rounded-full ${statusDotClass}`} />
+            <span className="whitespace-nowrap text-sm text-[#1e2023]">{statusLabel}</span>
           </div>
 
           <nav className="hidden h-16 items-center md:flex" aria-label="Primary">
@@ -93,7 +134,9 @@ export const PortfolioTopBar: React.FC = () => {
         </div>
 
         <div className="flex h-16 shrink-0 items-center gap-4">
-          <span className="hidden text-sm text-[#4f545d] sm:inline">{nowLabel()}</span>
+          <span className="hidden text-sm text-[#4f545d] sm:inline" aria-hidden="true">
+            {now}
+          </span>
           <StaggeredMenu
             className="md:hidden"
             position="right"
@@ -134,7 +177,7 @@ export const PortfolioTopBar: React.FC = () => {
             href={resumeUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden rounded-full border border-[#151618]/20 bg-[#151618] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-white no-underline transition-colors hover:bg-black md:inline-flex"
+            className="press-scale hidden rounded-full border border-[#151618]/20 bg-[#151618] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-white no-underline transition-colors hover:bg-black md:inline-flex"
           >
             Resume
           </a>

@@ -1,5 +1,10 @@
 import { FC, ReactNode, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useReducedMotion } from "framer-motion";
+import { TerminalEnvironment } from "../../components/TerminalEnvironment";
+import { TerminalWindow } from "../../components/TerminalWindow";
+import { TypedLine } from "../../components/TypedLine";
+import { useSoundEffects } from "../../hooks/useSoundEffects";
 
 const stack = ["React", "TypeScript", "Node.js", "Prisma", "PostgreSQL", "AI Engineering"];
 
@@ -42,10 +47,36 @@ const aliases: Record<string, string> = {
 
 const WHOAMI_COMMAND = "$ whoami";
 
+// A short system-boot log, played once before the terminal goes
+// interactive. It's the "arriving somewhere" beat — quick per line, but
+// enough lines that it reads as a machine actually starting up.
+const bootLines = [
+  "connecting to olusworks://lab",
+  "loading design system",
+  "mounting stack: react · typescript · node",
+  "warming up terminal",
+];
+
 type HistoryEntry = { command: string; output: ReactNode };
 
 export const Lab: FC = () => {
   const navigate = useNavigate();
+  const shouldReduceMotion = useReducedMotion();
+
+  // Sound defaults off — the first tap of the toggle is the same gesture
+  // that unlocks the browser's audio context, so there's no dead click.
+  const [soundOn, setSoundOn] = useState(false);
+  const soundEffects = useSoundEffects(soundOn);
+
+  const [bootLineIndex, setBootLineIndex] = useState(0);
+  // Reduced motion: skip the boot theatrics entirely rather than showing
+  // them instantly — lazy-initialized so there's no first-frame flash of
+  // boot log before this flips. The command-line UI is still fully usable,
+  // it just arrives without the character-by-character performance.
+  const [bootDone, setBootDone] = useState(
+    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+
   const [typedCommand, setTypedCommand] = useState("");
   const [showOutput, setShowOutput] = useState(false);
   const [ready, setReady] = useState(false);
@@ -57,11 +88,42 @@ export const Lab: FC = () => {
   const bottomRef = useRef<HTMLDivElement>(null);
   const timeoutsRef = useRef<number[]>([]);
 
+  const later = (fn: () => void, ms: number) => {
+    timeoutsRef.current.push(window.setTimeout(fn, ms));
+  };
+
   useEffect(() => {
+    const timeouts = timeoutsRef.current;
+    return () => timeouts.forEach((t) => window.clearTimeout(t));
+  }, []);
+
+  const handleBootLineComplete = (i: number) => {
+    if (i === bootLines.length - 1) {
+      later(() => {
+        soundEffects.playStartup();
+        setBootDone(true);
+      }, 220);
+    } else {
+      later(() => setBootLineIndex((idx) => idx + 1), 110);
+    }
+  };
+
+  // The `$ whoami` typing sequence only starts once the boot log finishes.
+  useEffect(() => {
+    if (!bootDone) return;
+
+    if (shouldReduceMotion) {
+      setTypedCommand(WHOAMI_COMMAND);
+      setShowOutput(true);
+      setReady(true);
+      return;
+    }
+
     let i = 0;
     const typeInterval = window.setInterval(() => {
       i += 1;
       setTypedCommand(WHOAMI_COMMAND.slice(0, i));
+      soundEffects.playKeystroke();
       if (i >= WHOAMI_COMMAND.length) {
         window.clearInterval(typeInterval);
         window.setTimeout(() => setShowOutput(true), 250);
@@ -70,20 +132,12 @@ export const Lab: FC = () => {
     }, 60);
 
     return () => window.clearInterval(typeInterval);
-  }, []);
-
-  useEffect(() => {
-    const timeouts = timeoutsRef.current;
-    return () => timeouts.forEach((t) => window.clearTimeout(t));
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bootDone]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ block: "nearest" });
   }, [history, ready]);
-
-  const later = (fn: () => void, ms: number) => {
-    timeoutsRef.current.push(window.setTimeout(fn, ms));
-  };
 
   const runCommand = (raw: string) => {
     const typed = raw.trim();
@@ -233,6 +287,7 @@ export const Lab: FC = () => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
+      soundEffects.playClick();
       runCommand(input);
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
@@ -251,17 +306,25 @@ export const Lab: FC = () => {
         setHistoryIndex(newIndex);
         setInput(commandHistory[newIndex]);
       }
+    } else if (e.key.length === 1) {
+      soundEffects.playKeystroke();
     }
   };
 
-  const focusInput = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleBodyClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if ((e.target as HTMLElement).closest("a,button")) return;
+    // Boot log still playing — treat a click as "skip", same as the
+    // Preloader. Never lock the visitor out of the page they're on.
+    if (!bootDone) {
+      setBootDone(true);
+      return;
+    }
     inputRef.current?.focus();
   };
 
   return (
-    <div className="min-h-screen bg-[#111214] text-[#e7e8ea]">
-      <header className="sticky top-0 z-40 border-b border-white/10 bg-[#111214]/90 backdrop-blur-sm">
+    <TerminalEnvironment>
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-[#0a0b0d]/85 backdrop-blur-sm">
         <div className="flex w-full items-center px-6 sm:px-8 lg:px-12">
           <Link
             to="/"
@@ -275,7 +338,7 @@ export const Lab: FC = () => {
             />
             <div className="whitespace-nowrap">
               <p className="text-sm font-medium text-white">Oluwanifemi Osunsanya</p>
-              <p className="text-[11px] uppercase tracking-[0.12em] text-[#9a9ea5]">
+              <p className="text-[11px] uppercase tracking-[0.12em] text-[#9aa1a9]">
                 Product Builder
               </p>
             </div>
@@ -295,14 +358,14 @@ export const Lab: FC = () => {
               <span className="relative inline-flex h-5 w-9 shrink-0 items-center rounded-full border border-white/15 bg-white/10">
                 <span className="inline-block h-3.5 w-3.5 translate-x-[18px] transform rounded-full bg-white" />
               </span>
-              <span className="whitespace-nowrap text-[11px] uppercase tracking-[0.12em] text-[#9a9ea5]">
+              <span className="whitespace-nowrap text-[11px] uppercase tracking-[0.12em] text-[#9aa1a9]">
                 Builder mode
               </span>
             </button>
 
             <Link
               to="/"
-              className="text-[11px] uppercase tracking-[0.12em] text-[#9a9ea5] no-underline hover:text-white"
+              className="text-[11px] uppercase tracking-[0.12em] text-[#9aa1a9] no-underline hover:text-white"
             >
               ← Back to portfolio
             </Link>
@@ -312,86 +375,101 @@ export const Lab: FC = () => {
 
       <main className="px-4 py-10 sm:px-6">
         <div className="mx-auto max-w-2xl">
-          <div className="overflow-hidden rounded-lg border border-white/10 shadow-2xl">
-            <div className="flex items-center gap-2 border-b border-white/10 bg-gradient-to-r from-[#1c1f24] to-[#13151a] px-4 py-2">
-              <span className="h-3 w-3 rounded-full bg-[#ff5f56]" />
-              <span className="h-3 w-3 rounded-full bg-[#ffbd2e]" />
-              <span className="h-3 w-3 rounded-full bg-[#27c93f]" />
-              <span
-                className="ml-2 text-[11px] text-[#8a8f98]"
-                style={{ fontFamily: "Sometype Mono, monospace" }}
-              >
-                builder@olusworks:~
-              </span>
-            </div>
-
-            <div
-              className="cursor-text bg-[#0d0f12] px-5 py-6 text-sm leading-relaxed"
-              style={{ fontFamily: "Sometype Mono, monospace" }}
-              onClick={focusInput}
-            >
-              {/* Boot sequence */}
-              <p className="text-[#27c93f]">
-                {typedCommand}
-                <span className="animate-pulse">{typedCommand.length < WHOAMI_COMMAND.length ? "▍" : ""}</span>
-              </p>
-              <p className={`mt-1 transition-opacity duration-300 ${showOutput ? "opacity-100" : "opacity-0"}`}>
-                Oluwanifemi Osunsanya — I help founders turn ideas into products people actually
-                use. Based in Lagos, Nigeria.
-              </p>
-
-              <div className={`transition-opacity duration-300 ${ready ? "opacity-100" : "opacity-0"}`}>
-                <p className="mt-5 text-[#8a8f98]">
-                  Type <span className="text-white">`help`</span> or tap a command.
-                </p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {chipCommands.map((cmd) => (
-                    <button
-                      key={cmd}
-                      type="button"
-                      onClick={() => runCommand(cmd)}
-                      className="rounded border border-white/15 bg-white/5 px-2 py-1 text-xs text-[#e7e8ea] transition-colors hover:border-white/30 hover:bg-white/10"
-                    >
-                      {cmd}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Command history */}
-                {history.map((entry, i) => (
-                  <div key={i} className="mt-5">
-                    <p className="term-line text-[#27c93f]">$ {entry.command}</p>
-                    {entry.output && <div className="term-output">{entry.output}</div>}
-                  </div>
-                ))}
-
-                {/* Live prompt */}
-                <p className="mt-5 text-[#27c93f]">
-                  $ <span className="text-[#e7e8ea]">{input}</span>
-                  <span className="animate-pulse">▍</span>
-                </p>
-                <input
-                  ref={inputRef}
-                  type="text"
-                  value={input}
-                  onChange={(e) => {
-                    setInput(e.target.value);
-                    setHistoryIndex(-1);
-                  }}
-                  onKeyDown={handleKeyDown}
-                  className="absolute h-px w-px opacity-0"
-                  aria-label="Terminal input"
-                  autoCapitalize="off"
-                  autoComplete="off"
-                  autoCorrect="off"
-                  spellCheck={false}
-                />
-                <div ref={bottomRef} />
+          <TerminalWindow
+            title="builder@olusworks:~"
+            soundOn={soundOn}
+            onToggleSound={() => setSoundOn((s) => !s)}
+            onBodyClick={handleBodyClick}
+          >
+            {!bootDone ? (
+              <div className="space-y-1.5">
+                {bootLines.map((line, i) =>
+                  i <= bootLineIndex ? (
+                    <p key={line} className="text-[#6a6e76]">
+                      <span className="text-[#2f6b34]">›</span>{" "}
+                      <TypedLine
+                        text={line}
+                        active={i === bootLineIndex}
+                        instant={i < bootLineIndex}
+                        speed={16}
+                        onComplete={() => handleBootLineComplete(i)}
+                        onChar={() => soundEffects.playKeystroke()}
+                        className="text-[#9aa1a9]"
+                      />
+                    </p>
+                  ) : null
+                )}
               </div>
-            </div>
-          </div>
+            ) : (
+              <>
+                {/* Boot sequence */}
+                <p className="text-[#27c93f]">
+                  {typedCommand}
+                  <span className="animate-pulse">
+                    {typedCommand.length < WHOAMI_COMMAND.length ? "▍" : ""}
+                  </span>
+                </p>
+                <p className={`mt-1 transition-opacity duration-300 ${showOutput ? "opacity-100" : "opacity-0"}`}>
+                  Oluwanifemi Osunsanya — I help founders turn ideas into products people actually
+                  use. Based in Lagos, Nigeria.
+                </p>
+
+                <div className={`transition-opacity duration-300 ${ready ? "opacity-100" : "opacity-0"}`}>
+                  <p className="mt-5 text-[#8a8f98]">
+                    Type <span className="text-white">`help`</span> or tap a command.
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {chipCommands.map((cmd) => (
+                      <button
+                        key={cmd}
+                        type="button"
+                        onClick={() => {
+                          soundEffects.playClick();
+                          runCommand(cmd);
+                        }}
+                        className="press-scale rounded border border-white/15 bg-white/5 px-2 py-1 text-xs text-[#e7e8ea] transition-colors hover:border-white/30 hover:bg-white/10"
+                      >
+                        {cmd}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Command history */}
+                  {history.map((entry, i) => (
+                    <div key={i} className="mt-5">
+                      <p className="term-line text-[#27c93f]">$ {entry.command}</p>
+                      {entry.output && <div className="term-output">{entry.output}</div>}
+                    </div>
+                  ))}
+
+                  {/* Live prompt */}
+                  <p className="mt-5 text-[#27c93f]">
+                    $ <span className="text-[#e7e8ea]">{input}</span>
+                    <span className="animate-pulse">▍</span>
+                  </p>
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={input}
+                    onChange={(e) => {
+                      setInput(e.target.value);
+                      setHistoryIndex(-1);
+                    }}
+                    onKeyDown={handleKeyDown}
+                    className="absolute h-px w-px opacity-0"
+                    aria-label="Terminal input"
+                    autoCapitalize="off"
+                    autoComplete="off"
+                    autoCorrect="off"
+                    spellCheck={false}
+                  />
+                  <div ref={bottomRef} />
+                </div>
+              </>
+            )}
+          </TerminalWindow>
         </div>
       </main>
-    </div>
+    </TerminalEnvironment>
   );
 };
