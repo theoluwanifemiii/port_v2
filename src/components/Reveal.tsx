@@ -39,7 +39,16 @@ export const Reveal: React.FC<RevealProps> = ({
       className={className}
       initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2, margin: "0px 0px -10% 0px" }}
+      // No bottom margin shrink here. A negative bottom margin ("-10%")
+      // requires the element to scroll past a point *higher* than the
+      // viewport's actual bottom edge before it's considered "in view" —
+      // which works fine when there's more page below to keep scrolling
+      // through, but creates a permanent dead zone for the LAST element on
+      // a page: the browser hits its natural scroll limit before the
+      // element can ever cross that raised threshold, so it never fires.
+      // `amount: 0.2` alone (20% of the element visible in the real
+      // viewport) triggers reliably regardless of what's below it.
+      viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.7, ease: [0.2, 0.6, 0.2, 1], delay }}
     >
       {children}
