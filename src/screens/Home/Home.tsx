@@ -1,9 +1,7 @@
-import { FC, ReactNode, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useAvailability } from "../../hooks/useAvailability";
+import { CSSProperties, FC, ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { EMAIL, LINKEDIN_URL, RESUME_URL, SiteHeader } from "../../components/site/SiteChrome";
 import "./Home.css";
-
-const EMAIL = "Olu@olusworks.xyz";
 
 interface WorkRow {
   title: string;
@@ -86,38 +84,94 @@ const ROWS: WorkRow[] = [
   },
 ];
 
-function lagosTime(): string {
+const INTRO_WORDS = ["I", "design", "the", "systems", "behind", "complex", "products"];
+const INTRO_SEEN_KEY = "hasSeenHomeIntro";
+
+type Phase = "init" | "hold" | "move" | "done";
+
+function shouldPlayIntro(hash: string): boolean {
+  if (hash === "#work") return false;
   try {
-    return new Date().toLocaleTimeString("en-US", {
-      timeZone: "Africa/Lagos",
-      hour: "numeric",
-      minute: "2-digit",
-    });
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
   } catch {
-    return "";
+    /* no matchMedia */
   }
+  try {
+    if (sessionStorage.getItem(INTRO_SEEN_KEY)) return false;
+  } catch {
+    /* storage blocked: play it */
+  }
+  return true;
 }
 
-function useLagosTime(): string {
-  const [time, setTime] = useState(lagosTime);
+/**
+ * The headline appears alone, word by word, then travels into its place in
+ * the hero while the rest of the page fades in. Plays once per session.
+ */
+function useIntro(hash: string) {
+  const [phase, setPhase] = useState<Phase>(() => (shouldPlayIntro(hash) ? "init" : "done"));
+  const [introW, setIntroW] = useState<string>("auto");
+  const [offset, setOffset] = useState({ dx: 0, dy: 0 });
+  const h1Ref = useRef<HTMLHeadingElement | null>(null);
+  const introRef = useRef<HTMLParagraphElement | null>(null);
+
   useEffect(() => {
-    const id = window.setInterval(() => setTime(lagosTime()), 30000);
-    return () => window.clearInterval(id);
-  }, []);
-  return time;
-}
+    if (phase !== "init") return;
+    let gone = false;
+    const timers: number[] = [];
+    const measure = () => {
+      if (h1Ref.current) setIntroW(`${h1Ref.current.offsetWidth}px`);
+    };
 
-const AvailabilityStatus: FC = () => {
-  const availability = useAvailability();
-  const label =
-    availability.status === "loading" ? "Available for projects" : availability.label;
-  return (
-    <Link to="/work-with-me" className="status">
-      <span className={`dot dot-${availability.status}`} aria-hidden="true" />
-      {label}
-    </Link>
-  );
-};
+    try {
+      sessionStorage.setItem(INTRO_SEEN_KEY, "true");
+    } catch {
+      /* ignore */
+    }
+
+    timers.push(
+      window.setTimeout(() => {
+        measure();
+        setPhase("hold");
+      }, 120)
+    );
+
+    const fonts: Promise<unknown> = document.fonts?.ready ?? Promise.resolve();
+    const fontsOrTimeout = Promise.race([
+      fonts.catch(() => undefined),
+      new Promise((r) => timers.push(window.setTimeout(r, 3000))),
+    ]);
+    const minHold = new Promise((r) => timers.push(window.setTimeout(r, 2000)));
+
+    Promise.all([fontsOrTimeout, minHold]).then(() => {
+      if (gone) return;
+      measure();
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => {
+          if (gone) return;
+          if (!h1Ref.current || !introRef.current) {
+            setPhase("done");
+            return;
+          }
+          const h = h1Ref.current.getBoundingClientRect();
+          const o = introRef.current.getBoundingClientRect();
+          setOffset({ dx: Math.round(h.left - o.left), dy: Math.round(h.top - o.top) });
+          setPhase("move");
+          timers.push(window.setTimeout(() => setPhase("done"), 1050));
+        })
+      );
+    });
+
+    return () => {
+      gone = true;
+      timers.forEach((t) => window.clearTimeout(t));
+    };
+    // Runs once on mount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return { phase, introW, offset, h1Ref, introRef };
+}
 
 const RowLink: FC<{
   row: WorkRow;
@@ -147,109 +201,51 @@ const RowLink: FC<{
   );
 };
 
+const delay = (d: string) => ({ "--d": d }) as CSSProperties;
+
 export const Home: FC = () => {
-  const time = useLagosTime();
-  const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
   const [activeRow, setActiveRow] = useState<number | null>(null);
+  const { phase, introW, offset, h1Ref, introRef } = useIntro(location.hash);
 
-  // Lock page scroll and allow Escape to close while the mobile menu is open.
-  useEffect(() => {
-    if (!menuOpen) return;
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setMenuOpen(false);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = prevOverflow;
-      window.removeEventListener("keydown", onKey);
-    };
-  }, [menuOpen]);
-
-  const closeMenu = () => setMenuOpen(false);
+  // Arriving from another page via "Work" lands on /#work: scroll to the list.
+  useLayoutEffect(() => {
+    if (location.hash !== "#work") return;
+    const id = window.setTimeout(() => {
+      document.getElementById("work")?.scrollIntoView({ block: "start" });
+    }, 50);
+    return () => window.clearTimeout(id);
+  }, [location.hash]);
 
   return (
-    <div className="d4-home">
-      <div className="first">
-        {/* Navigation */}
-        <header className="wrap d4-header">
-          <div style={{ display: "flex", alignItems: "center", gap: 36 }}>
-            <Link to="/" className="brand">
-              olu.
-            </Link>
-            <nav aria-label="Primary" className="mono d-nav">
-              <a href="#work">Work</a>
-              <Link to="/about">About</Link>
-              <Link to="/work-with-me">Contact</Link>
-            </nav>
-          </div>
-          <div className="d-status">
-            <span className="mono muted" style={{ fontSize: 12, letterSpacing: "0.02em" }}>
-              {time} · Lagos, NG
-            </span>
-            <AvailabilityStatus />
-          </div>
-          <button
-            type="button"
-            className="m-menu-btn"
-            aria-controls="m-menu"
-            aria-expanded={menuOpen}
-            onClick={() => setMenuOpen((open) => !open)}
-          >
-            MENU
-          </button>
-        </header>
-
-        {menuOpen && (
-          <div id="m-menu" className="m-menu" role="dialog" aria-modal="true" aria-label="Site menu">
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <Link to="/" className="brand" onClick={closeMenu}>
-                olu.
-              </Link>
-              <button type="button" className="m-menu-btn" onClick={closeMenu} autoFocus>
-                CLOSE
-              </button>
-            </div>
-            <nav aria-label="Mobile" className="m-nav">
-              <a href="#work" className="m-link" onClick={closeMenu}>
-                <span className="m-num">01</span>Work
-              </a>
-              <Link to="/about" className="m-link" onClick={closeMenu}>
-                <span className="m-num">02</span>About
-              </Link>
-              <Link to="/work-with-me" className="m-link" onClick={closeMenu}>
-                <span className="m-num">03</span>Contact
-              </Link>
-            </nav>
-            <div
-              style={{
-                marginTop: "auto",
-                paddingTop: 48,
-                display: "flex",
-                flexDirection: "column",
-                gap: 16,
-              }}
+    <div className="d4 d4-home">
+      <div className="first" data-phase={phase}>
+        {phase !== "done" && (
+          <div className="intro" data-phase={phase} aria-hidden="true">
+            <p
+              ref={introRef}
+              className="intro-text"
+              style={{ width: introW, transform: `translate(${offset.dx}px, ${offset.dy}px)` }}
             >
-              <AvailabilityStatus />
-              <a
-                href={`mailto:${EMAIL}`}
-                className="ulink"
-                style={{ alignSelf: "flex-start", fontSize: 20, letterSpacing: "-0.02em" }}
-              >
-                {EMAIL}
-              </a>
-              <span className="mono muted" style={{ fontSize: 12, letterSpacing: "0.04em" }}>
-                {time} · LAGOS, NG
-              </span>
-            </div>
+              {INTRO_WORDS.map((word, i) => (
+                <span key={word}>
+                  <span className="iw" style={{ "--i": i } as CSSProperties}>
+                    {word}
+                  </span>
+                  {i < INTRO_WORDS.length - 1 ? " " : ""}
+                </span>
+              ))}
+              <span className="intro-rest">, then build them into software people can use.</span>
+            </p>
           </div>
         )}
+
+        <SiteHeader onHome className="rv" style={delay("0s")} />
 
         {/* Hero: portrait anchors, text leads */}
         <section className="wrap hero-section">
           <div className="hero">
-            <figure className="hero-fig">
+            <figure className="hero-fig rv" style={delay(".08s")}>
               <img
                 src="/home/olu-portrait.jpg"
                 alt="Black and white studio portrait of Olu Osunsanya"
@@ -263,22 +259,26 @@ export const Home: FC = () => {
             </figure>
 
             <div className="hero-copy">
-              <p className="mono eyebrow">PRODUCT DESIGNER WHO BUILDS</p>
-              <h1 className="balance">
-                I design the systems behind complex products, then build them into software{" "}
-                <span>people can use.</span>
+              <p className="mono eyebrow rv" style={delay(".5s")}>
+                PRODUCT DESIGNER WHO BUILDS
+              </p>
+              <h1 ref={h1Ref} className="hero-h1">
+                I design the systems behind complex products
+                <span className="h1-rest">
+                  , then build them into software <span className="soft">people can use.</span>
+                </span>
               </h1>
-              <p className="hero-body">
+              <p className="hero-body rv" style={delay(".6s")}>
                 I work across product design and engineering, building fintech and B2B products
                 around complex workflows, permissions and operational needs. From defining the
                 experience to implementing the interface, I help teams turn messy problems into
                 software they can ship. I'm also building MomentOS and Fig2MD.
               </p>
-              <div className="hero-ctas">
+              <div className="hero-ctas rv" style={delay(".7s")}>
                 <a href="#work" className="d4-btn">
                   See the work
                 </a>
-                <Link to="/work-with-me" className="ulink" style={{ fontSize: 15, fontWeight: 500 }}>
+                <Link to="/contact" className="ulink" style={{ fontSize: 15, fontWeight: 500 }}>
                   Let's talk about your product →
                 </Link>
               </div>
@@ -310,8 +310,8 @@ export const Home: FC = () => {
                   <span className="row-desc">{row.desc}</span>
                   {row.outcome && (
                     <span className="row-outcome">
-                      <span className="mono label">OUTCOME</span>
-                      <span className="value">{row.outcome}</span>
+                      <span className="mono k">OUTCOME</span>
+                      <span className="v">{row.outcome}</span>
                     </span>
                   )}
                   <span className="mono row-meta">{row.meta}</span>
@@ -339,7 +339,7 @@ export const Home: FC = () => {
         </div>
       </section>
 
-      {/* Contact and footer */}
+      {/* Contact */}
       <section className="wrap contact">
         <div className="contact-inner">
           <div className="contact-lead">
@@ -350,27 +350,22 @@ export const Home: FC = () => {
             </a>
           </div>
           <div className="mono socials">
-            <a
-              href="https://www.linkedin.com/in/oluwanifemiosunsanya/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer">
               LINKEDIN ↗
             </a>
-            <a
-              href="https://drive.google.com/file/d/1ECIrky5LKSqD7UoULMbYi7zt35m3VXe9/view?usp=sharing"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href={RESUME_URL} target="_blank" rel="noopener noreferrer">
               RESUME ↗
             </a>
           </div>
         </div>
-        <div className="mono footer">
+      </section>
+
+      <footer className="wrap mono d4-footer">
+        <div>
           <span>© 2026 OLUWANIFEMI OSUNSANYA</span>
           <span>DESIGNED AND BUILT BY OLU</span>
         </div>
-      </section>
+      </footer>
     </div>
   );
 };

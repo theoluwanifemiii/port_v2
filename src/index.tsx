@@ -7,7 +7,8 @@ import { PageTransition } from "./components/PageTransition";
 import { Home } from "./screens/Home/Home";
 import { Work } from "./screens/Work/Work";
 import { ProjectDetail } from "./screens/ProjectDetail/ProjectDetail";
-import { WorkWithMe } from "./screens/WorkWithMe/WorkWithMe";
+import { Contact } from "./screens/Contact/Contact";
+import { DigitvantCase } from "./screens/CaseStudy/DigitvantCase";
 import { About } from "./screens/About/About";
 import { Preloader } from "./components/Preloader";
 import { Fintech } from "./screens/Fintech/Fintech";
@@ -51,8 +52,10 @@ const App = () => {
           <Routes location={location}>
             <Route path="/" element={<Home />} />
             <Route path="/work" element={<Work />} />
+            <Route path="/work/digitvant-pay" element={<DigitvantCase />} />
             <Route path="/work/:projectId" element={<ProjectDetail />} />
-            <Route path="/work-with-me" element={<WorkWithMe />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/work-with-me" element={<Contact />} />
             <Route path="/about" element={<About />} />
             <Route path="/fintech" element={<Fintech />} /> {/* Hidden page */}
             <Route path="/payble-v21" element={<PaybleV21 />} />
