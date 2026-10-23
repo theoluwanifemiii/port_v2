@@ -1,5 +1,6 @@
 import { FC, useState } from "react";
 import { Link } from "react-router-dom";
+import { api, convex, scannedTable } from "./backend";
 import { GOOGLE_REVIEW_URL, IMG, PATHS } from "./theme";
 import { BackLink, Eyebrow, IconBack, IconButton, IconExternal, IconPin, IconStar, PhoneShell } from "./ui";
 
@@ -28,7 +29,7 @@ export const Review: FC<{ preset?: ReviewPreset }> = ({ preset = "live" }) => {
   const [aspects, setAspects] = useState<Record<string, boolean>>(filled ? FILLED.aspects : {});
   const [text, setText] = useState(filled ? FILLED.text : "");
   const [name, setName] = useState(filled ? FILLED.name : "");
-  const [table, setTable] = useState(filled ? FILLED.table : "");
+  const [table, setTable] = useState(() => (filled ? FILLED.table : preset === "live" ? scannedTable() : ""));
   const [contact, setContact] = useState("");
   const [copied, setCopied] = useState(false);
 
@@ -39,6 +40,23 @@ export const Review: FC<{ preset?: ReviewPreset }> = ({ preset = "live" }) => {
       ? "We are sorry we fell short. A manager will reach out to you personally."
       : "We are sorry we fell short. Your words are already with our management."
     : "Your review is now with our management. We look forward to welcoming you again.";
+
+  const submit = () => {
+    // Preset screens in the screen index never post.
+    if (preset === "live" && convex) {
+      convex
+        .mutation(api.euphoria.submitReview, {
+          rating,
+          aspects: ASPECTS.filter((a) => aspects[a]),
+          text,
+          name,
+          table,
+          contact,
+        })
+        .catch((e) => console.error("Euphoria: could not send the review", e));
+    }
+    setStep(2);
+  };
 
   const copy = () => {
     try {
@@ -185,7 +203,7 @@ export const Review: FC<{ preset?: ReviewPreset }> = ({ preset = "live" }) => {
 
           <button
             type="button"
-            onClick={() => setStep(2)}
+            onClick={submit}
             className="h-14 w-full cursor-pointer border-none bg-eu-pink text-xs font-medium tracking-[0.24em] text-eu-black"
           >
             SUBMIT REVIEW

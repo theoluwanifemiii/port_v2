@@ -9,6 +9,8 @@
  */
 
 import type * as emailActions from "../emailActions.js";
+import type * as euphoria from "../euphoria.js";
+import type * as euphoriaLogic from "../euphoriaLogic.js";
 import type * as http from "../http.js";
 import type * as slots from "../slots.js";
 
@@ -20,6 +22,8 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   emailActions: typeof emailActions;
+  euphoria: typeof euphoria;
+  euphoriaLogic: typeof euphoriaLogic;
   http: typeof http;
   slots: typeof slots;
 }>;

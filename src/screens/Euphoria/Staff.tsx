@@ -1,4 +1,7 @@
 import { FC, useEffect, useRef, useState } from "react";
+import { StaffAction, reduceTable } from "../../../convex/euphoriaLogic";
+import { api, convex, useLive } from "./backend";
+import { Connecting, PinScreen, useStaffAccess } from "./StaffAccess";
 import { IMG, TABLE, clockNow, naira } from "./theme";
 import { useFrame } from "./ui";
 import { OrderItem, TableOrder, readStoredOrder, writeStoredOrder } from "./useTableOrder";
@@ -50,29 +53,42 @@ const liveCall = (v: TableOrder | null): Call | null => {
 const outlineBtn = "h-[60px] cursor-pointer border border-eu-green bg-transparent px-[26px] text-xs font-medium tracking-[0.18em] text-eu-green";
 const solidBtn = "h-[60px] flex-1 cursor-pointer border-none bg-eu-green text-xs font-medium tracking-[0.18em] text-eu-ivory";
 
-/** 23: the server's tablet. Table 12's calls come live from the guest screens. */
-export const Staff: FC = () => {
+const minutesAgo = (t: number, now: number) => {
+  const m = Math.floor((now - t) / 60000);
+  return m < 1 ? "Just now" : m + " min";
+};
+
+/** 23: the server's tablet. Calls come live from guests' phones. */
+export const Staff: FC<{ demo?: boolean }> = ({ demo = false }) => {
   const frame = useFrame();
+  const access = useStaffAccess(demo);
+  const remote = access.status === "ready";
   const [store, setStore] = useState<TableOrder | null>(() => readStoredOrder());
   const [samples, setSamples] = useState(SAMPLES);
   const [selected, setSelected] = useState<string | null>(null);
   const [acked, setAcked] = useState<Record<string, boolean>>({});
   const [clock, setClock] = useState(clockNow);
+  const [now, setNow] = useState(Date.now);
   const lastRaw = useRef<string>("");
+  const remoteCalls = useLive(api.euphoria.activeCalls, remote ? { key: access.key } : "skip");
 
-  // Poll so a guest screen in the same tab (the screen index) shows up too.
+  // Offline, poll this browser's stored order so a guest screen in the same
+  // browser shows up too. Online, the backend pushes calls as they happen.
   useEffect(() => {
     const tick = window.setInterval(() => {
-      const v = readStoredOrder();
-      const raw = JSON.stringify(v);
-      if (raw !== lastRaw.current) {
-        lastRaw.current = raw;
-        setStore(v);
+      if (!remote) {
+        const v = readStoredOrder();
+        const raw = JSON.stringify(v);
+        if (raw !== lastRaw.current) {
+          lastRaw.current = raw;
+          setStore(v);
+        }
       }
       setClock(clockNow());
+      setNow(Date.now());
     }, 1200);
     return () => window.clearInterval(tick);
-  }, []);
+  }, [remote]);
 
   const write = (v: TableOrder) => {
     writeStoredOrder(v);
@@ -80,30 +96,44 @@ export const Staff: FC = () => {
     setStore(v);
   };
 
-  const live = liveCall(store);
-  const list = (live ? [live] : []).concat(samples);
+  const offlineCall = liveCall(store);
+  const list: Call[] = remote
+    ? (remoteCalls.data ?? []).map((c) => ({ id: "t" + c.table, live: true, table: c.table, type: c.type, wait: minutesAgo(c.since, now), items: c.items }))
+    : (offlineCall ? [offlineCall] : []).concat(samples);
   const selId = selected && list.some((c) => c.id === selected) ? selected : list[0]?.id ?? null;
   const cur = list.find((c) => c.id === selId);
 
+  const staffAct = (action: StaffAction) => {
+    if (!cur || !convex) return;
+    convex
+      .mutation(api.euphoria.staffAct, { key: access.key, table: cur.table, action })
+      .catch((e) => console.error("Euphoria: could not update the table", e));
+    setSelected(null);
+  };
   const drop = () => {
     setSamples(samples.filter((c) => c.id !== selId));
     setSelected(null);
   };
   const confirm = () => {
-    if (cur?.live && store) {
-      write({ ...store, order: {}, stage: "draft", sent: store.sent.concat([{ time: clockNow(), items: Object.values(store.order) }]) });
+    if (remote) staffAct({ type: "confirmRound", time: clockNow() });
+    else if (cur?.live && store) {
+      write(reduceTable(store, { type: "confirmRound", time: clockNow() }));
       setSelected(null);
     } else drop();
   };
   const deliver = () => {
-    if (cur?.live && store) {
-      write({ ...store, bill: "done" });
+    if (remote) staffAct({ type: "deliverBill" });
+    else if (cur?.live && store) {
+      write(reduceTable(store, { type: "deliverBill" }));
       setSelected(null);
     } else drop();
   };
   const ack = () => selId && setAcked({ ...acked, [selId]: true });
 
   const size = frame === "page" ? "h-[100dvh] w-full" : "h-[820px] w-[1180px]";
+  if (access.status === "checking") return <Connecting className={size} />;
+  if (access.status === "needPin")
+    return <PinScreen title="Floor Calls" message={access.message} onSubmit={access.setKey} className={size} />;
 
   return (
     <div className={`eu-light flex flex-col overflow-hidden bg-eu-ivory font-eu-sans text-eu-black ${size}`}>
@@ -115,10 +145,19 @@ export const Staff: FC = () => {
         <span className="text-[13px] font-light tracking-[0.08em]">Floor calls</span>
         <span className="flex-1" />
         <span className="hidden border border-eu-ivory/[0.35] px-2.5 py-1.5 text-[11px] font-medium tracking-[0.14em] lg:inline">
-          TABLE {TABLE} IS LIVE FROM THE GUEST SCREENS
+          {remote ? "LIVE FROM GUEST PHONES" : "SAMPLE CALLS, PLUS THIS BROWSER'S TABLE"}
         </span>
         <span className="hidden text-[13px] font-light sm:inline">[Server name]</span>
         <span className="font-eu-display text-[15px] tracking-[0.06em]">{clock}</span>
+        {remote && (
+          <button
+            type="button"
+            onClick={access.signOut}
+            className="h-11 cursor-pointer border border-eu-ivory/[0.35] bg-transparent px-3 text-[11px] font-medium tracking-[0.14em] text-eu-ivory"
+          >
+            LOCK
+          </button>
+        )}
       </header>
 
       <div className="grid min-h-0 flex-1 grid-cols-1 grid-rows-[minmax(0,40%)_minmax(0,1fr)] md:grid-cols-[380px_minmax(0,1fr)] md:grid-rows-1">
@@ -171,7 +210,7 @@ export const Staff: FC = () => {
                   <span className={`font-eu-display text-[11px] tracking-[0.3em] ${TYPE[cur.type].text}`}>{TYPE[cur.type].label}</span>
                   <h2 className="m-0 font-eu-display text-[40px] font-normal tracking-[0.05em]">Table {cur.table}</h2>
                   <span className="text-[13px] font-light text-eu-muted">
-                    {(cur.live ? "From the guest's phone" : "Sample call") + ",  waiting " + cur.wait.toLowerCase()}
+                    {(cur.live ? "From the guest's phone" : "Sample call") + ",  " + (cur.wait === "Just now" ? "just now" : "waiting " + cur.wait)}
                   </span>
                 </div>
                 {acked[cur.id] && (

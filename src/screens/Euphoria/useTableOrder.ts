@@ -1,30 +1,18 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ORDER_KEY, clockNow } from "./theme";
+import {
+  EMPTY_ORDER,
+  GuestAction,
+  TableAction,
+  TableOrder,
+  fromDoc,
+  reduceTable,
+  toDoc,
+} from "../../../convex/euphoriaLogic";
+import { api, convex, useLive } from "./backend";
+import { ORDER_KEY } from "./theme";
 
-export interface OrderItem {
-  name: string;
-  /** Upper-case category or group the item came from. */
-  cat: string;
-  amount: number;
-  qty: number;
-  note: string;
-}
-
-export interface Round {
-  time: string;
-  items: OrderItem[];
-}
-
-export interface TableOrder {
-  /** Items chosen but not yet confirmed by a server, keyed "CAT|Name". */
-  order: Record<string, OrderItem>;
-  stage: "draft" | "called";
-  /** Rounds the server has confirmed and sent to the kitchen. */
-  sent: Round[];
-  bill: "none" | "requested" | "done";
-}
-
-export const EMPTY_ORDER: TableOrder = { order: {}, stage: "draft", sent: [], bill: "none" };
+export type { OrderItem, Round, TableOrder, TableAction } from "../../../convex/euphoriaLogic";
+export { EMPTY_ORDER };
 
 const normalize = (v: Partial<TableOrder> | null | undefined): TableOrder => ({
   order: v?.order ?? {},
@@ -32,6 +20,8 @@ const normalize = (v: Partial<TableOrder> | null | undefined): TableOrder => ({
   sent: v?.sent ?? [],
   bill: v?.bill ?? "none",
 });
+
+/* Offline fallback: the order lives in this browser only. */
 
 export const readStoredOrder = (): TableOrder | null => {
   try {
@@ -50,50 +40,75 @@ export const writeStoredOrder = (v: TableOrder) => {
   }
 };
 
+interface Options {
+  /** A real guest session (not a preset screen in the screen index). */
+  live: boolean;
+  seed?: Partial<TableOrder>;
+  table: string;
+}
+
 /**
- * The table's running order. When `live`, it is persisted to localStorage so
- * the food and drinks menus share one order and the staff tablet can see it;
- * preset screens (in the screen index) keep it in memory only.
+ * The table's running order.
+ *
+ * - Live, with the backend deployed: stored in Convex, so the staff tablet
+ *   sees it from any device and its confirmations come straight back here.
+ *   Changes show instantly (optimistic) and settle when the server agrees.
+ * - Live, no backend: stored in this browser (the food and drinks menus
+ *   still share it), and `remote` is false so the menu can simulate staff.
+ * - Preset screens: in memory only.
  */
-export function useTableOrder(live: boolean, seed?: Partial<TableOrder>) {
-  const [state, setState] = useState<TableOrder>(() => normalize(seed));
-  const ref = useRef(state);
-  ref.current = state;
+export function useTableOrder({ live, seed, table }: Options) {
+  const wantRemote = live && !!convex;
+  const { data, error } = useLive(api.euphoria.getTable, wantRemote ? { table } : "skip");
+  const remote = wantRemote && !error;
+
+  const [local, setLocal] = useState<TableOrder>(() => normalize(seed));
+  const ref = useRef(local);
+  ref.current = local;
 
   useEffect(() => {
-    if (!live) return;
+    if (!live || remote) return;
     const stored = readStoredOrder();
-    if (stored) setState(stored);
+    if (stored) setLocal(stored);
     const onStorage = (e: StorageEvent) => {
       if (e.key !== ORDER_KEY) return;
       try {
-        setState(normalize(JSON.parse(e.newValue || "{}")));
+        setLocal(normalize(JSON.parse(e.newValue || "{}")));
       } catch {
         /* ignore malformed writes */
       }
     };
     window.addEventListener("storage", onStorage);
     return () => window.removeEventListener("storage", onStorage);
-  }, [live]);
+  }, [live, remote]);
 
-  const save = useCallback(
-    (patch: Partial<TableOrder>) => {
-      const next: TableOrder = { ...ref.current, ...patch };
-      if (!Object.keys(next.order).length && next.stage === "called") next.stage = "draft";
+  const dispatch = useCallback(
+    (action: TableAction) => {
+      if (remote && convex) {
+        convex
+          .mutation(
+            api.euphoria.act,
+            // Staff actions only ever run here in the offline simulation.
+            { table, action: action as GuestAction },
+            {
+              optimisticUpdate: (store) => {
+                const cur = store.getQuery(api.euphoria.getTable, { table });
+                if (cur === undefined) return;
+                store.setQuery(api.euphoria.getTable, { table }, toDoc(reduceTable(fromDoc(cur), action)));
+              },
+            },
+          )
+          .catch((e) => console.error("Euphoria: could not update the order", e));
+        return;
+      }
+      const next = reduceTable(ref.current, action);
       ref.current = next;
-      setState(next);
+      setLocal(next);
       if (live) writeStoredOrder(next);
     },
-    [live],
+    [remote, table, live],
   );
 
-  /** What the server does on the tablet: move the selection into a confirmed round. */
-  const confirmRound = useCallback(() => {
-    const s = ref.current;
-    const keys = Object.keys(s.order);
-    if (!keys.length) return;
-    save({ sent: s.sent.concat([{ time: clockNow(), items: keys.map((k) => s.order[k]) }]), order: {}, stage: "draft" });
-  }, [save]);
-
-  return { state, save, confirmRound };
+  const state = remote ? fromDoc(data) : local;
+  return { state, dispatch, remote, loading: remote && data === undefined };
 }
