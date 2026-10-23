@@ -19,6 +19,7 @@ import { ArchiveXP } from "./screens/Archive/ArchiveXP";
 import { Lab } from "./screens/Lab/Lab";
 import { MomentOS } from "./screens/Lab/MomentOS";
 import { ClientBrief } from "./screens/ClientBrief/ClientBrief";
+import { Euphoria } from "./screens/Euphoria/Euphoria";
 
 inject();
 
@@ -43,6 +44,17 @@ const App = () => {
   };
 
   const location = useLocation();
+
+  // The Euphoria digital menu is opened by restaurant guests from a table QR
+  // code, so it runs on its own: no portfolio preloader or route transition.
+  if (location.pathname === "/euphoria" || location.pathname.startsWith("/euphoria/")) {
+    return (
+      <Routes location={location}>
+        <Route path="/euphoria/*" element={<Euphoria />} />
+      </Routes>
+    );
+  }
+
   return (
     <>
       {isLoading && <Preloader onComplete={handlePreloaderComplete} />}

@@ -44,6 +44,19 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Euphoria digital menu (Sujimoto Group palette)
+        eu: {
+          black: "#0B0B0C",
+          green: "#0F3B2E",
+          pink: "#EAB1B4",
+          "pink-hover": "#F6D3D5",
+          ivory: "#FAF8F3",
+          claret: "#6B1E2A",
+          navy: "#14213D",
+          raised: "#141416",
+          panel: "#121214",
+          muted: "#4A4A4C",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -60,6 +73,9 @@ module.exports = {
           '"Segoe UI Symbol"',
           '"Noto Color Emoji"',
         ],
+        "eu-display": ["Cinzel", '"Times New Roman"', "serif"],
+        "eu-serif": ['"Sorts Mill Goudy"', "Georgia", "serif"],
+        "eu-sans": ["Poppins", '"Helvetica Neue"', "Arial", "sans-serif"],
       },
       keyframes: {
         "accordion-down": {
