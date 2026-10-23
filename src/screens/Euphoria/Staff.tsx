@@ -1,9 +1,11 @@
 import { FC, useEffect, useRef, useState } from "react";
 import { StaffAction, reduceTable } from "../../../convex/euphoriaLogic";
 import { api, convex, useLive } from "./backend";
+import { Link } from "react-router-dom";
+import { GuestReview, REVIEW_STATUS, ReviewStatus, useGuestReviews } from "./reviews";
 import { Connecting, PinScreen, useStaffAccess } from "./StaffAccess";
-import { IMG, TABLE, clockNow, naira } from "./theme";
-import { useFrame } from "./ui";
+import { IMG, PATHS, TABLE, clockNow, naira } from "./theme";
+import { IconStar, useFrame } from "./ui";
 import { OrderItem, TableOrder, readStoredOrder, writeStoredOrder } from "./useTableOrder";
 
 type CallType = "order" | "more" | "bill";
@@ -71,6 +73,9 @@ export const Staff: FC<{ demo?: boolean }> = ({ demo = false }) => {
   const [now, setNow] = useState(Date.now);
   const lastRaw = useRef<string>("");
   const remoteCalls = useLive(api.euphoria.activeCalls, remote ? { key: access.key } : "skip");
+  const [view, setView] = useState<"calls" | "reviews">("calls");
+  const guestReviews = useGuestReviews(remote, access.key);
+  const openReviews = guestReviews.reviews.filter((r) => r.status !== "replied").length;
 
   // Offline, poll this browser's stored order so a guest screen in the same
   // browser shows up too. Online, the backend pushes calls as they happen.
@@ -142,7 +147,10 @@ export const Staff: FC<{ demo?: boolean }> = ({ demo = false }) => {
         <img src={IMG.mark} alt="" aria-hidden="true" className="h-[31px] w-8" />
         <span className="font-eu-display text-base tracking-[0.24em]">EUPHORIA</span>
         <span className="h-6 w-px bg-eu-ivory/30" />
-        <span className="text-[13px] font-light tracking-[0.08em]">Floor calls</span>
+        <nav aria-label="Staff screens" className="flex h-full items-stretch gap-1">
+          <HeaderTab on={view === "calls"} onClick={() => setView("calls")} label="Floor calls" count={list.length} />
+          <HeaderTab on={view === "reviews"} onClick={() => setView("reviews")} label="Reviews" count={openReviews} />
+        </nav>
         <span className="flex-1" />
         <span className="hidden border border-eu-ivory/[0.35] px-2.5 py-1.5 text-[11px] font-medium tracking-[0.14em] lg:inline">
           {remote ? "LIVE FROM GUEST PHONES" : "SAMPLE CALLS, PLUS THIS BROWSER'S TABLE"}
@@ -160,6 +168,9 @@ export const Staff: FC<{ demo?: boolean }> = ({ demo = false }) => {
         )}
       </header>
 
+      {view === "reviews" ? (
+        <StaffReviews {...guestReviews} remote={remote} />
+      ) : (
       <div className="grid min-h-0 flex-1 grid-cols-1 grid-rows-[minmax(0,40%)_minmax(0,1fr)] md:grid-cols-[380px_minmax(0,1fr)] md:grid-rows-1">
         {/* Queue */}
         <section aria-label="Calls waiting" className="flex min-h-0 flex-col border-b border-eu-black/[0.12] md:border-b-0 md:border-r">
@@ -272,6 +283,112 @@ export const Staff: FC<{ demo?: boolean }> = ({ demo = false }) => {
           )}
         </section>
       </div>
+      )}
     </div>
+  );
+};
+
+const HeaderTab: FC<{ on: boolean; onClick: () => void; label: string; count: number }> = ({ on, onClick, label, count }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    aria-current={on ? "page" : undefined}
+    className={`flex h-full cursor-pointer items-center gap-2 border-0 border-b-2 border-solid bg-transparent px-3 text-[13px] tracking-[0.08em] text-eu-ivory ${
+      on ? "border-eu-pink font-medium" : "border-transparent font-light text-eu-ivory/75"
+    }`}
+  >
+    {label}
+    {count > 0 && <span className="bg-eu-pink px-[7px] py-px text-[11px] font-medium text-eu-black">{count}</span>}
+  </button>
+);
+
+/** Reviews as they come in from guests, so the floor team sees them during service. */
+const StaffReviews: FC<{
+  reviews: GuestReview[];
+  loading: boolean;
+  remote: boolean;
+  setStatus: (id: string, status: ReviewStatus) => void;
+}> = ({ reviews, loading, remote, setStatus }) => {
+  const open = reviews.filter((r) => r.status !== "replied").length;
+  return (
+    <section aria-label="Guest reviews" className="eu-scroll min-h-0 flex-1 overflow-y-auto">
+      <div className="mx-auto flex max-w-[980px] flex-col px-6 pb-12 pt-7 md:px-10">
+        <div className="flex flex-wrap items-end justify-between gap-4 border-b border-eu-black/[0.12] pb-5">
+          <div className="flex flex-col gap-1.5">
+            <span className="font-eu-display text-[11px] tracking-[0.3em] text-eu-claret">{remote ? "LIVE FROM THE TABLES" : "SAMPLE REVIEWS"}</span>
+            <h1 className="m-0 font-eu-display text-[28px] font-normal tracking-[0.06em]">Guest Reviews</h1>
+            <span className="text-[13px] font-light text-eu-muted">
+              {open === 1 ? "1 review needs a response" : `${open} reviews need a response`}. New reviews appear here as guests send them.
+            </span>
+          </div>
+          <Link
+            to={PATHS.dashboard}
+            className="inline-flex h-11 items-center border border-eu-green px-4 text-[11px] font-medium tracking-[0.16em] text-eu-green no-underline"
+          >
+            OPEN FULL DASHBOARD
+          </Link>
+        </div>
+
+        {loading && <p className="m-0 py-10 font-eu-serif text-[17px] italic text-eu-muted">Loading reviews…</p>}
+        {!loading && reviews.length === 0 && (
+          <p className="m-0 py-10 font-eu-serif text-[17px] italic text-eu-muted">
+            No reviews yet. They appear here the moment a guest leaves one.
+          </p>
+        )}
+
+        <ul className="m-0 list-none p-0">
+          {reviews.map((r) => {
+            const st = REVIEW_STATUS[r.status];
+            const done = r.status === "replied";
+            return (
+              <li key={r.id} className="eu-anim-fade-up-sm flex flex-wrap gap-x-8 gap-y-4 border-b border-eu-black/[0.12] py-6">
+                <div className="flex min-w-0 flex-[1_1_180px] flex-col gap-1.5">
+                  <div className="flex gap-[3px]" role="img" aria-label={`${r.rating} of 5 stars`}>
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <IconStar key={n} size={15} color="#0F3B2E" fill={n <= r.rating ? "#0F3B2E" : "none"} />
+                    ))}
+                  </div>
+                  <span className="font-eu-display text-[15px] tracking-[0.06em]">{r.name}</span>
+                  <span className="text-xs font-light text-eu-muted">{[r.when, r.table].filter(Boolean).join("  ·  ")}</span>
+                </div>
+                <div className="flex min-w-0 flex-[999_1_340px] flex-col gap-2.5">
+                  {r.text ? (
+                    <p className="m-0 font-eu-serif text-[17px] leading-[1.55] text-[#1A1A1C]">{r.text}</p>
+                  ) : (
+                    <p className="m-0 font-eu-serif text-[15px] italic text-eu-muted">Rating only, no words.</p>
+                  )}
+                  {r.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {r.tags.map((t) => (
+                        <span key={t} className="border border-eu-black/[0.18] px-2 py-[3px] text-[11px] tracking-[0.08em] text-eu-muted">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  {r.contact && (
+                    <span className="text-xs text-eu-muted">
+                      Contact: <span className="font-medium text-eu-black">{r.contact}</span>
+                    </span>
+                  )}
+                </div>
+                <div className="flex flex-[1_1_160px] flex-col items-start gap-2.5">
+                  <span className={`pb-0.5 text-xs font-medium ${st.cls}`}>{st.label}</span>
+                  <button
+                    type="button"
+                    onClick={() => setStatus(r.id, done ? "new" : "replied")}
+                    className={`h-11 cursor-pointer border border-eu-green px-4 text-[11px] font-medium tracking-[0.16em] ${
+                      done ? "bg-transparent text-eu-green" : "bg-eu-green text-eu-ivory"
+                    }`}
+                  >
+                    {done ? "REOPEN" : "MARK REPLIED"}
+                  </button>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </section>
   );
 };
