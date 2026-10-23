@@ -51,8 +51,8 @@ const FLOWS: [num: string, name: string, steps: Step[]][] = [
     ["Thank you, share on Google", "phone", () => <Review preset="thanks" />],
   ]],
   ["5", "Staff view", [
-    ["Reviews dashboard", "desktop", () => <Dashboard />],
-    ["Floor calls (staff tablet)", "tablet", () => <Staff />],
+    ["Reviews dashboard", "desktop", () => <Dashboard demo />],
+    ["Floor calls (staff tablet)", "tablet", () => <Staff demo />],
   ]],
 ];
 

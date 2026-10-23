@@ -1,5 +1,6 @@
 import { FC, useCallback, useEffect, useState } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { rememberTableFromUrl } from "./backend";
 import { Dashboard } from "./Dashboard";
 import { Landing } from "./Landing";
 import { MenuCover } from "./MenuCover";
@@ -20,8 +21,12 @@ import { EuphoriaStyles } from "./ui";
 const STAFF_PATHS = ["/euphoria/dashboard", "/euphoria/staff", "/euphoria/screens"];
 
 export const Euphoria: FC = () => {
-  const { pathname } = useLocation();
-  const [covered, setCovered] = useState(() => !STAFF_PATHS.some((p) => pathname.startsWith(p)));
+  const { pathname, search } = useLocation();
+  const [covered, setCovered] = useState(() => {
+    // /euphoria?table=7 from a table's QR code: remember which table this is.
+    rememberTableFromUrl(search);
+    return !STAFF_PATHS.some((p) => pathname.startsWith(p));
+  });
   const uncover = useCallback(() => setCovered(false), []);
 
   useEffect(() => {

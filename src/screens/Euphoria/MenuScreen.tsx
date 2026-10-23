@@ -1,7 +1,8 @@
 import { FC, Fragment, ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { DRINKS, FOOD, MenuCategory, MenuGroup, MenuRow } from "./menuData";
-import { IMG, PATHS, ROMAN, TABLE, naira } from "./theme";
+import { IMG, PATHS, ROMAN, TABLE, clockNow, naira } from "./theme";
+import { currentTable } from "./backend";
 import { OrderItem, Round, TableOrder, useTableOrder } from "./useTableOrder";
 import {
   DoubleRule,
@@ -193,12 +194,15 @@ export const MenuScreen: FC<MenuScreenProps> = ({ kind, preset = "live", categor
   const [sheetQty, setSheetQty] = useState(seed.sheetQty ?? 1);
   const [sheetNote, setSheetNote] = useState(seed.sheetNote ?? "");
   const [orderOpen, setOrderOpen] = useState(!!seed.orderOpen);
-  const { state: s, save, confirmRound } = useTableOrder(live, seed.order);
+  const table = live ? currentTable() : TABLE;
+  const { state: s, dispatch, remote } = useTableOrder({ live, seed: seed.order, table });
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const timer = useRef<number | undefined>(undefined);
   useEffect(() => () => window.clearTimeout(timer.current), []);
-  const simulate = live && simulateServer;
+  // With the backend, a real server confirms from the staff tablet; offline,
+  // the prototype plays the server's part after a few seconds.
+  const simulate = live && simulateServer && !remote;
 
   const toTop = () => scrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
   const goCat = (i: number) => {
@@ -233,12 +237,8 @@ export const MenuScreen: FC<MenuScreenProps> = ({ kind, preset = "live", categor
     if (!hasAny) setOrderOpen(false);
   }, [hasAny]);
 
-  const setQty = (k: string, q: number) => {
-    const n = { ...s.order };
-    if (q < 1) delete n[k];
-    else n[k] = { ...n[k], qty: Math.min(20, q) };
-    save({ order: n });
-  };
+  const setQty = (k: string, q: number) =>
+    dispatch({ type: "setItem", key: k, item: q < 1 ? null : { ...s.order[k], qty: Math.min(20, q) } });
 
   const openDish = (d: Dish) => {
     const held = s.order[d.key];
@@ -249,37 +249,37 @@ export const MenuScreen: FC<MenuScreenProps> = ({ kind, preset = "live", categor
   const sheetInOrder = !!(sheet && s.order[sheet.key]);
   const addToOrder = () => {
     if (!sheet) return;
-    save({
-      order: { ...s.order, [sheet.key]: { name: sheet.name, cat: sheet.catUpper, amount: sheet.amount, qty: sheetQty, note: sheetNote.trim() } },
-      bill: s.bill === "done" ? "none" : s.bill,
+    dispatch({
+      type: "setItem",
+      key: sheet.key,
+      item: { name: sheet.name, cat: sheet.catUpper, amount: sheet.amount, qty: sheetQty, note: sheetNote.trim() },
+      reopen: true,
     });
     setSheet(null);
   };
   const removeFromSheet = () => {
     if (!sheet) return;
-    const n = { ...s.order };
-    delete n[sheet.key];
-    save({ order: n });
+    dispatch({ type: "setItem", key: sheet.key, item: null });
     setSheet(null);
   };
 
   const callServer = () => {
-    save({ stage: "called" });
+    dispatch({ type: "callServer" });
     window.clearTimeout(timer.current);
-    if (simulate) timer.current = window.setTimeout(confirmRound, 5000);
+    if (simulate) timer.current = window.setTimeout(() => dispatch({ type: "confirmRound", time: clockNow() }), 5000);
   };
   const cancelCall = () => {
     window.clearTimeout(timer.current);
-    save({ stage: "draft" });
+    dispatch({ type: "cancelCall" });
   };
   const requestBill = () => {
-    save({ bill: "requested" });
+    dispatch({ type: "requestBill" });
     window.clearTimeout(timer.current);
-    if (simulate) timer.current = window.setTimeout(() => save({ bill: "done" }), 6000);
+    if (simulate) timer.current = window.setTimeout(() => dispatch({ type: "deliverBill" }), 6000);
   };
   const finish = () => {
     window.clearTimeout(timer.current);
-    save({ order: {}, sent: [], stage: "draft", bill: "none" });
+    dispatch({ type: "closeTable" });
   };
 
   /* Menu content */
@@ -502,12 +502,12 @@ export const MenuScreen: FC<MenuScreenProps> = ({ kind, preset = "live", categor
 
       <div className="eu-scroll flex-1 overflow-y-auto">
         {mode === "bill" && (
-          <StatusCard eyebrow={`TABLE ${TABLE}`} title={["Your Bill Is", "on Its Way"]} line="Your server will bring it to your table shortly." icon={<IconReceipt />} />
+          <StatusCard eyebrow={`TABLE ${table}`} title={["Your Bill Is", "on Its Way"]} line="Your server will bring it to your table shortly." icon={<IconReceipt />} />
         )}
         {mode === "done" && (
           <div className="eu-anim-fade mx-4 mt-5 flex flex-col items-center gap-3 bg-eu-ivory px-6 py-[34px] text-center text-eu-black">
             <img src={IMG.mark} alt="" aria-hidden="true" className="h-[50px] w-[52px]" />
-            <div className="mt-1.5 font-eu-display text-[11px] tracking-[0.32em] text-eu-claret">TABLE {TABLE}</div>
+            <div className="mt-1.5 font-eu-display text-[11px] tracking-[0.32em] text-eu-claret">TABLE {table}</div>
             <h2 className="m-0 font-eu-display text-[22px] font-normal leading-[1.3] tracking-[0.05em]">
               Thank You for
               <br />
@@ -526,7 +526,7 @@ export const MenuScreen: FC<MenuScreenProps> = ({ kind, preset = "live", categor
         )}
         {mode === "called" && (
           <StatusCard
-            eyebrow={`TABLE ${TABLE}`}
+            eyebrow={`TABLE ${table}`}
             title={["Your Server Is", "on the Way"]}
             line={copy.calledLine}
             icon={<img src={IMG.mark} alt="" aria-hidden="true" className="h-9 w-[38px]" />}
@@ -534,7 +534,7 @@ export const MenuScreen: FC<MenuScreenProps> = ({ kind, preset = "live", categor
         )}
         {showIntro && (
           <div className="flex flex-col gap-2 px-6 pb-2 pt-7">
-            <Eyebrow>TABLE {TABLE}</Eyebrow>
+            <Eyebrow>TABLE {table}</Eyebrow>
             <h1 className="m-0 font-eu-display text-[26px] font-normal tracking-[0.05em]">Your Order</h1>
             <p className="m-0 font-eu-serif text-base italic leading-[1.45] text-eu-ivory/[0.68]">{introLine}</p>
           </div>
