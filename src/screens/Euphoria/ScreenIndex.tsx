@@ -202,6 +202,13 @@ export const ScreenIndex: FC = () => {
               </button>
             );
           })}
+          {cur.flow === FLOWS.length - 1 && (
+            <p className="m-0 mt-3.5 font-eu-serif text-sm italic leading-normal text-eu-ivory/60">
+              These use sample data. The live screens, with real orders and reviews, are at{" "}
+              <a href="/euphoria/staff" className="text-eu-pink">/euphoria/staff</a> and{" "}
+              <a href="/euphoria/dashboard" className="text-eu-pink">/euphoria/dashboard</a>.
+            </p>
+          )}
           {cur.kind === "tall" && (
             <p className="m-0 mt-3.5 font-eu-serif text-sm italic leading-normal text-eu-ivory/60">
               This page is longer than a phone screen. Scroll inside the frame to see all of it.

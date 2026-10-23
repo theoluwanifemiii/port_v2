@@ -1,48 +1,12 @@
 import { FC, useState } from "react";
-import type { Id } from "../../../convex/_generated/dataModel";
-import { api, convex, useLive } from "./backend";
+import { Link } from "react-router-dom";
+import { GuestReview, REVIEW_STATUS, useGuestReviews } from "./reviews";
 import { Connecting, PinScreen, useStaffAccess } from "./StaffAccess";
-import { IMG } from "./theme";
+import { IMG, PATHS } from "./theme";
 import { IconStar } from "./ui";
 
-type Status = "new" | "follow" | "replied";
-interface GuestReview {
-  id: string;
-  name: string;
-  src: "qr" | "google";
-  rating: number;
-  when: string;
-  table: string;
-  tags: string[];
-  text: string;
-  contact: string;
-  status: Status;
-}
-
-const SAMPLE: GuestReview[] = [
-  { id: "1", name: "Adaeze O.", src: "qr", rating: 5, when: "Sat, 7:42 pm", table: "Table 12", tags: ["Food", "Service"], text: "The lamb shank was outstanding and our server knew the menu by heart. The pool at dusk is something else.", contact: "", status: "new" },
-  { id: "2", name: "Tunde B.", src: "google", rating: 5, when: "Sat, 3:10 pm", table: "", tags: ["Ambience", "Drinks"], text: "Best brunch spot in Ikoyi. Cocktails were perfect and the setting is beautiful.", contact: "", status: "new" },
-  { id: "3", name: "Guest", src: "qr", rating: 2, when: "Fri, 9:05 pm", table: "Table 4", tags: ["Service"], text: "Food was good but we waited almost forty minutes for mains with no update.", contact: "0802 000 0000", status: "follow" },
-  { id: "4", name: "Kemi A.", src: "qr", rating: 4, when: "Fri, 1:20 pm", table: "Table 7", tags: ["Food", "Value"], text: "Business lunch was quick and elegant. Would love one more dessert option.", contact: "", status: "replied" },
-  { id: "5", name: "Michael E.", src: "google", rating: 3, when: "Thu, 8:47 pm", table: "", tags: ["Music"], text: "Lovely place, music was a little loud for conversation.", contact: "", status: "new" },
-  { id: "6", name: "Zainab M.", src: "qr", rating: 5, when: "Thu, 7:15 pm", table: "Table 2", tags: ["Drinks", "The Pool"], text: "The PMS cocktail is my new favourite. Thank you for a wonderful birthday evening.", contact: "", status: "replied" },
-];
 const TAGS = ["Food", "Drinks", "Service", "Ambience", "The Pool", "Music", "Value"];
-const STATUS: Record<Status, { label: string; cls: string }> = {
-  new: { label: "New", cls: "text-eu-navy" },
-  follow: { label: "Priority: call back requested", cls: "text-eu-claret border-b-2 border-eu-claret" },
-  replied: { label: "Replied", cls: "text-eu-green" },
-};
-
 const avg = (list: GuestReview[]) => (list.length ? (list.reduce((a, r) => a + r.rating, 0) / list.length).toFixed(1) : "–");
-
-const whenLabel = (t: number) => {
-  const d = new Date(t);
-  const day = d.toLocaleDateString("en-GB", { weekday: "short" });
-  const h = d.getHours();
-  const m = d.getMinutes();
-  return `${day}, ${(h % 12) || 12}:${m < 10 ? "0" : ""}${m} ${h < 12 ? "am" : "pm"}`;
-};
 
 const Bar: FC<{ label: string; count: number; width: string; fill: string; labelW: string }> = ({ label, count, width, fill, labelW }) => (
   <div className="flex items-center gap-3 text-[13px]">
@@ -60,37 +24,11 @@ export const Dashboard: FC<{ demo?: boolean }> = ({ demo = false }) => {
   const remote = access.status === "ready";
   const [src, setSrc] = useState<"all" | "qr" | "google">("all");
   const [onlyOpen, setOnlyOpen] = useState(false);
-  const [statusOverride, setStatusOverride] = useState<Record<string, Status>>({});
-  const live = useLive(api.euphoria.listReviews, remote ? { key: access.key } : "skip");
+  const { reviews: all, loading, setStatus } = useGuestReviews(remote, access.key);
 
   if (access.status === "checking") return <Connecting />;
   if (access.status === "needPin") return <PinScreen title="Guest Reviews" message={access.message} onSubmit={access.setKey} />;
 
-  const source: GuestReview[] = remote
-    ? (live.data ?? []).map((r) => ({
-        id: r._id,
-        name: r.name || "Guest",
-        src: r.source,
-        rating: r.rating,
-        when: whenLabel(r._creationTime),
-        table: r.table ? "Table " + r.table : "",
-        tags: r.aspects,
-        text: r.text,
-        contact: r.contact,
-        status: r.status,
-      }))
-    : SAMPLE;
-  // Live statuses come from the server, so every manager sees the same list.
-  const all = remote ? source : source.map((r) => ({ ...r, status: statusOverride[r.id] || r.status }));
-
-  const setStatus = (id: string, status: Status) => {
-    if (!remote) setStatusOverride({ ...statusOverride, [id]: status });
-    else if (convex) {
-      convex
-        .mutation(api.euphoria.setReviewStatus, { key: access.key, id: id as Id<"euphoriaReviews">, status })
-        .catch((e) => console.error("Euphoria: could not update the review", e));
-    }
-  };
   const google = all.filter((r) => r.src === "google");
   const open = all.filter((r) => r.status !== "replied");
   const follow = all.filter((r) => r.status === "follow");
@@ -132,6 +70,7 @@ export const Dashboard: FC<{ demo?: boolean }> = ({ demo = false }) => {
             Guest reviews
             <span className="ml-auto bg-eu-pink px-2 py-0.5 text-[11px] text-eu-black">{open.length}</span>
           </a>
+          <Link to={PATHS.staff} className={navLink}>Floor calls</Link>
           <a href="#menus" className={navLink}>Menus and prices</a>
           <a href="#qr" className={navLink}>Table QR codes</a>
           <a href="#settings" className={navLink}>Settings</a>
@@ -229,7 +168,7 @@ export const Dashboard: FC<{ demo?: boolean }> = ({ demo = false }) => {
 
           <ul className="m-0 list-none p-0">
             {shown.map((r) => {
-              const st = STATUS[r.status];
+              const st = REVIEW_STATUS[r.status];
               const done = r.status === "replied";
               return (
                 <li key={r.id} className="eu-row flex flex-wrap gap-x-8 gap-y-5 border-b border-eu-black/[0.12] px-2 py-6">
@@ -282,7 +221,7 @@ export const Dashboard: FC<{ demo?: boolean }> = ({ demo = false }) => {
           </ul>
           {shown.length === 0 && (
             <p className="m-0 px-2 py-10 font-eu-serif text-[17px] italic text-eu-muted">
-              {all.length ? "Every review in this view has a response. Well done." : remote && live.data === undefined ? "Loading reviews…" : "No reviews yet. They appear here as guests leave them."}
+              {all.length ? "Every review in this view has a response. Well done." : loading ? "Loading reviews…" : "No reviews yet. They appear here as guests leave them."}
             </p>
           )}
         </section>
