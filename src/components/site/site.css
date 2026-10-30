@@ -292,3 +292,7 @@
   .d4 .marquee-track { animation: none; }
   .d4 .marquee-dupe { display: none; }
 }
+
+/* Lucide icons (icons.tsx): sit on the text baseline, size with the text */
+.d4 .d4-ico { display: inline-block; flex-shrink: 0; vertical-align: -0.14em; }
+.d4 .with-ico { display: inline-flex; align-items: center; gap: 0.35em; }

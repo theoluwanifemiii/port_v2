@@ -1,6 +1,7 @@
 import { CSSProperties, FC, ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { EMAIL, LINKEDIN_URL, RESUME_URL, SiteHeader } from "../../components/site/SiteChrome";
+import { IconArrow, IconExternal } from "../../components/site/icons";
 import "./Home.css";
 
 interface WorkRow {
@@ -16,6 +17,8 @@ interface WorkRow {
   /** External link. */
   href?: string;
   cta: string;
+  /** Arrow after the CTA: into a case study, or out to another site. */
+  ctaIcon?: "arrow" | "external";
 }
 
 const ROWS: WorkRow[] = [
@@ -28,7 +31,8 @@ const ROWS: WorkRow[] = [
     img: "/home/digitvant-pay.webp",
     alt: "Digitvant Pay app on a phone",
     to: "/work/digitvant-pay",
-    cta: "CASE STUDY →",
+    cta: "CASE STUDY",
+    ctaIcon: "arrow",
   },
   {
     title: "Plenti",
@@ -39,7 +43,8 @@ const ROWS: WorkRow[] = [
     img: "/home/plenti.webp",
     alt: "Plenti dashboard on a monitor",
     to: "/work/plenti",
-    cta: "CASE STUDY →",
+    cta: "CASE STUDY",
+    ctaIcon: "arrow",
   },
   {
     title: "Vital Swap",
@@ -50,7 +55,8 @@ const ROWS: WorkRow[] = [
     img: "/home/vital-swap.webp",
     alt: "Vital Swap back office on a laptop",
     to: "/work/vital-swap",
-    cta: "CASE STUDY →",
+    cta: "CASE STUDY",
+    ctaIcon: "arrow",
   },
   {
     title: "Motobills Admin",
@@ -61,7 +67,8 @@ const ROWS: WorkRow[] = [
     img: "/home/motobills.webp",
     alt: "Motobills dashboard on a laptop",
     to: "/work/motobills",
-    cta: "CASE STUDY →",
+    cta: "CASE STUDY",
+    ctaIcon: "arrow",
   },
   {
     title: "One Drug Store",
@@ -80,7 +87,8 @@ const ROWS: WorkRow[] = [
     img: "/home/creative-pay.jpg",
     alt: "Creative Pay landing page",
     href: "https://www.behance.net/gallery/173528357/Creative-Pay-UX-Case-Study",
-    cta: "BEHANCE ↗",
+    cta: "BEHANCE",
+    ctaIcon: "external",
   },
 ];
 
@@ -278,8 +286,8 @@ export const Home: FC = () => {
                 <a href="#work" className="d4-btn">
                   See the work
                 </a>
-                <Link to="/contact" className="ulink" style={{ fontSize: 15, fontWeight: 500 }}>
-                  Let's talk about your product →
+                <Link to="/contact" className="ulink with-ico" style={{ fontSize: 15, fontWeight: 500 }}>
+                  Let's talk about your product <IconArrow />
                 </Link>
               </div>
             </div>
@@ -319,7 +327,11 @@ export const Home: FC = () => {
                 </span>
                 <span className="mono row-side">
                   <span className="muted">{row.year}</span>
-                  <span className="row-cta">{row.cta}</span>
+                  <span className="row-cta with-ico">
+                    {row.cta}
+                    {row.ctaIcon === "arrow" && <IconArrow />}
+                    {row.ctaIcon === "external" && <IconExternal />}
+                  </span>
                 </span>
                 {activeRow === i && <img className="peek" src={row.img} alt="" />}
               </RowLink>
@@ -351,10 +363,10 @@ export const Home: FC = () => {
           </div>
           <div className="mono socials">
             <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer">
-              LINKEDIN ↗
+              LINKEDIN <IconExternal />
             </a>
             <a href={RESUME_URL} target="_blank" rel="noopener noreferrer">
-              RESUME ↗
+              RESUME <IconExternal />
             </a>
           </div>
         </div>

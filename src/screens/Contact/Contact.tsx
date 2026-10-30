@@ -1,5 +1,6 @@
 import { ChangeEvent, FC, FormEvent, useEffect, useState } from "react";
 import { EMAIL, LINKEDIN_URL, RESUME_URL, SiteFooter, SiteHeader } from "../../components/site/SiteChrome";
+import { IconExternal } from "../../components/site/icons";
 import "./Contact.css";
 
 const NEEDS = [
@@ -118,10 +119,10 @@ export const Contact: FC = () => {
               </ol>
               <div className="mono socials" style={{ marginTop: 24 }}>
                 <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer">
-                  LINKEDIN ↗
+                  LINKEDIN <IconExternal />
                 </a>
                 <a href={RESUME_URL} target="_blank" rel="noopener noreferrer">
-                  RESUME ↗
+                  RESUME <IconExternal />
                 </a>
               </div>
             </div>

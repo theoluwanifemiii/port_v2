@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { SiteHeader } from "../../components/site/SiteChrome";
 import { Marquee } from "../../components/site/Marquee";
 import { ProjectCaseStudy, projectCaseStudies } from "../../data/projects";
+import { IconArrow, IconBack, IconExternal } from "../../components/site/icons";
 import "./CaseStudy.css";
 
 /** Order matches the Selected work list on Home. */
@@ -23,7 +24,7 @@ const CaseFooter: FC = () => (
     <div>
       <span>© 2026 OLUWANIFEMI OSUNSANYA</span>
       <Link to="/contact" style={{ textDecoration: "none" }}>
-        LET'S TALK ABOUT YOUR PRODUCT →
+        LET'S TALK ABOUT YOUR PRODUCT <IconArrow />
       </Link>
     </div>
   </footer>
@@ -35,7 +36,9 @@ const NotFound: FC = () => (
     <main className="wrap">
       <section className="case-intro" style={{ paddingBottom: 120 }}>
         <div className="mono crumbs">
-          <Link to="/#work">← ALL WORK</Link>
+          <Link to="/#work" className="with-ico">
+            <IconBack /> ALL WORK
+          </Link>
         </div>
         <h1 className="balance">Project not found</h1>
         <p className="summary">That case study doesn't exist, or it has moved.</p>
@@ -85,7 +88,9 @@ const CaseStudy: FC<{ project: ProjectCaseStudy }> = ({ project: p }) => {
         {/* Intro */}
         <section className="case-intro">
           <div className="mono crumbs">
-            <Link to="/#work">← ALL WORK</Link>
+            <Link to="/#work" className="with-ico">
+            <IconBack /> ALL WORK
+          </Link>
             {index >= 0 && <span className="muted">CASE STUDY {pad(index + 1)} OF 06</span>}
           </div>
           <h1 className="balance">{p.title}</h1>
@@ -120,7 +125,7 @@ const CaseStudy: FC<{ project: ProjectCaseStudy }> = ({ project: p }) => {
                     className="ulink"
                     style={{ overflowWrap: "anywhere" }}
                   >
-                    {p.website.split("/")[0]} ↗
+                    {p.website.split("/")[0]} <IconExternal />
                   </a>
                 </dd>
               </div>
@@ -330,7 +335,7 @@ const CaseStudy: FC<{ project: ProjectCaseStudy }> = ({ project: p }) => {
               <span className="big">{next.title}</span>
             </span>
             <span className="arrow" aria-hidden="true">
-              →
+              <IconArrow strokeWidth={1} />
             </span>
           </Link>
         ) : (
@@ -340,7 +345,7 @@ const CaseStudy: FC<{ project: ProjectCaseStudy }> = ({ project: p }) => {
               <span className="big">All work</span>
             </span>
             <span className="arrow" aria-hidden="true">
-              →
+              <IconArrow strokeWidth={1} />
             </span>
           </Link>
         )}
