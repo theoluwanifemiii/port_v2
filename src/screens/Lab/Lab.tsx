@@ -10,7 +10,6 @@ const stack = ["React", "TypeScript", "Node.js", "Prisma", "PostgreSQL", "AI Eng
 
 const shipped = [
   { label: "MomentOS", to: "/lab/momentos" },
-  { label: "VitalSwap", to: "/work/vital-swap" },
   { label: "Digitvant Pay", to: "/work/digitvant-pay" },
   { label: "Motobills", to: "/work/motobills" },
 ];

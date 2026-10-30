@@ -31,15 +31,6 @@ interface ProjectCard {
 
 const projects: ProjectCard[] = [
   {
-    title: "VITAL SWAP BACK OFFICE",
-    year: "2024",
-    description: [
-      "I designed the Vital Swap back office to support three different user types, ensuring smooth operations and efficient workflows.",
-    ],
-    image: "/Project 1.png",
-    projectId: "vital-swap",
-  },
-  {
     title: "DIGITVANT PAY MOBILE & INTERNET REDESIGN",
     year: "2025",
     description: [
