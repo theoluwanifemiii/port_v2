@@ -8,7 +8,16 @@ import { IconArrow, IconBack, IconExternal } from "../../components/site/icons";
 import "./CaseStudy.css";
 
 /** Order matches the Selected work list on Home. */
-const CASE_ORDER = ["moto-ride", "digitvant-pay", "plenti", "vital-swap", "one-drug-store", "creative-pay"];
+const CASE_ORDER = [
+  "moto-ride",
+  "digitvant-pay",
+  "plenti",
+  "vital-swap",
+  "momentos",
+  "fig2md",
+  "one-drug-store",
+  "creative-pay",
+];
 
 /** Short outcome lines, matching the Selected work list on Home. */
 const SHORT_OUTCOME: Record<string, string> = {
@@ -16,6 +25,8 @@ const SHORT_OUTCOME: Record<string, string> = {
   plenti: "11 modules, 3 role based portals, 150+ screens",
   "vital-swap": "Faster onboarding for staff and agents, fewer errors",
   "moto-ride": "One rider pool for 3 services",
+  momentos: "Live product, designed and built solo",
+  fig2md: "80 component pages an agent can follow",
   motobills: "Faster restocking across core bill categories",
 };
 
@@ -129,7 +140,7 @@ const CaseStudy: FC<{ project: ProjectCaseStudy }> = ({ project: p }) => {
             <Link to="/#work" className="with-ico">
             <IconBack /> ALL WORK
           </Link>
-            {index >= 0 && <span className="muted">CASE STUDY {pad(index + 1)} OF 06</span>}
+            {index >= 0 && <span className="muted">CASE STUDY {pad(index + 1)} OF {pad(CASE_ORDER.length)}</span>}
           </div>
           <h1 className="balance">{p.title}</h1>
           <p className="balance summary">{p.summary}</p>
