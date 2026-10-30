@@ -292,6 +292,7 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
     results: [
       "A product spec defining one rider identity, per service profiles and a four layer allocation engine with an explainability record.",
       "An operations dashboard: network overview, rider management, vehicle capabilities and complaints with service specific suspensions.",
+      "Onboarding that approves each service on its own and shows how every identity check was made, and finance that tracks payouts and rider pay by service.",
       "The Moto Ride design system: tokens, type, status tones and 17 components shared across the admin dashboard and rider app.",
       "Service colour reserved for telling products apart, with urgency carried by separate tones and glyphs.",
     ],
@@ -302,8 +303,13 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
     backdrop: true,
     galleryImages: [
       "/case/moto-ride/riders.webp",
+      "/case/moto-ride/onboarding-services.webp",
+      "/case/moto-ride/onboarding-nin-check.webp",
       "/case/moto-ride/rider-vehicles.webp",
       "/case/moto-ride/rider-complaints.webp",
+      "/case/moto-ride/rider-suspend-service.webp",
+      "/case/moto-ride/finance-overview.webp",
+      "/case/moto-ride/finance-rider-pay.webp",
     ],
     tags: ["Logistics", "Dispatch", "Design System"],
     client: "Sujimoto Digital Service",
