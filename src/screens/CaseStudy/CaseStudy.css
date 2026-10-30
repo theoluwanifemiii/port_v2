@@ -95,8 +95,9 @@
 
 .d4-case .pills { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 10px; }
 
-.d4-case .gallery { padding: 0 0 80px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-.d4-case .gallery img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 20px; }
+/* Gallery: an auto-scrolling strip (components/site/Marquee) */
+.d4-case .gallery { padding: 0 0 80px; }
+.d4-case .gallery .g-phone { display: block; width: 300px; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 20px; }
 .d4-case .shipped {
   display: flex;
   flex-direction: column;
@@ -105,6 +106,7 @@
   padding: 28px;
   border-radius: 20px;
   background: #f5f5f4;
+  width: 300px;
   aspect-ratio: 3 / 4;
   box-sizing: border-box;
 }
@@ -190,16 +192,19 @@
 .d4-case .modules h3 { margin: 0; font-size: 20px; font-weight: 500; letter-spacing: -0.02em; }
 .d4-case .modules p { margin: 0; font-size: 15px; line-height: 1.55; color: #4a4a4a; }
 
-/* Screenshot gallery: keeps each image's own shape (dashboards are wide) */
-.d4-case .gallery-wide { grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); }
-.d4-case .gallery-wide img {
-  aspect-ratio: auto;
-  height: auto;
-  object-fit: contain;
+/* Screenshots keep their own shape (dashboards are wide): fixed height, natural width */
+.d4-case .gallery .g-wide {
+  display: block;
+  height: 380px;
+  width: auto;
+  max-width: none;
+  border-radius: 20px;
   border: 1px solid #ececea;
   background: #f5f5f4;
 }
 @media (max-width: 760px) {
-  .d4-case .gallery-wide { grid-template-columns: minmax(0, 1fr); }
+  .d4-case .gallery .g-wide { height: 240px; }
+  .d4-case .gallery .g-phone,
+  .d4-case .shipped { width: 240px; }
   .d4-case .stats { padding: 40px 0 56px; }
 }

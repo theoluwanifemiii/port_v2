@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
 import { SiteHeader } from "../../components/site/SiteChrome";
+import { Marquee } from "../../components/site/Marquee";
 import "./CaseStudy.css";
 
 const IMG = "/case/digitvant";
@@ -254,15 +255,17 @@ export const DigitvantCase: FC = () => (
 
       {/* Gallery */}
       <section className="gallery">
-        {GALLERY.map((g) => (
-          <img key={g.src} src={g.src} alt={g.alt} loading="lazy" />
-        ))}
-        <div className="shipped">
-          <span className="mono eyebrow">SHIPPED</span>
-          <span className="big">
-            Mobile app, internet banking and an internal support dashboard, on one design system.
-          </span>
-        </div>
+        <Marquee label="Digitvant Pay screens" secondsPerItem={6}>
+          {[
+            ...GALLERY.map((g) => <img key={g.src} className="g-phone" src={g.src} alt={g.alt} />),
+            <div key="shipped" className="shipped">
+              <span className="mono eyebrow">SHIPPED</span>
+              <span className="big">
+                Mobile app, internet banking and an internal support dashboard, on one design system.
+              </span>
+            </div>,
+          ]}
+        </Marquee>
       </section>
 
       {/* 08 Results */}

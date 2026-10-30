@@ -265,3 +265,30 @@
 @media (prefers-reduced-motion: reduce) {
   .d4 .m-menu { animation: none; }
 }
+
+/* Auto-scrolling strip (Marquee.tsx) */
+.d4 .marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 48px, #000 calc(100% - 48px), transparent);
+  mask-image: linear-gradient(to right, transparent, #000 48px, #000 calc(100% - 48px), transparent);
+}
+.d4 .marquee-track,
+.d4 .marquee-dupe { display: flex; width: max-content; }
+.d4 .marquee-track { animation: d4Marquee var(--marquee-duration, 40s) linear infinite; }
+.d4 .marquee:hover .marquee-track,
+.d4 .marquee:focus-within .marquee-track { animation-play-state: paused; }
+/* Spacing lives on each item (not flex gap) so the two copies are exactly equal halves. */
+.d4 .marquee-item { flex: 0 0 auto; padding-right: var(--marquee-gap, 20px); }
+@keyframes d4Marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .d4 .marquee {
+    overflow-x: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .d4 .marquee-track { animation: none; }
+  .d4 .marquee-dupe { display: none; }
+}
