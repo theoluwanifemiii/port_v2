@@ -1,0 +1,105 @@
+.d4-about .about-hero { padding: 72px 0 112px; }
+.d4-about .about-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 58fr) minmax(0, 34fr);
+  column-gap: 8%;
+  align-items: end;
+}
+.d4-about .about-copy { display: flex; flex-direction: column; padding-bottom: 36px; }
+.d4-about h1 {
+  margin: 24px 0 0;
+  font-size: clamp(44px, 5.6vw, 80px);
+  font-weight: 500;
+  line-height: 0.98;
+  letter-spacing: -0.05em;
+}
+.d4-about .lead {
+  margin: 36px 0 0;
+  max-width: 640px;
+  font-size: 21px;
+  line-height: 1.5;
+  letter-spacing: -0.015em;
+  color: #191919;
+}
+.d4-about .body {
+  margin: 24px 0 0;
+  max-width: 620px;
+  font-size: 17px;
+  line-height: 1.65;
+  color: #4a4a4a;
+}
+.d4-about .ctas {
+  margin-top: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 28px;
+}
+
+.d4-about .principles {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 40px;
+}
+.d4-about .principles li { display: flex; flex-direction: column; gap: 12px; }
+.d4-about h3 { margin: 0; font-size: 24px; font-weight: 500; letter-spacing: -0.025em; }
+.d4-about .principles p { margin: 0; font-size: 16px; line-height: 1.6; color: #4a4a4a; }
+
+.d4-about .caps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 40px;
+}
+.d4-about .caps > div { display: flex; flex-direction: column; gap: 14px; }
+.d4-about .caps p { margin: 0; font-size: 18px; line-height: 1.8; }
+
+.d4-about .quotes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+.d4-about .quote {
+  margin: 0;
+  padding: 28px;
+  border-radius: 20px;
+  background: #f5f5f4;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 32px;
+}
+.d4-about blockquote { margin: 0; font-size: 20px; line-height: 1.4; letter-spacing: -0.015em; }
+.d4-about .quote figcaption { display: flex; flex-direction: column; gap: 2px; }
+.d4-about .quote .who { font-size: 15px; font-weight: 500; }
+.d4-about .quote .role { font-size: 12px; letter-spacing: 0.04em; color: #5f5f5f; }
+
+.d4-about .offclock-big {
+  margin: 0;
+  max-width: 760px;
+  font-size: clamp(22px, 2.2vw, 28px);
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  color: #858585;
+}
+
+.d4-about .about-contact {
+  padding: 56px 0 96px;
+  border-top: 1px solid #191919;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px 48px;
+}
+
+@media (max-width: 860px) {
+  .d4-about .about-grid { grid-template-columns: minmax(0, 1fr); row-gap: 40px; }
+  .d4-about .hero-fig { max-width: 340px; order: -1; }
+}
+@media (max-width: 760px) {
+  .d4-about .hero-fig { max-width: 100%; }
+  .d4-about .about-hero { padding-top: 32px; padding-bottom: 56px; }
+}

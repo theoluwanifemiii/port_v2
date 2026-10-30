@@ -1,151 +1,371 @@
-import { FC, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import { LottiePlayer } from "../../components/LottiePlayer";
-import { PortfolioShell } from "../../components/PortfolioShell";
-import { useAvailability } from "../../hooks/useAvailability";
+import { CSSProperties, FC, ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { EMAIL, LINKEDIN_URL, RESUME_URL, SiteHeader } from "../../components/site/SiteChrome";
+import "./Home.css";
 
-const showcaseAnimations = [
-  { title: "Vital Swap", path: "/Vitalswap.json", href: "/work/vital-swap" },
-  { title: "Digitvant Scene", path: "/Scene.json", href: "/work/digitvant-pay" },
-  { title: "Motobills", path: "/motobills.json", href: "/work/motobills" },
+interface WorkRow {
+  title: string;
+  desc: string;
+  outcome?: string;
+  meta: string;
+  year: string;
+  img: string;
+  alt: string;
+  /** Internal route. */
+  to?: string;
+  /** External link. */
+  href?: string;
+  cta: string;
+}
+
+const ROWS: WorkRow[] = [
+  {
+    title: "Digitvant Pay",
+    desc: "Full verification before an account meant people left before they saw any value. I led the mobile and web redesign around progressive onboarding, with a shared design system for engineering.",
+    outcome: "1K beta users to 10K+ active users",
+    meta: "PRODUCT DESIGNER · MOBILE AND WEB BANKING",
+    year: "2025",
+    img: "/home/digitvant-pay.webp",
+    alt: "Digitvant Pay app on a phone",
+    to: "/work/digitvant-pay",
+    cta: "CASE STUDY →",
+  },
+  {
+    title: "Plenti",
+    desc: "Eleven departments had to coordinate every customer order. I designed the internal platform that connects them, with each team seeing only what its role needs.",
+    outcome: "11 modules, 3 role based portals, 150+ screens",
+    meta: "OPERATIONS PLATFORM · ROLES · DESIGN SYSTEM",
+    year: "2026",
+    img: "/home/plenti.webp",
+    alt: "Plenti dashboard on a monitor",
+    to: "/work/plenti",
+    cta: "CASE STUDY →",
+  },
+  {
+    title: "Vital Swap",
+    desc: "Fragmented tools caused delays, repeated tasks and low visibility. I designed one back office for admins, agents and merchants, with clear permissions and role specific views.",
+    outcome: "Faster onboarding for staff and agents, fewer errors",
+    meta: "BACK OFFICE · THREE ROLES · PERMISSIONS",
+    year: "2025",
+    img: "/home/vital-swap.webp",
+    alt: "Vital Swap back office on a laptop",
+    to: "/work/vital-swap",
+    cta: "CASE STUDY →",
+  },
+  {
+    title: "Motobills Admin",
+    desc: "Key inventory actions took several manual steps. I designed an inventory module with instant balance visibility and reliable paths for restocking and pricing.",
+    outcome: "Faster restocking across core bill categories",
+    meta: "ADMIN UX · INVENTORY · FINTECH",
+    year: "2024",
+    img: "/home/motobills.webp",
+    alt: "Motobills dashboard on a laptop",
+    to: "/work/motobills",
+    cta: "CASE STUDY →",
+  },
+  {
+    title: "One Drug Store",
+    desc: "A checkout redesign to reduce friction and build trust at the point of payment.",
+    meta: "CHECKOUT · E COMMERCE · CONVERSION",
+    year: "2025",
+    img: "/home/one-drug-store.jpg",
+    alt: "One Drug Store checkout on a phone",
+    cta: "CASE STUDY SOON",
+  },
+  {
+    title: "Creative Pay",
+    desc: "A UX concept for matching creators with meaningful opportunities.",
+    meta: "CONCEPT",
+    year: "2023",
+    img: "/home/creative-pay.jpg",
+    alt: "Creative Pay landing page",
+    href: "https://www.behance.net/gallery/173528357/Creative-Pay-UX-Case-Study",
+    cta: "BEHANCE ↗",
+  },
 ];
 
-export const Home: FC = () => {
-  const [activeAnimationIndex, setActiveAnimationIndex] = useState(0);
-  const [isShowcaseHovered, setIsShowcaseHovered] = useState(false);
-  const [isProjectHovered, setIsProjectHovered] = useState(false);
-  const availability = useAvailability();
-  const cursorLabelRef = useRef<HTMLSpanElement | null>(null);
-  const activeAnimation = showcaseAnimations[activeAnimationIndex];
+const INTRO_WORDS = ["I", "design", "the", "systems", "behind", "complex", "products"];
+const INTRO_SEEN_KEY = "hasSeenHomeIntro";
 
-  const handleProjectMouseMove = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!cursorLabelRef.current) return;
+type Phase = "init" | "hold" | "move" | "done";
 
-    const rect = event.currentTarget.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+function shouldPlayIntro(hash: string): boolean {
+  if (hash === "#work") return false;
+  try {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
+  } catch {
+    /* no matchMedia */
+  }
+  try {
+    if (sessionStorage.getItem(INTRO_SEEN_KEY)) return false;
+  } catch {
+    /* storage blocked: play it */
+  }
+  return true;
+}
 
-    cursorLabelRef.current.style.transform = `translate(${x}px, ${y}px) translate(-50%, -140%)`;
-  };
+/**
+ * The headline appears alone, word by word, then travels into its place in
+ * the hero while the rest of the page fades in. Plays once per session.
+ */
+function useIntro(hash: string) {
+  const [phase, setPhase] = useState<Phase>(() => (shouldPlayIntro(hash) ? "init" : "done"));
+  const [introW, setIntroW] = useState<string>("auto");
+  const [offset, setOffset] = useState({ dx: 0, dy: 0 });
+  const h1Ref = useRef<HTMLHeadingElement | null>(null);
+  const introRef = useRef<HTMLParagraphElement | null>(null);
 
   useEffect(() => {
-    if (isShowcaseHovered) return;
+    if (phase !== "init") return;
+    let gone = false;
+    const timers: number[] = [];
+    const measure = () => {
+      if (h1Ref.current) setIntroW(`${h1Ref.current.offsetWidth}px`);
+    };
 
-    const intervalId = window.setInterval(() => {
-      setActiveAnimationIndex((current) =>
-        current === showcaseAnimations.length - 1 ? 0 : current + 1
+    try {
+      sessionStorage.setItem(INTRO_SEEN_KEY, "true");
+    } catch {
+      /* ignore */
+    }
+
+    timers.push(
+      window.setTimeout(() => {
+        measure();
+        setPhase("hold");
+      }, 120)
+    );
+
+    const fonts: Promise<unknown> = document.fonts?.ready ?? Promise.resolve();
+    const fontsOrTimeout = Promise.race([
+      fonts.catch(() => undefined),
+      new Promise((r) => timers.push(window.setTimeout(r, 3000))),
+    ]);
+    const minHold = new Promise((r) => timers.push(window.setTimeout(r, 2000)));
+
+    Promise.all([fontsOrTimeout, minHold]).then(() => {
+      if (gone) return;
+      measure();
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => {
+          if (gone) return;
+          if (!h1Ref.current || !introRef.current) {
+            setPhase("done");
+            return;
+          }
+          const h = h1Ref.current.getBoundingClientRect();
+          const o = introRef.current.getBoundingClientRect();
+          setOffset({ dx: Math.round(h.left - o.left), dy: Math.round(h.top - o.top) });
+          setPhase("move");
+          timers.push(window.setTimeout(() => setPhase("done"), 1050));
+        })
       );
-    }, 4500);
+    });
 
-    return () => window.clearInterval(intervalId);
-  }, [isShowcaseHovered]);
+    return () => {
+      gone = true;
+      timers.forEach((t) => window.clearTimeout(t));
+    };
+    // Runs once on mount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return { phase, introW, offset, h1Ref, introRef };
+}
+
+const RowLink: FC<{
+  row: WorkRow;
+  className: string;
+  onEnter: () => void;
+  children: ReactNode;
+}> = ({ row, className, onEnter, children }) => {
+  const handlers = { onMouseEnter: onEnter, onFocus: onEnter };
+  if (row.to) {
+    return (
+      <Link to={row.to} className={className} {...handlers}>
+        {children}
+      </Link>
+    );
+  }
+  if (row.href) {
+    return (
+      <a href={row.href} target="_blank" rel="noopener noreferrer" className={className} {...handlers}>
+        {children}
+      </a>
+    );
+  }
+  return (
+    <div className={className} onMouseEnter={onEnter}>
+      {children}
+    </div>
+  );
+};
+
+const delay = (d: string) => ({ "--d": d }) as CSSProperties;
+
+export const Home: FC = () => {
+  const location = useLocation();
+  const [activeRow, setActiveRow] = useState<number | null>(null);
+  const { phase, introW, offset, h1Ref, introRef } = useIntro(location.hash);
+
+  // Arriving from another page via "Work" lands on /#work: scroll to the list.
+  useLayoutEffect(() => {
+    if (location.hash !== "#work") return;
+    const id = window.setTimeout(() => {
+      document.getElementById("work")?.scrollIntoView({ block: "start" });
+    }, 50);
+    return () => window.clearTimeout(id);
+  }, [location.hash]);
 
   return (
-    <PortfolioShell contentClassName="max-w-[1160px]">
-      <div className="mx-auto w-full max-w-[960px]">
-      <section className="grid gap-8 lg:grid-cols-[1.35fr_0.65fr] reveal-up">
-        <div>
-          <p className="text-[11px] uppercase tracking-[0.14em] text-[#70747b]">Product Designer · Lagos, Nigeria</p>
-          <h1 className="section-title mt-3 max-w-3xl text-5xl leading-[1.02] text-[#111214] sm:text-6xl">
-           I design products by starting with people, not pixels.
-          </h1>
-
-          <div className="mt-5 flex flex-wrap gap-2">
-            {[
-              "Product Design",
-              "UX Strategy",
-              "Dashboard UX",
-              "Design Systems",
-            ].map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full border border-black/15 bg-[#f7f7f3] px-3 py-1 text-xs text-[#5b6169]"
-              >
-                {tag}
-              </span>
-            ))}
+    <div className="d4 d4-home">
+      <div className="first" data-phase={phase}>
+        {phase !== "done" && (
+          <div className="intro" data-phase={phase} aria-hidden="true">
+            <p
+              ref={introRef}
+              className="intro-text"
+              style={{ width: introW, transform: `translate(${offset.dx}px, ${offset.dy}px)` }}
+            >
+              {INTRO_WORDS.map((word, i) => (
+                <span key={word}>
+                  <span className="iw" style={{ "--i": i } as CSSProperties}>
+                    {word}
+                  </span>
+                  {i < INTRO_WORDS.length - 1 ? " " : ""}
+                </span>
+              ))}
+              <span className="intro-rest">, then build them into software people can use.</span>
+            </p>
           </div>
-        </div>
+        )}
 
-        <div className="space-y-4 text-sm leading-relaxed text-[#535860] lg:pt-1">
-          <p>
-            Product Designer based in Lagos, Nigeria — designing intuitive fintech and B2B experiences.
-          </p>
-          <p>
-            Led a 72-hour redesign that resulted in 1,000+ beta user signups.
-          </p>
-          <p>
-            Currently focused on partnering with crypto-focused startups, healthcare platforms, and B2B SaaS products.
-          </p>
+        <SiteHeader onHome className="rv" style={delay("0s")} />
 
-          <Link
-            to="/work-with-me"
-            className={`press-scale inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] no-underline transition-colors ${
-              availability.isFull
-                ? "border-black/10 bg-[#f4f4f0] text-[#6a7077]"
-                : "border-black/20 bg-[#111214] text-white"
-            }`}
-          >
-            <span
-              className={`inline-block h-1.5 w-1.5 rounded-full ${
-                availability.status === "full"
-                  ? "bg-[#9a9fa6]"
-                  : availability.status === "limited"
-                  ? "bg-amber-400"
-                  : availability.status === "loading"
-                  ? "bg-[#9a9fa6]"
-                  : "bg-emerald-400"
-              }`}
-            />
-            {availability.status === "loading" ? "Available for projects" : availability.label}
-          </Link>
-        </div>
-      </section>
+        {/* Hero: portrait anchors, text leads */}
+        <section className="wrap hero-section">
+          <div className="hero">
+            <figure className="hero-fig rv" style={delay(".08s")}>
+              <img
+                src="/home/olu-portrait.jpg"
+                alt="Black and white studio portrait of Olu Osunsanya"
+                width={960}
+                height={1200}
+              />
+              <figcaption className="mono">
+                <span>OLU · LAGOS, NG</span>
+                <span>FIG. 01</span>
+              </figcaption>
+            </figure>
+
+            <div className="hero-copy">
+              <p className="mono eyebrow rv" style={delay(".5s")}>
+                PRODUCT DESIGNER WHO BUILDS
+              </p>
+              <h1 ref={h1Ref} className="hero-h1">
+                I design the systems behind complex products
+                <span className="h1-rest">
+                  , then build them into software <span className="soft">people can use.</span>
+                </span>
+              </h1>
+              <p className="hero-body rv" style={delay(".6s")}>
+                I work across product design and engineering, building fintech and B2B products
+                around complex workflows, permissions and operational needs. From defining the
+                experience to implementing the interface, I help teams turn messy problems into
+                software they can ship. I'm also building MomentOS and Fig2MD.
+              </p>
+              <div className="hero-ctas rv" style={delay(".7s")}>
+                <a href="#work" className="d4-btn">
+                  See the work
+                </a>
+                <Link to="/contact" className="ulink" style={{ fontSize: 15, fontWeight: 500 }}>
+                  Let's talk about your product →
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
 
-      <section className="mt-4 pb-2 reveal-up reveal-up-delay-1 sm:mt-5">
-        <div className="w-full border-y border-black/10 bg-[#f4f4f0] px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
-          <div className="w-full">
-            <article
-              className="overflow-hidden rounded-2xl border border-black/10 bg-[#fafaf7]"
-              onMouseEnter={() => setIsShowcaseHovered(true)}
-              onMouseLeave={() => setIsShowcaseHovered(false)}
-            >
-              <div className="flex items-center justify-between gap-3 px-4 py-3 sm:px-5">
-                <p className="text-[11px] uppercase tracking-[0.12em] text-[#6a6f76]">
-                  {activeAnimation.title}
-                </p>
-                <p className="text-[11px] uppercase tracking-[0.12em] text-[#6a6f76]">
-                  {activeAnimationIndex + 1} / {showcaseAnimations.length}
-                </p>
-              </div>
-              <Link
-                to={activeAnimation.href}
-                className="group relative block overflow-hidden border-t border-black/10 no-underline"
-                onMouseEnter={() => setIsProjectHovered(true)}
-                onMouseLeave={() => setIsProjectHovered(false)}
-                onMouseMove={handleProjectMouseMove}
+      {/* Selected work */}
+      <section id="work" className="wrap work">
+        <div className="mono work-head">
+          <h2>(01) SELECTED WORK</h2>
+          <span className="muted">2023 TO 2026</span>
+        </div>
+
+        <div onMouseLeave={() => setActiveRow(null)}>
+          {ROWS.map((row, i) => {
+            const dimmed = activeRow !== null && activeRow !== i;
+            return (
+              <RowLink
+                key={row.title}
+                row={row}
+                className={`row${dimmed ? " is-dimmed" : ""}`}
+                onEnter={() => setActiveRow(i)}
               >
-                <LottiePlayer
-                  animationPath={activeAnimation.path}
-                  autoplay
-                  loop
-                  pauseOnHover={false}
-                  className="h-[20rem] w-full sm:h-[26rem] lg:h-[32rem]"
-                />
-                <span
-                  ref={cursorLabelRef}
-                  className={`pointer-events-none absolute left-0 top-0 z-10 hidden whitespace-nowrap rounded-full border border-black/20 bg-[#111214] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-white transition-opacity duration-150 sm:inline-flex ${
-                    isProjectHovered ? "opacity-100" : "opacity-0"
-                  }`}
-                >
-                  View project
+                <span className="mono row-n">{String(i + 1).padStart(2, "0")}</span>
+                <span className="row-main">
+                  <span className="row-title">{row.title}</span>
+                  <span className="row-desc">{row.desc}</span>
+                  {row.outcome && (
+                    <span className="row-outcome">
+                      <span className="mono k">OUTCOME</span>
+                      <span className="v">{row.outcome}</span>
+                    </span>
+                  )}
+                  <span className="mono row-meta">{row.meta}</span>
+                  <img className="m-thumb" src={row.img} alt={row.alt} loading="lazy" />
                 </span>
-              </Link>
-            </article>
+                <span className="mono row-side">
+                  <span className="muted">{row.year}</span>
+                  <span className="row-cta">{row.cta}</span>
+                </span>
+                {activeRow === i && <img className="peek" src={row.img} alt="" />}
+              </RowLink>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Personal */}
+      <section className="wrap offclock">
+        <div className="offclock-inner">
+          <h2 className="mono">(02) OFF THE CLOCK</h2>
+          <p>
+            Long Sunday runs, a properly smoky <span>jollof</span>, loud{" "}
+            <span>Arsenal matchdays</span> and <span>teaching</span> what I learn, out loud.
+          </p>
+        </div>
+      </section>
+
+      {/* Contact */}
+      <section className="wrap contact">
+        <div className="contact-inner">
+          <div className="contact-lead">
+            <p className="mono eyebrow">(03) CONTACT</p>
+            <p className="balance contact-title">Have a product that needs untangling? Let's talk.</p>
+            <a href={`mailto:${EMAIL}`} className="ulink contact-email">
+              {EMAIL}
+            </a>
+          </div>
+          <div className="mono socials">
+            <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer">
+              LINKEDIN ↗
+            </a>
+            <a href={RESUME_URL} target="_blank" rel="noopener noreferrer">
+              RESUME ↗
+            </a>
           </div>
         </div>
       </section>
-    </PortfolioShell>
+
+      <footer className="wrap mono d4-footer">
+        <div>
+          <span>© 2026 OLUWANIFEMI OSUNSANYA</span>
+          <span>DESIGNED AND BUILT BY OLU</span>
+        </div>
+      </footer>
+    </div>
   );
 };
