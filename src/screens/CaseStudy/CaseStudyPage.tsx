@@ -73,7 +73,12 @@ const CaseStudy: FC<{ project: ProjectCaseStudy }> = ({ project: p }) => {
 
   const index = CASE_ORDER.indexOf(p.id);
   const cover = p.heroImage ?? p.heroImages?.[0] ?? p.image;
-  const gallery = [...(p.heroImages?.slice(1) ?? []), ...(p.galleryImages ?? [])];
+  // Extra hero shots are styled mockup photos; gallery images are plain UI screenshots,
+  // which get the scenic backdrop.
+  const gallery = [
+    ...(p.heroImages?.slice(1) ?? []).map((src) => ({ src, staged: false })),
+    ...(p.galleryImages ?? []).map((src) => ({ src, staged: true })),
+  ];
   // Next follows the Home list order, wrapping round, skipping projects without a case study.
   const withCase = CASE_ORDER.filter((id) => projectCaseStudies[id]);
   const pos = withCase.indexOf(p.id);
@@ -134,7 +139,14 @@ const CaseStudy: FC<{ project: ProjectCaseStudy }> = ({ project: p }) => {
           </dl>
         </section>
 
-        <img className={`cover${p.heroFit === "full" ? " cover-full" : ""}`} src={encodeURI(cover)} alt={`${p.title} product overview`} />
+        {p.heroFit === "full" ? (
+          // A UI screenshot sits as a framed window on the scenic backdrop.
+          <div className="stage stage-cover">
+            <img src={encodeURI(cover)} alt={`${p.title} product overview`} />
+          </div>
+        ) : (
+          <img className="cover" src={encodeURI(cover)} alt={`${p.title} product overview`} />
+        )}
 
         {/* At a glance */}
         {p.statCards && p.statCards.length > 0 && (
@@ -277,14 +289,24 @@ const CaseStudy: FC<{ project: ProjectCaseStudy }> = ({ project: p }) => {
         {gallery.length > 0 && (
           <section className="gallery">
             <Marquee label={`${p.title} screens`} secondsPerItem={8}>
-              {gallery.map((src) => (
-                <img
-                  key={src}
-                  className="g-wide"
-                  src={encodeURI(src)}
-                  alt={`${p.title}: ${src.split("/").pop()?.replace(/\.[^.]+$/, "")}`}
-                />
-              ))}
+              {gallery.map(({ src, staged }) => {
+                const img = (
+                  <img
+                    className="g-wide"
+                    src={encodeURI(src)}
+                    alt={`${p.title}: ${src.split("/").pop()?.replace(/\.[^.]+$/, "")}`}
+                  />
+                );
+                return staged ? (
+                  <div key={src} className="stage stage-tile">
+                    {img}
+                  </div>
+                ) : (
+                  <div key={src} className="g-plain">
+                    {img}
+                  </div>
+                );
+              })}
             </Marquee>
           </section>
         )}

@@ -195,19 +195,42 @@
 /* Screenshots keep their own shape (dashboards are wide): fixed height, natural width */
 .d4-case .gallery .g-wide {
   display: block;
-  height: 380px;
+  height: 324px;
   width: auto;
   max-width: none;
-  border-radius: 20px;
-  border: 1px solid #ececea;
-  background: #f5f5f4;
 }
+
+/* Stage: a UI screenshot shown as a framed window on a scenic backdrop */
+.d4-case .stage {
+  background: #1f5a52 url("/case/backdrop-beach.webp") center / cover no-repeat;
+  border-radius: 24px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.d4-case .stage img {
+  display: block;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18), 0 2px 6px rgba(0, 0, 0, 0.18), 0 28px 60px rgba(0, 0, 0, 0.34);
+}
+.d4-case .stage-cover { padding: clamp(20px, 5vw, 72px); }
+.d4-case .stage-cover img { width: 100%; height: auto; }
+.d4-case .stage-tile { padding: 28px; border-radius: 20px; }
+.d4-case .stage-tile img { border-radius: 10px; }
+/* A styled mockup photo in the gallery: same height as a staged tile, no backdrop */
+.d4-case .g-plain .g-wide { height: 380px; border-radius: 20px; object-fit: cover; }
+/* Each tile shows a different part of the backdrop */
+.d4-case .marquee-item:nth-child(3n + 1) .stage-tile { background-position: 15% 35%; }
+.d4-case .marquee-item:nth-child(3n + 2) .stage-tile { background-position: 55% 55%; }
+.d4-case .marquee-item:nth-child(3n + 3) .stage-tile { background-position: 85% 25%; }
 @media (max-width: 760px) {
-  .d4-case .gallery .g-wide { height: 240px; }
+  .d4-case .gallery .g-wide { height: 200px; }
+  .d4-case .stage-tile { padding: 16px; }
+  .d4-case .g-plain .g-wide { height: 232px; }
+  .d4-case .stage-cover { padding: 14px; border-radius: 16px; }
+  .d4-case .stage-cover img { border-radius: 8px; }
   .d4-case .gallery .g-phone,
   .d4-case .shipped { width: 240px; }
   .d4-case .stats { padding: 40px 0 56px; }
 }
 
-/* A cover that is a UI screenshot keeps its own shape, with a hairline frame */
-.d4-case .cover.cover-full { aspect-ratio: auto; height: auto; object-fit: contain; border: 1px solid #ececea; }

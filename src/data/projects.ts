@@ -39,7 +39,7 @@ export interface ProjectCaseStudy {
   }[];
   image: string;
   heroImage?: string;
-  /** "full": show the cover at its own shape (for UI screenshots) instead of a 16:9 crop. */
+  /** "full": the cover is a UI screenshot, shown whole as a framed window on the scenic backdrop instead of a 16:9 crop. */
   heroFit?: "full";
   heroImages?: string[];
   challengeImages?: string[];
