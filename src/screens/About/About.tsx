@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
 import { LINKEDIN_URL, RESUME_URL, SiteFooter, SiteHeader } from "../../components/site/SiteChrome";
+import { Marquee } from "../../components/site/Marquee";
 import "./About.css";
 
 const PRINCIPLES = [
@@ -152,7 +153,7 @@ export const About: FC = () => (
       {/* Kind words */}
       <section className="sec">
         <h2 className="label">(03) KIND WORDS</h2>
-        <div className="quotes">
+        <Marquee label="Testimonials" secondsPerItem={9} gap={24}>
           {QUOTES.map((q) => (
             <figure key={q.name} className="quote">
               <blockquote>“{q.quote}”</blockquote>
@@ -162,7 +163,7 @@ export const About: FC = () => (
               </figcaption>
             </figure>
           ))}
-        </div>
+        </Marquee>
       </section>
 
       {/* Off the clock */}

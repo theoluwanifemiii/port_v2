@@ -56,12 +56,10 @@
 .d4-about .caps > div { display: flex; flex-direction: column; gap: 14px; }
 .d4-about .caps p { margin: 0; font-size: 18px; line-height: 1.8; }
 
-.d4-about .quotes {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px;
-}
 .d4-about .quote {
+  width: 340px;
+  height: 100%;
+  box-sizing: border-box;
   margin: 0;
   padding: 28px;
   border-radius: 20px;

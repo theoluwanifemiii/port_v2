@@ -1,6 +1,7 @@
 import { FC, ReactNode } from "react";
 import { Link, useParams } from "react-router-dom";
 import { SiteHeader } from "../../components/site/SiteChrome";
+import { Marquee } from "../../components/site/Marquee";
 import { ProjectCaseStudy, projectCaseStudies } from "../../data/projects";
 import "./CaseStudy.css";
 
@@ -268,15 +269,17 @@ const CaseStudy: FC<{ project: ProjectCaseStudy }> = ({ project: p }) => {
         )}
 
         {gallery.length > 0 && (
-          <section className="gallery gallery-wide">
-            {gallery.map((src) => (
-              <img
-                key={src}
-                src={encodeURI(src)}
-                alt={`${p.title}: ${src.split("/").pop()?.replace(/\.[^.]+$/, "")}`}
-                loading="lazy"
-              />
-            ))}
+          <section className="gallery">
+            <Marquee label={`${p.title} screens`} secondsPerItem={8}>
+              {gallery.map((src) => (
+                <img
+                  key={src}
+                  className="g-wide"
+                  src={encodeURI(src)}
+                  alt={`${p.title}: ${src.split("/").pop()?.replace(/\.[^.]+$/, "")}`}
+                />
+              ))}
+            </Marquee>
           </section>
         )}
 
