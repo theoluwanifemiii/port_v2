@@ -307,7 +307,7 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
     ],
     tags: ["Logistics", "Dispatch", "Design System"],
     client: "Moto",
-    role: "Product Designer",
+    role: "Lead Product Designer",
     roleDescription:
       "I wrote the product spec for the Moto Ride platform and designed its operations dashboard and design system, from the allocation model through to the screens operators use every day.",
     responsibilities: [
