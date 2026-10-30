@@ -1,7 +1,8 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Link } from "react-router-dom";
 import { SiteHeader } from "../../components/site/SiteChrome";
 import { Marquee } from "../../components/site/Marquee";
+import { Lightbox } from "../../components/site/Lightbox";
 import { IconArrow, IconBack, IconExternal } from "../../components/site/icons";
 import "./CaseStudy.css";
 
@@ -60,6 +61,37 @@ const ROLE_TAGS = [
   "ENGINEERING COLLABORATION",
 ];
 
+/** Auto-scrolling gallery; click a screen to view it large. */
+const DigitvantGallery: FC = () => {
+  const [open, setOpen] = useState<number | null>(null);
+  return (
+    <section className="gallery">
+      <Marquee label="Digitvant Pay screens" secondsPerItem={6}>
+        {[
+          ...GALLERY.map((g, i) => (
+            <button
+              key={g.src}
+              type="button"
+              className="g-view"
+              aria-label={`View larger: ${g.alt}`}
+              onClick={() => setOpen(i)}
+            >
+              <img className="g-phone" src={g.src} alt={g.alt} />
+            </button>
+          )),
+          <div key="shipped" className="shipped">
+            <span className="mono eyebrow">SHIPPED</span>
+            <span className="big">
+              Mobile app, internet banking and an internal support dashboard, on one design system.
+            </span>
+          </div>,
+        ]}
+      </Marquee>
+      <Lightbox images={GALLERY} index={open} onChange={setOpen} />
+    </section>
+  );
+};
+
 export const DigitvantCase: FC = () => (
   <div className="d4 d4-case">
     <SiteHeader active="work" showClock={false} />
@@ -71,7 +103,7 @@ export const DigitvantCase: FC = () => (
           <Link to="/#work" className="with-ico">
             <IconBack /> ALL WORK
           </Link>
-          <span className="muted">CASE STUDY 01 OF 06</span>
+          <span className="muted">CASE STUDY 02 OF 08</span>
         </div>
         <h1 className="balance">Digitvant Pay</h1>
         <p className="balance summary">
@@ -257,19 +289,7 @@ export const DigitvantCase: FC = () => (
       </section>
 
       {/* Gallery */}
-      <section className="gallery">
-        <Marquee label="Digitvant Pay screens" secondsPerItem={6}>
-          {[
-            ...GALLERY.map((g) => <img key={g.src} className="g-phone" src={g.src} alt={g.alt} />),
-            <div key="shipped" className="shipped">
-              <span className="mono eyebrow">SHIPPED</span>
-              <span className="big">
-                Mobile app, internet banking and an internal support dashboard, on one design system.
-              </span>
-            </div>,
-          ]}
-        </Marquee>
-      </section>
+      <DigitvantGallery />
 
       {/* 08 Results */}
       <section className="sec">
@@ -316,7 +336,7 @@ export const DigitvantCase: FC = () => (
       {/* Next */}
       <Link to="/work/plenti" className="next-link">
         <span style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <span className="mono eyebrow">NEXT PROJECT · 02</span>
+          <span className="mono eyebrow">NEXT PROJECT · 03</span>
           <span className="big">Plenti</span>
         </span>
         <span className="arrow" aria-hidden="true">

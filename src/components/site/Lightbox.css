@@ -1,0 +1,124 @@
+/* Full-screen image viewer (Lightbox.tsx). Lives in <body>, outside .d4. */
+.d4-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 56px 72px;
+  box-sizing: border-box;
+  background: rgba(12, 12, 12, 0.94);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  font-family: "IBM Plex Mono", monospace;
+  animation: d4LbIn 0.2s ease both;
+}
+/* Beach backdrop variant (Moto Ride): a light tint keeps controls readable */
+.d4-lightbox.lb-beach {
+  background:
+    linear-gradient(rgba(8, 20, 18, 0.28), rgba(8, 20, 18, 0.28)),
+    #1f5a52 url("/case/backdrop-beach.webp") center / cover no-repeat;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.d4-lightbox.lb-beach .lb-figure img {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2), 0 2px 8px rgba(0, 0, 0, 0.2), 0 40px 90px rgba(0, 0, 0, 0.45);
+}
+.d4-lightbox.lb-beach figcaption {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
+  color: rgba(255, 255, 255, 0.85);
+}
+.d4-lightbox.lb-beach .lb-btn {
+  background: rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+.d4-lightbox.lb-beach .lb-btn:hover { background: rgba(0, 0, 0, 0.6); }
+@keyframes d4LbIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.d4-lightbox .lb-figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  max-width: 100%;
+  max-height: 100%;
+}
+.d4-lightbox .lb-figure img {
+  display: block;
+  max-width: min(1400px, calc(100vw - 144px));
+  max-height: calc(100vh - 150px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  animation: d4LbImg 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes d4LbImg {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+.d4-lightbox figcaption {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.72);
+  text-align: center;
+}
+.d4-lightbox .lb-count { color: #ffffff; }
+
+.d4-lightbox .lb-btn {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 150ms;
+}
+.d4-lightbox .lb-btn:hover { background: rgba(255, 255, 255, 0.18); }
+.d4-lightbox .lb-btn:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; }
+.d4-lightbox .lb-close { top: 16px; right: 16px; }
+.d4-lightbox .lb-prev { left: 16px; top: 50%; transform: translateY(-50%); }
+.d4-lightbox .lb-next { right: 16px; top: 50%; transform: translateY(-50%); }
+
+@media (max-width: 760px) {
+  .d4-lightbox { padding: 64px 12px 72px; }
+  .d4-lightbox .lb-figure img { max-width: calc(100vw - 24px); max-height: calc(100vh - 170px); border-radius: 8px; }
+  .d4-lightbox .lb-prev,
+  .d4-lightbox .lb-next { top: auto; bottom: 16px; transform: none; }
+  .d4-lightbox .lb-prev { left: calc(50% - 56px); }
+  .d4-lightbox .lb-next { right: calc(50% - 56px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .d4-lightbox,
+  .d4-lightbox .lb-figure img { animation: none; }
+}
+
+/* Gallery items that open the viewer */
+.d4 .g-view {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: zoom-in;
+  border-radius: 20px;
+}
+.d4 .g-view:focus-visible { outline: 2px solid #191919; outline-offset: 3px; }

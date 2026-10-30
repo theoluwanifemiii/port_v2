@@ -123,6 +123,39 @@ Impact:
 
 https://olusworks.xyz/work/vital-swap
 
+### Moto Ride
+
+One rider network and operations platform serving MotoBites, Plenti and Mr Meat from a single rider pool, with a central allocation engine.
+
+Responsibilities:
+- Product spec
+- Operations dashboard
+- Design system
+
+https://olusworks.xyz/work/moto-ride
+
+### MomentOS
+
+A celebration platform for teams, churches and families: birthdays, work anniversaries, graduations and other milestones, delivered automatically by email and SMS. Designed and engineered end to end.
+
+Responsibilities:
+- Product strategy
+- Design
+- Frontend and backend engineering
+
+https://olusworks.xyz/work/momentos
+
+### Fig2MD
+
+A Figma plugin and compiler that turns a design system into Markdown in the codebase, so developers and coding agents use the same tokens, components and rules.
+
+Responsibilities:
+- Product strategy
+- Plugin UX
+- Compiler architecture
+
+https://olusworks.xyz/work/fig2md
+
 ### Motobills Admin
 
 Back-office dashboard for inventory and financial operations.

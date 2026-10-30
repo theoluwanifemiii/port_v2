@@ -1,19 +1,32 @@
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { SiteHeader } from "../../components/site/SiteChrome";
 import { Marquee } from "../../components/site/Marquee";
+import { Lightbox } from "../../components/site/Lightbox";
 import { ProjectCaseStudy, projectCaseStudies } from "../../data/projects";
 import { IconArrow, IconBack, IconExternal } from "../../components/site/icons";
 import "./CaseStudy.css";
 
 /** Order matches the Selected work list on Home. */
-const CASE_ORDER = ["digitvant-pay", "plenti", "vital-swap", "motobills", "one-drug-store", "creative-pay"];
+const CASE_ORDER = [
+  "moto-ride",
+  "digitvant-pay",
+  "plenti",
+  "vital-swap",
+  "momentos",
+  "fig2md",
+  "one-drug-store",
+  "creative-pay",
+];
 
 /** Short outcome lines, matching the Selected work list on Home. */
 const SHORT_OUTCOME: Record<string, string> = {
   "digitvant-pay": "1K beta to 10K+ active users",
   plenti: "11 modules, 3 role based portals, 150+ screens",
   "vital-swap": "Faster onboarding for staff and agents, fewer errors",
+  "moto-ride": "One rider pool for 3 services",
+  momentos: "Live product, designed and built solo",
+  fig2md: "80 component pages an agent can follow",
   motobills: "Faster restocking across core bill categories",
 };
 
@@ -48,6 +61,38 @@ const NotFound: FC = () => (
   </div>
 );
 
+/** Auto-scrolling gallery; click an image to view it large. Holds its own
+ *  state so opening the viewer doesn't re-render the rest of the page. */
+const CaseGallery: FC<{ title: string; items: { src: string; staged: boolean }[]; backdrop?: boolean }> = ({
+  title,
+  items,
+  backdrop = false,
+}) => {
+  const [open, setOpen] = useState<number | null>(null);
+  const images = items.map(({ src }) => ({
+    src: encodeURI(src),
+    alt: `${title}: ${src.split("/").pop()?.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ")}`,
+  }));
+  return (
+    <section className="gallery">
+      <Marquee label={`${title} screens`} secondsPerItem={8}>
+        {items.map(({ src, staged }, i) => (
+          <button
+            key={src}
+            type="button"
+            className={`g-view ${staged ? "stage stage-tile" : "g-plain"}`}
+            aria-label={`View larger: ${images[i].alt}`}
+            onClick={() => setOpen(i)}
+          >
+            <img className="g-wide" src={images[i].src} alt={images[i].alt} />
+          </button>
+        ))}
+      </Marquee>
+      <Lightbox images={images} index={open} onChange={setOpen} backdrop={backdrop} />
+    </section>
+  );
+};
+
 export const CaseStudyPage: FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
   const project = projectId ? projectCaseStudies[projectId] : undefined;
@@ -72,7 +117,11 @@ const CaseStudy: FC<{ project: ProjectCaseStudy }> = ({ project: p }) => {
 
   const index = CASE_ORDER.indexOf(p.id);
   const cover = p.heroImage ?? p.heroImages?.[0] ?? p.image;
-  const gallery = [...(p.heroImages?.slice(1) ?? []), ...(p.galleryImages ?? [])];
+  // Only projects with backdrop on show their gallery screenshots on the beach backdrop.
+  const gallery = [
+    ...(p.heroImages?.slice(1) ?? []).map((src) => ({ src, staged: false })),
+    ...(p.galleryImages ?? []).map((src) => ({ src, staged: p.backdrop === true })),
+  ];
   // Next follows the Home list order, wrapping round, skipping projects without a case study.
   const withCase = CASE_ORDER.filter((id) => projectCaseStudies[id]);
   const pos = withCase.indexOf(p.id);
@@ -91,7 +140,7 @@ const CaseStudy: FC<{ project: ProjectCaseStudy }> = ({ project: p }) => {
             <Link to="/#work" className="with-ico">
             <IconBack /> ALL WORK
           </Link>
-            {index >= 0 && <span className="muted">CASE STUDY {pad(index + 1)} OF 06</span>}
+            {index >= 0 && <span className="muted">CASE STUDY {pad(index + 1)} OF {pad(CASE_ORDER.length)}</span>}
           </div>
           <h1 className="balance">{p.title}</h1>
           <p className="balance summary">{p.summary}</p>
@@ -133,7 +182,14 @@ const CaseStudy: FC<{ project: ProjectCaseStudy }> = ({ project: p }) => {
           </dl>
         </section>
 
-        <img className="cover" src={encodeURI(cover)} alt={`${p.title} product overview`} />
+        {p.backdrop ? (
+          // A UI screenshot sits as a framed window on the scenic backdrop.
+          <div className="stage stage-cover">
+            <img src={encodeURI(cover)} alt={`${p.title} product overview`} />
+          </div>
+        ) : (
+          <img className="cover" src={encodeURI(cover)} alt={`${p.title} product overview`} />
+        )}
 
         {/* At a glance */}
         {p.statCards && p.statCards.length > 0 && (
@@ -273,20 +329,7 @@ const CaseStudy: FC<{ project: ProjectCaseStudy }> = ({ project: p }) => {
           </Sec>
         )}
 
-        {gallery.length > 0 && (
-          <section className="gallery">
-            <Marquee label={`${p.title} screens`} secondsPerItem={8}>
-              {gallery.map((src) => (
-                <img
-                  key={src}
-                  className="g-wide"
-                  src={encodeURI(src)}
-                  alt={`${p.title}: ${src.split("/").pop()?.replace(/\.[^.]+$/, "")}`}
-                />
-              ))}
-            </Marquee>
-          </section>
-        )}
+        {gallery.length > 0 && <CaseGallery title={p.title} items={gallery} backdrop={p.backdrop === true} />}
 
         <Sec title={label("Results")}>
           <ol className="results">
