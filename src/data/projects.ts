@@ -83,15 +83,6 @@ export const portfolioProjects: PortfolioProject[] = [
     projectId: "plenti",
   },
   {
-    id: "vital-swap",
-    title: "Vital Swap",
-    subtitle: "Back-office platform for admins, agents, and merchants.",
-    year: "2025",
-    image: "/Project 1.png",
-    tags: ["Operations", "Dashboard", "Multi-role"],
-    projectId: "vital-swap",
-  },
-  {
     id: "momentos",
     title: "MomentOS",
     subtitle: "A celebration platform for teams, churches and families, designed and built end to end.",
@@ -207,36 +198,6 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
     ],
     website: "ibank.digitvant.com",
     nextProjectId: "plenti",
-    previousProjectId: "vital-swap",
-  },
-  "vital-swap": {
-    id: "vital-swap",
-    title: "Vital Swap",
-    subtitle: "Back Office for Smooth Operations",
-    year: "2025",
-    summary:
-      "Vital Swap required a unified back office experience for three user types: administrators, agents, and merchants.",
-    context:
-      "Operations relied on fragmented tools, causing delays, repeated tasks, and low visibility into key activities.",
-    challenge:
-      "Design a scalable operations cockpit with clear permissions, cleaner information flow, and reusable UI patterns.",
-    approach: [
-      "Mapped daily jobs-to-be-done for each user type before touching screens.",
-      "Created structured navigation and status visibility for high-priority operational actions.",
-      "Worked with stakeholders and engineering to align each pattern with real workflows.",
-    ],
-    outcome:
-      "A single system that reduced confusion and helped teams operate faster with better confidence.",
-    results: [
-      "Faster onboarding for operations staff and agents.",
-      "Reduced errors through clearer visibility and role-specific views.",
-      "Consistent design language across the back-office product.",
-    ],
-    image: "/Project 1.png",
-    tags: ["Back Office", "Admin Dashboard", "Operations"],
-    client: "Vital Swap",
-    website: "vitalswap.com",
-    nextProjectId: "digitvant-pay",
   },
   momentos: {
     id: "momentos",

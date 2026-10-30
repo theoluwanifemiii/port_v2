@@ -106,23 +106,6 @@ Impact:
 
 https://olusworks.xyz/work/digitvant-pay
 
-### VitalSwap
-
-Operations platform for merchants, agents, and administrators.
-
-Responsibilities:
-- Product strategy
-- UX design
-- Admin dashboards
-- Operational workflows
-- Design system
-
-Impact:
-- 30% reduction in task completion time
-- 90% internal NPS
-
-https://olusworks.xyz/work/vital-swap
-
 ### Moto Ride
 
 One rider network and operations platform serving MotoBites, Plenti and Mr Meat from a single rider pool, with a central allocation engine.

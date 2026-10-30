@@ -103,7 +103,7 @@ export const DigitvantCase: FC = () => (
           <Link to="/#work" className="with-ico">
             <IconBack /> ALL WORK
           </Link>
-          <span className="muted">CASE STUDY 02 OF 08</span>
+          <span className="muted">CASE STUDY 02 OF 07</span>
         </div>
         <h1 className="balance">Digitvant Pay</h1>
         <p className="balance summary">

@@ -12,7 +12,6 @@ const CASE_ORDER = [
   "moto-ride",
   "digitvant-pay",
   "plenti",
-  "vital-swap",
   "momentos",
   "fig2md",
   "one-drug-store",
@@ -23,7 +22,6 @@ const CASE_ORDER = [
 const SHORT_OUTCOME: Record<string, string> = {
   "digitvant-pay": "1K beta to 10K+ active users",
   plenti: "11 modules, 3 role based portals, 150+ screens",
-  "vital-swap": "Faster onboarding for staff and agents, fewer errors",
   "moto-ride": "One rider pool for 3 services",
   momentos: "Live product, designed and built solo",
   fig2md: "80 component pages an agent can follow",

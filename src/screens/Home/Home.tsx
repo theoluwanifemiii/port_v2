@@ -59,18 +59,6 @@ const ROWS: WorkRow[] = [
     ctaIcon: "arrow",
   },
   {
-    title: "Vital Swap",
-    desc: "Fragmented tools caused delays, repeated tasks and low visibility. I designed one back office for admins, agents and merchants, with clear permissions and role specific views.",
-    outcome: "Faster onboarding for staff and agents, fewer errors",
-    meta: "BACK OFFICE · THREE ROLES · PERMISSIONS",
-    year: "2025",
-    img: "/home/vital-swap.webp",
-    alt: "Vital Swap back office on a laptop",
-    to: "/work/vital-swap",
-    cta: "CASE STUDY",
-    ctaIcon: "arrow",
-  },
-  {
     title: "MomentOS",
     desc: "Remembering people had become manual work for teams and churches. I designed and built a product that celebrates them automatically, from birthdays to work anniversaries and graduations, by email and SMS.",
     outcome: "Live product, designed and built solo",
