@@ -2,6 +2,7 @@ import { FC } from "react";
 import { Link } from "react-router-dom";
 import { LINKEDIN_URL, RESUME_URL, SiteFooter, SiteHeader } from "../../components/site/SiteChrome";
 import { Marquee } from "../../components/site/Marquee";
+import { IconExternal } from "../../components/site/icons";
 import "./About.css";
 
 const PRINCIPLES = [
@@ -94,10 +95,10 @@ export const About: FC = () => (
                 href={LINKEDIN_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="ulink"
+                className="ulink with-ico"
                 style={{ fontSize: 15, fontWeight: 500 }}
               >
-                LinkedIn ↗
+                LinkedIn <IconExternal />
               </a>
             </div>
           </div>

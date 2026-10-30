@@ -2,6 +2,7 @@ import { FC } from "react";
 import { Link } from "react-router-dom";
 import { SiteHeader } from "../../components/site/SiteChrome";
 import { Marquee } from "../../components/site/Marquee";
+import { IconArrow, IconBack, IconExternal } from "../../components/site/icons";
 import "./CaseStudy.css";
 
 const IMG = "/case/digitvant";
@@ -67,7 +68,9 @@ export const DigitvantCase: FC = () => (
       {/* Intro */}
       <section className="case-intro">
         <div className="mono crumbs">
-          <Link to="/#work">← ALL WORK</Link>
+          <Link to="/#work" className="with-ico">
+            <IconBack /> ALL WORK
+          </Link>
           <span className="muted">CASE STUDY 01 OF 06</span>
         </div>
         <h1 className="balance">Digitvant Pay</h1>
@@ -96,7 +99,7 @@ export const DigitvantCase: FC = () => (
             <dt className="mono">LIVE</dt>
             <dd>
               <a href="https://ibank.digitvant.com" target="_blank" rel="noopener noreferrer" className="ulink">
-                ibank.digitvant.com ↗
+                ibank.digitvant.com <IconExternal />
               </a>
             </dd>
           </div>
@@ -317,7 +320,7 @@ export const DigitvantCase: FC = () => (
           <span className="big">Plenti</span>
         </span>
         <span className="arrow" aria-hidden="true">
-          →
+          <IconArrow strokeWidth={1} />
         </span>
       </Link>
     </main>
@@ -326,7 +329,7 @@ export const DigitvantCase: FC = () => (
       <div>
         <span>© 2026 OLUWANIFEMI OSUNSANYA</span>
         <Link to="/contact" style={{ textDecoration: "none" }}>
-          LET'S TALK ABOUT YOUR PRODUCT →
+          LET'S TALK ABOUT YOUR PRODUCT <IconArrow />
         </Link>
       </div>
     </footer>
