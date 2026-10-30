@@ -73,11 +73,10 @@ const CaseStudy: FC<{ project: ProjectCaseStudy }> = ({ project: p }) => {
 
   const index = CASE_ORDER.indexOf(p.id);
   const cover = p.heroImage ?? p.heroImages?.[0] ?? p.image;
-  // Extra hero shots are styled mockup photos; gallery images are plain UI screenshots,
-  // which get the scenic backdrop.
+  // Only projects with backdrop on show their gallery screenshots on the beach backdrop.
   const gallery = [
     ...(p.heroImages?.slice(1) ?? []).map((src) => ({ src, staged: false })),
-    ...(p.galleryImages ?? []).map((src) => ({ src, staged: true })),
+    ...(p.galleryImages ?? []).map((src) => ({ src, staged: p.backdrop === true })),
   ];
   // Next follows the Home list order, wrapping round, skipping projects without a case study.
   const withCase = CASE_ORDER.filter((id) => projectCaseStudies[id]);
@@ -139,7 +138,7 @@ const CaseStudy: FC<{ project: ProjectCaseStudy }> = ({ project: p }) => {
           </dl>
         </section>
 
-        {p.heroFit === "full" ? (
+        {p.backdrop ? (
           // A UI screenshot sits as a framed window on the scenic backdrop.
           <div className="stage stage-cover">
             <img src={encodeURI(cover)} alt={`${p.title} product overview`} />

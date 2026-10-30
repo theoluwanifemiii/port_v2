@@ -39,8 +39,8 @@ export interface ProjectCaseStudy {
   }[];
   image: string;
   heroImage?: string;
-  /** "full": the cover is a UI screenshot, shown whole as a framed window on the scenic backdrop instead of a 16:9 crop. */
-  heroFit?: "full";
+  /** Show the cover and gallery screenshots whole, as framed windows on the beach backdrop (Moto Ride only). */
+  backdrop?: boolean;
   heroImages?: string[];
   challengeImages?: string[];
   galleryImages?: string[];
@@ -299,7 +299,7 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
       "When software makes the decision, the design job moves to explaining it. The screens that mattered most were the ones that show why: why this rider, why this vehicle is blocked, why this job is at risk.",
     image: "/case/moto-ride/overview.webp",
     heroImage: "/case/moto-ride/overview.webp",
-    heroFit: "full",
+    backdrop: true,
     galleryImages: [
       "/case/moto-ride/riders.webp",
       "/case/moto-ride/rider-vehicles.webp",
