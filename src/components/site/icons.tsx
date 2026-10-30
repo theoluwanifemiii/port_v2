@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, ArrowUpRight, LucideProps } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, LucideProps, X } from "lucide-react";
 import { FC } from "react";
 
 /**
@@ -20,3 +20,8 @@ export const IconArrow: FC<LucideProps> = (props) => <ArrowRight {...base(props)
 export const IconExternal: FC<LucideProps> = (props) => <ArrowUpRight {...base(props)} />;
 /** Back. */
 export const IconBack: FC<LucideProps> = (props) => <ArrowLeft {...base(props)} />;
+/** Close a dialog. */
+export const IconClose: FC<LucideProps> = (props) => <X {...base(props)} />;
+/** Previous / next in a viewer. */
+export const IconPrev: FC<LucideProps> = (props) => <ChevronLeft {...base(props)} />;
+export const IconNext: FC<LucideProps> = (props) => <ChevronRight {...base(props)} />;

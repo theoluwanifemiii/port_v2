@@ -1,7 +1,8 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Link } from "react-router-dom";
 import { SiteHeader } from "../../components/site/SiteChrome";
 import { Marquee } from "../../components/site/Marquee";
+import { Lightbox } from "../../components/site/Lightbox";
 import { IconArrow, IconBack, IconExternal } from "../../components/site/icons";
 import "./CaseStudy.css";
 
@@ -59,6 +60,37 @@ const ROLE_TAGS = [
   "DESIGN SYSTEM",
   "ENGINEERING COLLABORATION",
 ];
+
+/** Auto-scrolling gallery; click a screen to view it large. */
+const DigitvantGallery: FC = () => {
+  const [open, setOpen] = useState<number | null>(null);
+  return (
+    <section className="gallery">
+      <Marquee label="Digitvant Pay screens" secondsPerItem={6}>
+        {[
+          ...GALLERY.map((g, i) => (
+            <button
+              key={g.src}
+              type="button"
+              className="g-view"
+              aria-label={`View larger: ${g.alt}`}
+              onClick={() => setOpen(i)}
+            >
+              <img className="g-phone" src={g.src} alt={g.alt} />
+            </button>
+          )),
+          <div key="shipped" className="shipped">
+            <span className="mono eyebrow">SHIPPED</span>
+            <span className="big">
+              Mobile app, internet banking and an internal support dashboard, on one design system.
+            </span>
+          </div>,
+        ]}
+      </Marquee>
+      <Lightbox images={GALLERY} index={open} onChange={setOpen} />
+    </section>
+  );
+};
 
 export const DigitvantCase: FC = () => (
   <div className="d4 d4-case">
@@ -257,19 +289,7 @@ export const DigitvantCase: FC = () => (
       </section>
 
       {/* Gallery */}
-      <section className="gallery">
-        <Marquee label="Digitvant Pay screens" secondsPerItem={6}>
-          {[
-            ...GALLERY.map((g) => <img key={g.src} className="g-phone" src={g.src} alt={g.alt} />),
-            <div key="shipped" className="shipped">
-              <span className="mono eyebrow">SHIPPED</span>
-              <span className="big">
-                Mobile app, internet banking and an internal support dashboard, on one design system.
-              </span>
-            </div>,
-          ]}
-        </Marquee>
-      </section>
+      <DigitvantGallery />
 
       {/* 08 Results */}
       <section className="sec">

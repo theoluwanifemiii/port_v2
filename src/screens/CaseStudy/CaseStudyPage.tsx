@@ -1,7 +1,8 @@
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { SiteHeader } from "../../components/site/SiteChrome";
 import { Marquee } from "../../components/site/Marquee";
+import { Lightbox } from "../../components/site/Lightbox";
 import { ProjectCaseStudy, projectCaseStudies } from "../../data/projects";
 import { IconArrow, IconBack, IconExternal } from "../../components/site/icons";
 import "./CaseStudy.css";
@@ -48,6 +49,34 @@ const NotFound: FC = () => (
     <CaseFooter />
   </div>
 );
+
+/** Auto-scrolling gallery; click an image to view it large. Holds its own
+ *  state so opening the viewer doesn't re-render the rest of the page. */
+const CaseGallery: FC<{ title: string; items: { src: string; staged: boolean }[] }> = ({ title, items }) => {
+  const [open, setOpen] = useState<number | null>(null);
+  const images = items.map(({ src }) => ({
+    src: encodeURI(src),
+    alt: `${title}: ${src.split("/").pop()?.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ")}`,
+  }));
+  return (
+    <section className="gallery">
+      <Marquee label={`${title} screens`} secondsPerItem={8}>
+        {items.map(({ src, staged }, i) => (
+          <button
+            key={src}
+            type="button"
+            className={`g-view ${staged ? "stage stage-tile" : "g-plain"}`}
+            aria-label={`View larger: ${images[i].alt}`}
+            onClick={() => setOpen(i)}
+          >
+            <img className="g-wide" src={images[i].src} alt={images[i].alt} />
+          </button>
+        ))}
+      </Marquee>
+      <Lightbox images={images} index={open} onChange={setOpen} />
+    </section>
+  );
+};
 
 export const CaseStudyPage: FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -285,30 +314,7 @@ const CaseStudy: FC<{ project: ProjectCaseStudy }> = ({ project: p }) => {
           </Sec>
         )}
 
-        {gallery.length > 0 && (
-          <section className="gallery">
-            <Marquee label={`${p.title} screens`} secondsPerItem={8}>
-              {gallery.map(({ src, staged }) => {
-                const img = (
-                  <img
-                    className="g-wide"
-                    src={encodeURI(src)}
-                    alt={`${p.title}: ${src.split("/").pop()?.replace(/\.[^.]+$/, "")}`}
-                  />
-                );
-                return staged ? (
-                  <div key={src} className="stage stage-tile">
-                    {img}
-                  </div>
-                ) : (
-                  <div key={src} className="g-plain">
-                    {img}
-                  </div>
-                );
-              })}
-            </Marquee>
-          </section>
-        )}
+        {gallery.length > 0 && <CaseGallery title={p.title} items={gallery} />}
 
         <Sec title={label("Results")}>
           <ol className="results">
