@@ -222,11 +222,16 @@
   .d4-home .hero-fig { max-width: 100%; }
 
   .d4-home .peek { display: none; }
+  /* Keep each image's own shape: don't let the flex column stretch it to full
+     width (a tall phone shot was squashed into a wide box). */
   .d4-home .m-thumb {
     display: block;
+    align-self: flex-start;
     width: auto;
+    height: auto;
     max-width: 100%;
     max-height: 220px;
+    object-fit: contain;
     margin-top: 12px;
   }
   .d4-home .row { grid-template-columns: 36px minmax(0, 1fr); }
