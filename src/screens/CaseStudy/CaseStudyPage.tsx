@@ -52,7 +52,11 @@ const NotFound: FC = () => (
 
 /** Auto-scrolling gallery; click an image to view it large. Holds its own
  *  state so opening the viewer doesn't re-render the rest of the page. */
-const CaseGallery: FC<{ title: string; items: { src: string; staged: boolean }[] }> = ({ title, items }) => {
+const CaseGallery: FC<{ title: string; items: { src: string; staged: boolean }[]; backdrop?: boolean }> = ({
+  title,
+  items,
+  backdrop = false,
+}) => {
   const [open, setOpen] = useState<number | null>(null);
   const images = items.map(({ src }) => ({
     src: encodeURI(src),
@@ -73,7 +77,7 @@ const CaseGallery: FC<{ title: string; items: { src: string; staged: boolean }[]
           </button>
         ))}
       </Marquee>
-      <Lightbox images={images} index={open} onChange={setOpen} />
+      <Lightbox images={images} index={open} onChange={setOpen} backdrop={backdrop} />
     </section>
   );
 };
@@ -314,7 +318,7 @@ const CaseStudy: FC<{ project: ProjectCaseStudy }> = ({ project: p }) => {
           </Sec>
         )}
 
-        {gallery.length > 0 && <CaseGallery title={p.title} items={gallery} />}
+        {gallery.length > 0 && <CaseGallery title={p.title} items={gallery} backdrop={p.backdrop === true} />}
 
         <Sec title={label("Results")}>
           <ol className="results">

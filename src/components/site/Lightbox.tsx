@@ -13,6 +13,8 @@ interface LightboxProps {
   /** Index of the open image, or null when closed. */
   index: number | null;
   onChange: (index: number | null) => void;
+  /** Show the open image on the beach backdrop instead of the dark overlay. */
+  backdrop?: boolean;
 }
 
 /**
@@ -22,7 +24,7 @@ interface LightboxProps {
  * break its fixed position. Page scroll is locked while open and focus
  * returns to whatever opened it.
  */
-export const Lightbox: FC<LightboxProps> = ({ images, index, onChange }) => {
+export const Lightbox: FC<LightboxProps> = ({ images, index, onChange, backdrop = false }) => {
   const closeRef = useRef<HTMLButtonElement | null>(null);
   const dialogRef = useRef<HTMLDivElement | null>(null);
   const open = index !== null && images.length > 0;
@@ -70,7 +72,7 @@ export const Lightbox: FC<LightboxProps> = ({ images, index, onChange }) => {
   return createPortal(
     <div
       ref={dialogRef}
-      className="d4-lightbox"
+      className={`d4-lightbox${backdrop ? " lb-beach" : ""}`}
       role="dialog"
       aria-modal="true"
       aria-label={`Image ${index + 1} of ${images.length}`}

@@ -14,6 +14,28 @@
   font-family: "IBM Plex Mono", monospace;
   animation: d4LbIn 0.2s ease both;
 }
+/* Beach backdrop variant (Moto Ride): a light tint keeps controls readable */
+.d4-lightbox.lb-beach {
+  background:
+    linear-gradient(rgba(8, 20, 18, 0.28), rgba(8, 20, 18, 0.28)),
+    #1f5a52 url("/case/backdrop-beach.webp") center / cover no-repeat;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.d4-lightbox.lb-beach .lb-figure img {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2), 0 2px 8px rgba(0, 0, 0, 0.2), 0 40px 90px rgba(0, 0, 0, 0.45);
+}
+.d4-lightbox.lb-beach figcaption {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
+  color: rgba(255, 255, 255, 0.85);
+}
+.d4-lightbox.lb-beach .lb-btn {
+  background: rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+.d4-lightbox.lb-beach .lb-btn:hover { background: rgba(0, 0, 0, 0.6); }
 @keyframes d4LbIn {
   from { opacity: 0; }
   to { opacity: 1; }
