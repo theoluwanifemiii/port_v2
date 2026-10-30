@@ -208,3 +208,6 @@
   .d4-case .shipped { width: 240px; }
   .d4-case .stats { padding: 40px 0 56px; }
 }
+
+/* A cover that is a UI screenshot keeps its own shape, with a hairline frame */
+.d4-case .cover.cover-full { aspect-ratio: auto; height: auto; object-fit: contain; border: 1px solid #ececea; }

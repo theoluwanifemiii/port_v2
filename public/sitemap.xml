@@ -35,6 +35,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- Case study: Moto Ride -->
+  <url>
+    <loc>https://olusworks.xyz/work/moto-ride</loc>
+    <lastmod>2026-10-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- Case study: Motobills Admin -->
   <url>
     <loc>https://olusworks.xyz/work/motobills</loc>

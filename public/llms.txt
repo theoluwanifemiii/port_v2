@@ -123,6 +123,17 @@ Impact:
 
 https://olusworks.xyz/work/vital-swap
 
+### Moto Ride
+
+One rider network and operations platform serving MotoBites, Plenti and Mr Meat from a single rider pool, with a central allocation engine.
+
+Responsibilities:
+- Product spec
+- Operations dashboard
+- Design system
+
+https://olusworks.xyz/work/moto-ride
+
 ### Motobills Admin
 
 Back-office dashboard for inventory and financial operations.

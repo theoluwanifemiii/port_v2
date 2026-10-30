@@ -39,6 +39,8 @@ export interface ProjectCaseStudy {
   }[];
   image: string;
   heroImage?: string;
+  /** "full": show the cover at its own shape (for UI screenshots) instead of a 16:9 crop. */
+  heroFit?: "full";
   heroImages?: string[];
   challengeImages?: string[];
   galleryImages?: string[];
@@ -81,13 +83,13 @@ export const portfolioProjects: PortfolioProject[] = [
     projectId: "vital-swap",
   },
   {
-    id: "motobills",
-    title: "Motobills Admin",
-    subtitle: "Inventory dashboard that speeds up restocking decisions.",
-    year: "2024",
-    image: "/Project 3.png",
-    tags: ["Admin UX", "Inventory", "Fintech"],
-    projectId: "motobills",
+    id: "moto-ride",
+    title: "Moto Ride",
+    subtitle: "One rider network and dispatch engine for MotoBites, Plenti and Mr Meat.",
+    year: "2026",
+    image: "/case/moto-ride/overview.webp",
+    tags: ["Logistics", "Dispatch", "Design System"],
+    projectId: "moto-ride",
   },
   {
     id: "one-drug-store",
@@ -246,6 +248,76 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
     client: "Motobills",
     website: "play.google.com/store/apps/details?id=com.motobills.app",
     previousProjectId: "plenti",
+  },
+  "moto-ride": {
+    id: "moto-ride",
+    title: "Moto Ride",
+    subtitle: "Rider operations platform for MotoBites, Plenti and Mr Meat",
+    year: "2026",
+    summary:
+      "Designed Moto Ride, one rider network and operations platform that serves three delivery products, MotoBites, Plenti and Mr Meat, from a single pool of riders, with a central engine deciding which rider gets which job.",
+    pullQuote:
+      "A rider is not busy. They have spare capacity on some legs of their route and none on others.",
+    context:
+      "Moto runs three delivery products: MotoBites for food, Plenti for FMCG and e-commerce, and Mr Meat for meat and fresh food. Built the usual way, each would need its own riders, its own onboarding and its own dispatch. Moto Ride replaces that with one rider identity, verified once and eligible for every product the rider qualifies for, and one dispatch engine shared by all three. The products create jobs; Moto owns the riders and decides who carries what.",
+    costOfProblem:
+      "Separate systems mean duplicated KYC, idle riders on one product while another is short, and no way to combine trips that share a route. A rider heading to Ikoyi for a MotoBites pickup could carry a Plenti parcel to Yaba on the same trip, but three separate systems can never see that.",
+    challenge:
+      "How do you let one rider carry jobs from three products at once, without a single promised delivery time slipping, and keep every decision the engine makes visible to the people running it?",
+    approach: [
+      "Wrote the product spec around an engine with operator controls on top, rather than a screen where someone picks a rider. Every new job passes four layers: eligibility (who is allowed), feasibility (whose live route can absorb it), ranking (who is best) and assignment (offer, accept or fall through to a queue for the operations team).",
+      "Modelled riders and jobs so the engine can reason about them: vehicles carry capabilities such as load, box size and cold chain, jobs carry matching requirements, and every job has a ready time, a promised time and a latest acceptable time. One rider holds a separate service profile per product, so a suspension on Mr Meat for a cold chain breach leaves MotoBites untouched.",
+      "Designed the operations dashboard to answer one question first: is the network healthy right now. Overview leads with riders online, carrying and idle, jobs at risk sorted by time to breach, and whether stacking is hurting promises. Rider records explain themselves: what each vehicle can take for each service, and complaints with photos, the rider's reply and the suspension rule they trigger.",
+      "Built the Moto Ride design system alongside the screens: light neutral grounds, white cards with hairline borders, quiet large numbers, and one colour per product used only to tell products apart. Urgency has its own tones and always comes with a glyph. 17 components cover actions, status, data and the rider's live route.",
+    ],
+    timeline: [
+      "Product Spec",
+      "Allocation Engine Model",
+      "Design System",
+      "Operations Dashboard",
+      "Rider Management",
+    ],
+    outcome:
+      "One platform where operators see network health at a glance, understand why the engine chose a rider, and act on riders per service without touching the others.",
+    outcomeParagraphs: [
+      "Queues sort by time to breach, so nobody has to compare two times to know a job is late. A rider's profile shows, per product, what their vehicle can carry and why a product is blocked. Complaints carry the evidence and the rule they trigger, so a Plenti only suspension is a decision the screen supports rather than a guess.",
+    ],
+    solutionLabel: "One network, three services",
+    statCards: [
+      { value: "3", label: "Services on one rider pool" },
+      { value: "4", label: "Layer allocation engine" },
+      { value: "6", label: "User groups served" },
+      { value: "17", label: "Design system components" },
+    ],
+    results: [
+      "A product spec defining one rider identity, per service profiles and a four layer allocation engine with an explainability record.",
+      "An operations dashboard: network overview, rider management, vehicle capabilities and complaints with service specific suspensions.",
+      "The Moto Ride design system: tokens, type, status tones and 17 components shared across the admin dashboard and rider app.",
+      "Service colour reserved for telling products apart, with urgency carried by separate tones and glyphs.",
+    ],
+    keyTakeaway:
+      "When software makes the decision, the design job moves to explaining it. The screens that mattered most were the ones that show why: why this rider, why this vehicle is blocked, why this job is at risk.",
+    image: "/case/moto-ride/overview.webp",
+    heroImage: "/case/moto-ride/overview.webp",
+    heroFit: "full",
+    galleryImages: [
+      "/case/moto-ride/riders.webp",
+      "/case/moto-ride/rider-vehicles.webp",
+      "/case/moto-ride/rider-complaints.webp",
+    ],
+    tags: ["Logistics", "Dispatch", "Design System"],
+    client: "Moto",
+    role: "Product Designer",
+    roleDescription:
+      "I wrote the product spec for the Moto Ride platform and designed its operations dashboard and design system, from the allocation model through to the screens operators use every day.",
+    responsibilities: [
+      "Product Strategy",
+      "Product Spec",
+      "Information Architecture",
+      "UI Design",
+      "Design System",
+      "Operations Dashboard",
+    ],
   },
   plenti: {
     id: "plenti",

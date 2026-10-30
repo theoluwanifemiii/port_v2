@@ -7,13 +7,14 @@ import { IconArrow, IconBack, IconExternal } from "../../components/site/icons";
 import "./CaseStudy.css";
 
 /** Order matches the Selected work list on Home. */
-const CASE_ORDER = ["digitvant-pay", "plenti", "vital-swap", "motobills", "one-drug-store", "creative-pay"];
+const CASE_ORDER = ["digitvant-pay", "plenti", "vital-swap", "moto-ride", "one-drug-store", "creative-pay"];
 
 /** Short outcome lines, matching the Selected work list on Home. */
 const SHORT_OUTCOME: Record<string, string> = {
   "digitvant-pay": "1K beta to 10K+ active users",
   plenti: "11 modules, 3 role based portals, 150+ screens",
   "vital-swap": "Faster onboarding for staff and agents, fewer errors",
+  "moto-ride": "One rider pool for 3 services",
   motobills: "Faster restocking across core bill categories",
 };
 
@@ -133,7 +134,7 @@ const CaseStudy: FC<{ project: ProjectCaseStudy }> = ({ project: p }) => {
           </dl>
         </section>
 
-        <img className="cover" src={encodeURI(cover)} alt={`${p.title} product overview`} />
+        <img className={`cover${p.heroFit === "full" ? " cover-full" : ""}`} src={encodeURI(cover)} alt={`${p.title} product overview`} />
 
         {/* At a glance */}
         {p.statCards && p.statCards.length > 0 && (
