@@ -23,6 +23,18 @@ interface WorkRow {
 
 const ROWS: WorkRow[] = [
   {
+    title: "Moto Ride",
+    desc: "Three delivery products needed riders without three rider networks. I designed one rider pool and operations platform for MotoBites, Plenti and Mr Meat, with an engine that decides who carries what and shows why.",
+    outcome: "One rider pool for 3 services, 17 component design system",
+    meta: "OPERATIONS PLATFORM · DISPATCH · DESIGN SYSTEM",
+    year: "2026",
+    img: "/case/moto-ride/overview.webp",
+    alt: "Moto Ride operations overview dashboard",
+    to: "/work/moto-ride",
+    cta: "CASE STUDY",
+    ctaIcon: "arrow",
+  },
+  {
     title: "Digitvant Pay",
     desc: "Full verification before an account meant people left before they saw any value. I led the mobile and web redesign around progressive onboarding, with a shared design system for engineering.",
     outcome: "1K beta users to 10K+ active users",
@@ -55,18 +67,6 @@ const ROWS: WorkRow[] = [
     img: "/home/vital-swap.webp",
     alt: "Vital Swap back office on a laptop",
     to: "/work/vital-swap",
-    cta: "CASE STUDY",
-    ctaIcon: "arrow",
-  },
-  {
-    title: "Moto Ride",
-    desc: "Three delivery products needed riders without three rider networks. I designed one rider pool and operations platform for MotoBites, Plenti and Mr Meat, with an engine that decides who carries what and shows why.",
-    outcome: "One rider pool for 3 services, 17 component design system",
-    meta: "OPERATIONS PLATFORM · DISPATCH · DESIGN SYSTEM",
-    year: "2026",
-    img: "/case/moto-ride/overview.webp",
-    alt: "Moto Ride operations overview dashboard",
-    to: "/work/moto-ride",
     cta: "CASE STUDY",
     ctaIcon: "arrow",
   },

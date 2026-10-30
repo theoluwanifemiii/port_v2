@@ -71,7 +71,7 @@ export const DigitvantCase: FC = () => (
           <Link to="/#work" className="with-ico">
             <IconBack /> ALL WORK
           </Link>
-          <span className="muted">CASE STUDY 01 OF 06</span>
+          <span className="muted">CASE STUDY 02 OF 06</span>
         </div>
         <h1 className="balance">Digitvant Pay</h1>
         <p className="balance summary">
@@ -316,7 +316,7 @@ export const DigitvantCase: FC = () => (
       {/* Next */}
       <Link to="/work/plenti" className="next-link">
         <span style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <span className="mono eyebrow">NEXT PROJECT · 02</span>
+          <span className="mono eyebrow">NEXT PROJECT · 03</span>
           <span className="big">Plenti</span>
         </span>
         <span className="arrow" aria-hidden="true">

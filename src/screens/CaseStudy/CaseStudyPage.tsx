@@ -7,7 +7,7 @@ import { IconArrow, IconBack, IconExternal } from "../../components/site/icons";
 import "./CaseStudy.css";
 
 /** Order matches the Selected work list on Home. */
-const CASE_ORDER = ["digitvant-pay", "plenti", "vital-swap", "moto-ride", "one-drug-store", "creative-pay"];
+const CASE_ORDER = ["moto-ride", "digitvant-pay", "plenti", "vital-swap", "one-drug-store", "creative-pay"];
 
 /** Short outcome lines, matching the Selected work list on Home. */
 const SHORT_OUTCOME: Record<string, string> = {

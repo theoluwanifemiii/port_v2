@@ -56,6 +56,15 @@ export interface ProjectCaseStudy {
 
 export const portfolioProjects: PortfolioProject[] = [
   {
+    id: "moto-ride",
+    title: "Moto Ride",
+    subtitle: "One rider network and dispatch engine for MotoBites, Plenti and Mr Meat.",
+    year: "2026",
+    image: "/case/moto-ride/overview.webp",
+    tags: ["Logistics", "Dispatch", "Design System"],
+    projectId: "moto-ride",
+  },
+  {
     id: "digitvant-pay",
     title: "Digitvant Pay",
     subtitle: "Redesigning a digital banking experience by reducing onboarding friction and building a scalable design foundation.",
@@ -81,15 +90,6 @@ export const portfolioProjects: PortfolioProject[] = [
     image: "/Project 1.png",
     tags: ["Operations", "Dashboard", "Multi-role"],
     projectId: "vital-swap",
-  },
-  {
-    id: "moto-ride",
-    title: "Moto Ride",
-    subtitle: "One rider network and dispatch engine for MotoBites, Plenti and Mr Meat.",
-    year: "2026",
-    image: "/case/moto-ride/overview.webp",
-    tags: ["Logistics", "Dispatch", "Design System"],
-    projectId: "moto-ride",
   },
   {
     id: "one-drug-store",
