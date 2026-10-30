@@ -259,7 +259,7 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
     pullQuote:
       "A rider is not busy. They have spare capacity on some legs of their route and none on others.",
     context:
-      "Moto runs three delivery products: MotoBites for food, Plenti for FMCG and e-commerce, and Mr Meat for meat and fresh food. Built the usual way, each would need its own riders, its own onboarding and its own dispatch. Moto Ride replaces that with one rider identity, verified once and eligible for every product the rider qualifies for, and one dispatch engine shared by all three. The products create jobs; Moto owns the riders and decides who carries what.",
+      "Sujimoto Digital Service runs three delivery products: MotoBites for food, Plenti for FMCG and e-commerce, and Mr Meat for meat and fresh food. Built the usual way, each would need its own riders, its own onboarding and its own dispatch. Moto Ride replaces that with one rider identity, verified once and eligible for every product the rider qualifies for, and one dispatch engine shared by all three. The products create jobs; Sujimoto Digital Service owns the riders and decides who carries what.",
     costOfProblem:
       "Separate systems mean duplicated KYC, idle riders on one product while another is short, and no way to combine trips that share a route. A rider heading to Ikoyi for a MotoBites pickup could carry a Plenti parcel to Yaba on the same trip, but three separate systems can never see that.",
     challenge:
@@ -306,7 +306,7 @@ export const projectCaseStudies: Record<string, ProjectCaseStudy> = {
       "/case/moto-ride/rider-complaints.webp",
     ],
     tags: ["Logistics", "Dispatch", "Design System"],
-    client: "Moto",
+    client: "Sujimoto Digital Service",
     role: "Lead Product Designer",
     roleDescription:
       "I wrote the product spec for the Moto Ride platform and designed its operations dashboard and design system, from the allocation model through to the screens operators use every day.",
